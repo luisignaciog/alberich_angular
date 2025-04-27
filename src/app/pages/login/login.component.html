@@ -1,0 +1,12 @@
+<div class="login-wrapper">
+  <div class="main">
+    <div class="signup">
+      <form [formGroup]="formulario" (ngSubmit)="getUSer()">
+        <label for="chk" aria-hidden="true">Iniciar sesión</label>
+        <input placeholder="Código de usuario" id="userName" formControlName="userName" maxlength="20"/>
+        <input placeholder="Contraseña" type="password" id="password" formControlName="password">
+        <button>Entrar</button>
+      </form>
+    </div>
+  </div>
+</div>
