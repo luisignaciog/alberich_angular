@@ -1,3 +1,14 @@
+.back
+{
+  background-image: url(/assets/images/image_blur.jpg);
+  background-size: cover;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
 .login-wrapper {
   display: flex;
   justify-content: center;
@@ -10,10 +21,10 @@
 	height: 400px;
 	background: rgba(36, 53, 108, 1);
 	overflow: hidden;
-
 	border-radius: 10px;
 	box-shadow: 5px 20px 50px #000;
 }
+
 #chk{
 	display: none;
 }
@@ -85,3 +96,4 @@ button:hover{
 #chk:checked ~ .signup label{
 	transform: scale(.6);
 }
+

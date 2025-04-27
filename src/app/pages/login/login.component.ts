@@ -36,8 +36,20 @@ export class LoginComponent {
 
   async getUSer()
   {
-    const url = environment.url + `passwordempresasgreenbc('${this.formulario.value.userName}', '${this.formulario.value.password}')`;
-    this.loginData = await lastValueFrom(this.http.get<any>(url));
-    console.log(this.loginData);
+    try{
+      const url = environment.url + `passwordempresasgreenbc('${this.formulario.value.userName}', '${this.formulario.value.password}')`;
+      this.loginData = await lastValueFrom(this.http.get<LoginData>(url));
+      console.log(this.loginData);
+    } catch (error: any) {
+      if (error.status === 0) {
+        this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {
+          duration: 3000,
+          verticalPosition: 'top' });
+      } else {
+        this.snackBar.open('Usuario o contraseña no válidos', 'Cerrar', {
+          duration: 3000,
+          verticalPosition: 'top' });
+      }
+    }
   }
 }
