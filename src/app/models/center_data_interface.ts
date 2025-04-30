@@ -16,3 +16,24 @@ export interface CenterData {
   Email: string;
   MobilePhoneNo: string;
 }
+
+export function createEmptyCenterData (): CenterData {
+  return {
+    "@odata.context": "",
+    "@odata.etag": "",
+    SystemId: "b4e1af38-b421-f011-add3-00155d037f01",
+    No: "",
+    Name: "",
+    Name2: "",
+    Address: "",
+    Address2: "",
+    City: "",
+    PhoneNo: "",
+    CountryRegionCode: "",
+    VATRegistrationNo: "",
+    PostCode: "",
+    County: "",
+    Email: "",
+    MobilePhoneNo: ""
+  };
+}

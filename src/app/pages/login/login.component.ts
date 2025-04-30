@@ -8,6 +8,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from '../../../environmets/environment';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { SessionStorageService } from '../../models/session-storage-service';
+import { CenterData, createEmptyCenterData } from '../../models/center_data_interface';
 
 @Component({
   selector: 'app-login',
@@ -19,9 +21,12 @@ import { NgIf } from '@angular/common';
 })
 export class LoginComponent {
   loginData: LoginData = createEmptyLoginData();
+  centerData: CenterData = createEmptyCenterData();
   formulario: FormGroup;
 
-  constructor(private router: Router, private http: HttpClient, private snackBar: MatSnackBar, private fb: FormBuilder)
+  constructor(private router: Router, private http: HttpClient,
+    private snackBar: MatSnackBar, private fb: FormBuilder,
+    private session: SessionStorageService)
   {
     this.formulario = this.fb.group({
       userName: ['', [
@@ -39,7 +44,7 @@ export class LoginComponent {
     try{
       const url = environment.url + `passwordempresasgreenbc('${this.formulario.value.userName}', '${this.formulario.value.password}')`;
       this.loginData = await lastValueFrom(this.http.get<LoginData>(url));
-      console.log(this.loginData);
+      this.getCompanyData(this.loginData.SystemId);
     } catch (error: any) {
       if (error.status === 0) {
         this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {
@@ -51,5 +56,26 @@ export class LoginComponent {
           verticalPosition: 'top' });
       }
     }
+  }
+
+  async getCompanyData(systemId: string)
+  {
+    try{
+      const url = environment.url + `empresasgreenbc(${systemId})`;
+      this.centerData = await lastValueFrom(this.http.get<CenterData>(url));
+      this.session.setData(this.centerData);
+      this.router.navigate(['home']);
+    } catch (error: any) {
+      if (error.status === 0) {
+        this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {
+          duration: 3000,
+          verticalPosition: 'top' });
+      } else {
+        this.snackBar.open('Datos del centro no válidos', 'Cerrar', {
+          duration: 3000,
+          verticalPosition: 'top' });
+      }
+    }
+
   }
 }

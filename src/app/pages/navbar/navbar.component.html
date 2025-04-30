@@ -1,0 +1,31 @@
+<mat-toolbar>
+  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>domain</mat-icon>
+      <span>Centros</span>
+    </button>
+    <!--
+    <button mat-menu-item disabled>
+      <mat-icon>voicemail</mat-icon>
+      <span>Contactos</span>
+    </button>
+    -->
+    <button mat-menu-item>
+      <mat-icon>groups</mat-icon>
+      <span>Contactos</span>
+    </button>
+  </mat-menu>
+  <span>{{ userName }}</span>
+  <span class="example-spacer"></span>
+  <!--
+  <button mat-icon-button>
+    <mat-icon>favorite</mat-icon>
+  </button>
+  -->
+  <button mat-icon-button (click)="logout()">
+    <span class="material-symbols-outlined">mode_off_on</span>
+  </button>
+</mat-toolbar>
