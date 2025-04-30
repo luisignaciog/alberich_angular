@@ -4,6 +4,7 @@ import { NavbarComponent } from "../navbar/navbar.component";
 import { createEmptyLoginData, LoginData } from '../../models/login_data_interface';
 import { SessionStorageService } from '../../models/session-storage-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CenterData, createEmptyCenterData } from '../../models/center_data_interface';
 
 @Component({
   selector: 'app-home',
@@ -12,14 +13,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [NavbarComponent],
 })
 export class HomeComponent {
-  loginData: LoginData = createEmptyLoginData();
+  centerData: CenterData = createEmptyCenterData();
 
   constructor( private snackBar: MatSnackBar, private session: SessionStorageService, private router: Router ) { }
 
   ngOnInit() {
-    this.loginData = this.session.getData();
+    this.centerData = this.session.getData();
 
-    if (this.loginData === null) {
+    if (this.centerData === null) {
       this.router.navigate(['login']);
     }
   }

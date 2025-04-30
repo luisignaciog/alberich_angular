@@ -7,3 +7,39 @@
   justify-content: center;
   align-items: center;
 }
+
+.profile-card {
+  max-width: 400px;
+  background: rgba(36, 53, 108, 1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  box-shadow: 5px 20px 50px #000;
+  padding: 24px;
+  font-family: "Helvetica Neue", sans-serif;
+  margin: 20px auto;
+}
+
+.profile-card h2 {
+  font-size: 20px;
+  margin-bottom: 16px;
+  color: #ffffff;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.label {
+  font-weight: 600;
+  color: #dadada;
+}
+
+.value {
+  color: rgba(241, 178, 87, 1);
+  text-align: left;
+}
