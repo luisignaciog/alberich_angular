@@ -1,6 +1,6 @@
 .back
 {
-  background-image: url(/assets/images/image_blur.jpg);
+  background-image: url(../../../assets/images/image_blur.jpg);
   background-size: cover;
   height: calc(100vh - 64px);
   display: flex;

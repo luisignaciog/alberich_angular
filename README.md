@@ -81,3 +81,8 @@ Si queremos promover un despliegue de preview a producción:
 ```
 npx swa deploy ./dist/alberich/browser --deployment-token <TOKEN-IMPLEMENTACION> --deployment-id <ID_DEPLOY>
 ```
+
+## Build con webConfig
+```
+ng build --configuration=production --base-href "/alberich/"
+```
