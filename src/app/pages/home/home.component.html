@@ -1,35 +1,47 @@
 <app-navbar></app-navbar>
-<div class="back">
-  <div class="profile-card">
-    <h2>Datos de empresa</h2>
-    <div class="info-row">
-      <span class="label">Nombre:</span>
-      <span class="value">{{ centerData.Name }}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Dirección:</span>
-      <span class="value">{{ centerData.Address }}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Teléfono:</span>
-      <span class="value">{{ centerData.PhoneNo }}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Ciudad:</span>
-      <span class="value">{{ centerData.City}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Código postal:</span>
-      <span class="value">{{ centerData.PostCode}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">Provincia:</span>
-      <span class="value">{{ centerData.County}}</span>
-    </div>
-    <div class="info-row">
-      <span class="label">CIF/NIF:</span>
-      <span class="value">{{ centerData.VATRegistrationNo}}</span>
-    </div>
-  </div>
+<div class="loading-overlay" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
 
+<div class="back">
+    <div class="profile-card">
+      <form [formGroup]="formulario" (ngSubmit)="save()">
+        <h2>Datos de empresa</h2>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Nombre empresa</mat-label>
+          <input matInput placeholder="Nombre empresa" value="centerData.Name" formControlName="name" [(ngModel)]="centerData.Name" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input matInput placeholder="Dirección" value="centerData.Address" formControlName="address" [(ngModel)]="centerData.Address" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input matInput placeholder="Teléfono" value="centerData.PhoneNo" formControlName="phoneNo" [(ngModel)]="centerData.PhoneNo" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Ciudad</mat-label>
+          <input matInput placeholder="Ciudad" value="centerData.City" formControlName="city" [(ngModel)]="centerData.City" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Código postal</mat-label>
+          <input matInput placeholder="Código postal" value="centerData.PostCode" formControlName="postCode" [(ngModel)]="centerData.PostCode" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Provincia</mat-label>
+          <input matInput placeholder="Provincia" value="centerData.County" formControlName="county" [(ngModel)]="centerData.County" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>CIF/NIF</mat-label>
+          <input matInput placeholder="CIF/NIF" value="centerData.VATRegistrationNo" formControlName="vatRegistrationNo" [(ngModel)]="centerData.VATRegistrationNo" >
+        </mat-form-field>
+        <button>Entrar</button>
+      </form>
+  </div>
 </div>

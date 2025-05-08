@@ -1,3 +1,4 @@
+
 .back
 {
   background-image: url(../../../assets/images/image_blur.jpg);
@@ -10,7 +11,7 @@
 
 .profile-card {
   max-width: 400px;
-  background: rgba(36, 53, 108, 1);
+  background: rgb(255, 255, 255);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   border-radius: 12px;
   box-shadow: 5px 20px 50px #000;
@@ -22,8 +23,8 @@
 .profile-card h2 {
   font-size: 20px;
   margin-bottom: 16px;
-  color: #ffffff;
-  border-bottom: 1px solid #ccc;
+  color:  rgba(36, 53, 108, 1);
+  border-bottom: 1px solid rgba(241, 178, 87, 1);
   padding-bottom: 8px;
 }
 
@@ -42,4 +43,8 @@
 .value {
   color: rgba(241, 178, 87, 1);
   text-align: left;
+}
+
+:host ::ng-deep .mat-form-field-flex {
+  background: rgb(245, 245, 245);
 }
