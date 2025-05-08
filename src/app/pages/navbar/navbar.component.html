@@ -20,12 +20,10 @@
   </mat-menu>
   <span>{{ userName }}</span>
   <span class="example-spacer"></span>
-  <!--
-  <button mat-icon-button>
-    <mat-icon>favorite</mat-icon>
+  <button mat-icon-button (click)="userData()" matTooltip="Ver datos">
+    <mat-icon>person</mat-icon>
   </button>
-  -->
-  <button mat-icon-button (click)="logout()">
+  <button mat-icon-button (click)="logout()" matTooltip="Cerrar sesión">
     <span class="material-symbols-outlined">mode_off_on</span>
   </button>
 </mat-toolbar>

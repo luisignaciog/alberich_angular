@@ -6,12 +6,14 @@ import { MatToolbarModule} from '@angular/material/toolbar';
 import { MatMenuModule} from '@angular/material/menu';
 import { SessionStorageService } from '../../models/session-storage-service';
 import { Router } from '@angular/router';
+import {MatTooltipModule} from '@angular/material/tooltip';
+
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css',
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule],
+  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
 })
 export class NavbarComponent {
   centerData: CenterData = createEmptyCenterData();
@@ -32,5 +34,9 @@ export class NavbarComponent {
     this.centerData = createEmptyCenterData();
     this.userName = '';
     this.router.navigate(['login']);
+  }
+
+  userData() {
+    this.router.navigate(['user-data']);
   }
 }

@@ -57,3 +57,32 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## implementar en web estatica
+Crear la web estatica en Azure con "Otro" origen de implementacion
+![alt text](image.png)
+![alt text](image2.png)
+
+Despues crear el build de la web
+```
+ng build --configuration production
+
+```
+
+Una vez creada la carpeta "dist" con el build, ejecutar el comando de despliegue
+```
+npx swa deploy ./dist/alberich/browser --deployment-token <TOKEN-IMPLEMENTACION>
+```
+Para dexplegarlo directamente en producción
+```
+npx swa deploy ./dist/alberich/browser --deployment-token <TOKEN-IMPLEMENTACION> --env production
+```
+Si queremos promover un despliegue de preview a producción:
+```
+npx swa deploy ./dist/alberich/browser --deployment-token <TOKEN-IMPLEMENTACION> --deployment-id <ID_DEPLOY>
+```
+
+## Build con webConfig
+```
+ng build --configuration=production --base-href "/alberich/"
+```
