@@ -1,0 +1,66 @@
+<div class="loading-overlay" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="back">
+  <form [formGroup]="formulario">
+    <mat-card class="example-card" appearance="outlined">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>Datos del centro</mat-card-title>
+        <mat-card-subtitle>Nuevo</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Nombre empresa</mat-label>
+          <input matInput placeholder="Nombre empresa" value="centerData.Name" formControlName="name" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input matInput placeholder="Dirección" value="centerData.Address" formControlName="address" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input matInput placeholder="Teléfono" value="centerData.PhoneNo" formControlName="phoneNo" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Ciudad</mat-label>
+          <input matInput placeholder="Ciudad" value="centerData.City" formControlName="city" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Código postal</mat-label>
+          <input matInput placeholder="Código postal" value="centerData.PostCode" formControlName="postCode" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Provincia</mat-label>
+          <input matInput placeholder="Provincia" value="centerData.County" formControlName="county" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>CIF/NIF</mat-label>
+          <input matInput placeholder="CIF/NIF" value="centerData.VATRegistrationNo" formControlName="vatRegistrationNo" >
+        </mat-form-field>
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-mini-fab color="primary" (click)="edit()" *ngIf="!enableEdit">
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button mat-mini-fab color="primary" (click)="save()" *ngIf="enableEdit">
+          <mat-icon>check</mat-icon>
+        </button>
+        <button mat-mini-fab color="primary" style="margin-left: 10px;" (click)="cancel()" *ngIf="enableEdit">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>
