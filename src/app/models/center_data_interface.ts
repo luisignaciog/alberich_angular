@@ -15,6 +15,30 @@ export interface CenterData {
   County: string;
   Email: string;
   MobilePhoneNo: string;
+  SystemModifiedAt: string;
+  centrosempresasgreenbc: centers[];
+}
+
+export interface centers {
+  "@odata.etag": string;
+  NoEmpresaGreenBC: string;
+  Code: string;
+  Name: string;
+  Name2: string;
+  Address: string;
+  Address2: string;
+  City: string;
+  PhoneNo: string;
+  CountryRegionCode: string;
+  PostCode: string;
+  County: string;
+  EMail: string;
+  CodProductor: string;
+  CodGestor: string;
+  CodTransportista: string;
+  EMailEnvioServicio: string;
+  EMailEnvioDocAmbiental: string;
+  SystemModifiedAt: string;
 }
 
 export function createEmptyCenterData (): CenterData {
@@ -34,6 +58,8 @@ export function createEmptyCenterData (): CenterData {
     PostCode: "",
     County: "",
     Email: "",
-    MobilePhoneNo: ""
+    MobilePhoneNo: "",
+    SystemModifiedAt: "",
+    centrosempresasgreenbc: []
   };
 }

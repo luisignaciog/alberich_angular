@@ -1,4 +1,4 @@
-import { CenterData, createEmptyCenterData } from './../../models/center_data_interface';
+import { CenterData, createEmptyCenterData, centers } from './../../models/center_data_interface';
 import { Component } from '@angular/core';
 import { MatIconModule} from '@angular/material/icon';
 import { MatButtonModule} from '@angular/material/button';
@@ -37,6 +37,11 @@ export class NavbarComponent {
   }
 
   userData() {
-    this.router.navigate(['user-data']);
+    this.router.navigate(['home']);
+  }
+
+  centers() {
+    console.log('centers');
+    this.router.navigate(['centers']);
   }
 }

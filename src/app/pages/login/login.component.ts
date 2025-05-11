@@ -68,7 +68,7 @@ export class LoginComponent {
   async getCompanyData(systemId: string)
   {
     try{
-      const url = environment.url + `empresasgreenbc(${systemId})`;
+      const url = environment.url + `empresasgreenbc(${systemId})?$expand=centrosempresasgreenbc`;
       this.centerData = await lastValueFrom(this.http.get<CenterData>(url));
       this.session.setData(this.centerData);
       this.loading = false;

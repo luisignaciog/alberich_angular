@@ -3,16 +3,10 @@
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>
+    <button mat-menu-item (click)="centers()">
       <mat-icon>domain</mat-icon>
       <span>Centros</span>
     </button>
-    <!--
-    <button mat-menu-item disabled>
-      <mat-icon>voicemail</mat-icon>
-      <span>Contactos</span>
-    </button>
-    -->
     <button mat-menu-item>
       <mat-icon>groups</mat-icon>
       <span>Contactos</span>
