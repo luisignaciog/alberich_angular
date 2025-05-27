@@ -72,6 +72,7 @@ ng build --configuration production
 Una vez creada la carpeta "dist" con el build, ejecutar el comando de despliegue
 ```
 npx swa deploy ./dist/alberich/browser --deployment-token <TOKEN-IMPLEMENTACION>
+npx swa deploy ./dist/alberich/browser --deployment-token 1688597b580ea9fe8945789552a8ab9f0e7c18cf97e58d434085592f5b53a7c506-fdefff53-77ca-4063-ad53-0b359bde83080030826030d2db03
 ```
 Para dexplegarlo directamente en producción
 ```

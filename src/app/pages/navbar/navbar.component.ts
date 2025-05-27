@@ -44,4 +44,9 @@ export class NavbarComponent {
     console.log('centers');
     this.router.navigate(['centers']);
   }
+
+  contacts() {
+    console.log('contacts');
+    this.router.navigate(['contacts']);
+  }
 }

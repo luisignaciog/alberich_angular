@@ -5,74 +5,76 @@
 
 <div class="back">
   <div class="table">
-    <button mat-button color="primary" style="color: aliceblue;" (click)="openDialogCenter()">
+    <button mat-raised-button (click)="openDialogCenter()">
       Nuevo Centro
     </button>
 
-    <div class="mat-elevation-z8">
-      <mat-table #centerTable [dataSource]="dataSource" matSort >
-        <ng-container matColumnDef="Code">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
-            <mat-cell *matCellDef="let centerRow">{{centerRow.Code}}</mat-cell>
-        </ng-container>
+    <div class="table-container">
+      <div class="mat-elevation-z8">
+        <mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="Code">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
+              <mat-cell *matCellDef="let centerRow">{{centerRow.Code}}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="Name">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
-            <mat-cell *matCellDef="let centerRow">{{centerRow.Name}}</mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="Name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</mat-header-cell>
+              <mat-cell *matCellDef="let centerRow">{{centerRow.Name}}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="City">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Ciudad</mat-header-cell>
-            <mat-cell *matCellDef="let centerRow">{{centerRow.City}}</mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="City">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Ciudad</mat-header-cell>
+              <mat-cell *matCellDef="let centerRow">{{centerRow.City}}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="PhoneNo">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Teléfono</mat-header-cell>
-            <mat-cell *matCellDef="let centerRow">{{centerRow.PhoneNo}}</mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="PhoneNo">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Teléfono</mat-header-cell>
+              <mat-cell *matCellDef="let centerRow">{{centerRow.PhoneNo}}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="EMail">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>E-Mail</mat-header-cell>
-            <mat-cell *matCellDef="let centerRow">{{centerRow.EMail}}</mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="EMail">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>E-Mail</mat-header-cell>
+              <mat-cell *matCellDef="let centerRow">{{centerRow.EMail}}</mat-cell>
+          </ng-container>
 
-        <!--
-        <ng-container matColumnDef="CodProductor">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Productor</mat-header-cell>
-            <mat-cell *matCellDef="let centerRow">{{centerRow.CodProductor}}</mat-cell>
-        </ng-container>
+          <!--
+          <ng-container matColumnDef="CodProductor">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Productor</mat-header-cell>
+              <mat-cell *matCellDef="let centerRow">{{centerRow.CodProductor}}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="CodGestor">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Gestor</mat-header-cell>
-            <mat-cell *matCellDef="let centerRow">{{centerRow.CodGestor}}</mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="CodGestor">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Gestor</mat-header-cell>
+              <mat-cell *matCellDef="let centerRow">{{centerRow.CodGestor}}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="CodTransportista">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
-            <mat-cell *matCellDef="let centerRow">{{centerRow.CodTransportista}}</mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="CodTransportista">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Transportista</mat-header-cell>
+              <mat-cell *matCellDef="let centerRow">{{centerRow.CodTransportista}}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="EMailEnvioServicio">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>EMailEnvioServicio</mat-header-cell>
-            <mat-cell *matCellDef="let centerRow">{{centerRow.EMailEnvioServicio}}</mat-cell>
-        </ng-container>
+          <ng-container matColumnDef="EMailEnvioServicio">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>EMailEnvioServicio</mat-header-cell>
+              <mat-cell *matCellDef="let centerRow">{{centerRow.EMailEnvioServicio}}</mat-cell>
+          </ng-container>
 
-        <ng-container matColumnDef="EMailEnvioDocAmbiental">
-            <mat-header-cell *matHeaderCellDef mat-sort-header>EMailEnvioDocAmbiental</mat-header-cell>
-            <mat-cell *matCellDef="let centerRow">{{centerRow.EMailEnvioDocAmbiental}}</mat-cell>
-        </ng-container>
-        -->
+          <ng-container matColumnDef="EMailEnvioDocAmbiental">
+              <mat-header-cell *matHeaderCellDef mat-sort-header>EMailEnvioDocAmbiental</mat-header-cell>
+              <mat-cell *matCellDef="let centerRow">{{centerRow.EMailEnvioDocAmbiental}}</mat-cell>
+          </ng-container>
+          -->
 
-        <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef></mat-header-cell>
-          <mat-cell *matCellDef="let centerRow">
-            <mat-icon *ngIf="!centerRow.centerRow" style="cursor: pointer;" (click)="editCenter(centerRow)" title="Editar">edit</mat-icon>
-          </mat-cell>
-      </ng-container>
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let centerRow; columns: displayedColumns"></mat-row>
-      </mat-table>
-      <mat-paginator #centerPaginator [length]="dataSource.data.length" [pageSize]="10" showFirstLastButtons="true" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let centerRow">
+              <mat-icon *ngIf="!centerRow.centerRow" style="cursor: pointer;" (click)="editCenter(centerRow)" title="Editar">edit</mat-icon>
+            </mat-cell>
+        </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let centerRow; columns: displayedColumns"></mat-row>
+        </mat-table>
+        <mat-paginator [length]="dataSource.data.length" [pageSize]="10" showFirstLastButtons="true" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      </div>
     </div>
   </div>
 </div>

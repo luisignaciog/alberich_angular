@@ -17,6 +17,7 @@ export interface CenterData {
   MobilePhoneNo: string;
   SystemModifiedAt: string;
   centrosempresasgreenbc: centers[];
+  contactosempresasgreenbc: contacts[];
 }
 
 export interface centers {
@@ -41,6 +42,15 @@ export interface centers {
   SystemModifiedAt: string;
 }
 
+export interface contacts {
+  No: string;
+  SystemId: string;
+  Name: string;
+  Name2: string;
+  PhoneNo: string;
+  EMail: string;
+}
+
 export function createEmptyCenterData (): CenterData {
   return {
     "@odata.context": "",
@@ -60,6 +70,7 @@ export function createEmptyCenterData (): CenterData {
     Email: "",
     MobilePhoneNo: "",
     SystemModifiedAt: "",
-    centrosempresasgreenbc: []
+    centrosempresasgreenbc: [],
+    contactosempresasgreenbc: []
   };
 }

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgIf } from '@angular/common';
@@ -21,14 +21,14 @@ import { CenterDialogComponent } from '../center-dialog/center-dialog.component'
   imports: [NavbarComponent, MatProgressSpinnerModule, NgIf, MatTableModule, MatPaginatorModule, MatSortModule,
     MatIcon, MatButtonModule],
 })
-export class CentersComponent {
+export class CentersComponent implements OnInit, AfterViewInit {
   centerData: CenterData = createEmptyCenterData();
   loading: boolean = false;
   dataSource: MatTableDataSource<centers> = new MatTableDataSource<centers>();
   displayedColumns: string[] = ['Code','Name','City','PhoneNo','EMail', 'actions']; //,'CodProductor','CodGestor','CodTransportista','EMailEnvioServicio','EMailEnvioDocAmbiental'];
 
-  @ViewChild('centerTable',{read:MatSort, static: true}) centerTable!: MatSort;
-  @ViewChild('centerPaginator',{read: MatPaginator}) centerPaginator!: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor( private snackBar: MatSnackBar, private session: SessionStorageService,
     private router: Router, public dialog: MatDialog) { }
@@ -42,10 +42,12 @@ export class CentersComponent {
 
     this.loading = true;
     this.dataSource = new MatTableDataSource<centers>(this.centerData.centrosempresasgreenbc);
-    this.dataSource.paginator = this.centerPaginator;
-    this.dataSource.sort = this.centerTable;
-
     this.loading = false;
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   newCenter(){
