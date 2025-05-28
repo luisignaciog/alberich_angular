@@ -103,7 +103,7 @@ export class HomeComponent {
     };
 
     const ahora = new Date().toISOString();
-    const noTabla = 50111;
+    const noTabla = 50110;
     const systemId = this.centerData.SystemId;
     const tipoCambio = '1';
 

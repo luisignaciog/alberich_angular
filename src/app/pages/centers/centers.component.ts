@@ -57,18 +57,16 @@ export class CentersComponent implements OnInit, AfterViewInit {
   }
 
   editCenter(center: centers){
-    this.snackBar.open('On development', 'Cerrar', {
-          duration: 3000,
-          verticalPosition: 'top' });
+    this.openDialogCenter(center);
   }
 
-  openDialogCenter() {
+  openDialogCenter(center: centers) {
     const dialogRef = this.dialog.open(CenterDialogComponent, {
       //width: '70vw',
       //height: '65vh',
       //maxWidth: '100vw', // evita el límite predeterminado de 80vw
       //panelClass: 'custom-dialog-container',
-      data: { /* opcional: puedes pasar datos aquí */ }
+      data: { center }
     });
 
     dialogRef.afterClosed().subscribe((resultado: centers) => {

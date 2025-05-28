@@ -40,6 +40,7 @@ export interface centers {
   EMailEnvioServicio: string;
   EMailEnvioDocAmbiental: string;
   SystemModifiedAt: string;
+  SystemId: string;
 }
 
 export interface contacts {
