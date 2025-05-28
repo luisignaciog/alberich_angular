@@ -133,8 +133,7 @@ export class ContactDialogComponent {
             const url = environment.url + "registroscambiosHeader?$expand=registroscambios";
             const result = await firstValueFrom(this.http.post(url, body));
             this.loading = false;
-            console.log('Resultado del API:', result);
-          } catch (error: any) {
+                      } catch (error: any) {
             if (error.status === 0) {
               this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {
                 duration: 3000,

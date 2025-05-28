@@ -151,7 +151,6 @@ export class CenterDialogComponent {
       }, [] as RegistroCambio[]);
 
       const payload = { registroscambios };
-      console.log('Payload generado:', payload);
       return payload;
     }
 
