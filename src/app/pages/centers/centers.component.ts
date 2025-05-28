@@ -50,14 +50,15 @@ export class CentersComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  newCenter(){
-    this.snackBar.open('On development', 'Cerrar', {
-          duration: 3000,
-          verticalPosition: 'top' });
-  }
-
   editCenter(center: centers){
     this.openDialogCenter(center);
+  }
+
+  newCenter()
+  {
+    const dialogRef = this.dialog.open(CenterDialogComponent, {
+      data: { }
+    });
   }
 
   openDialogCenter(center: centers) {

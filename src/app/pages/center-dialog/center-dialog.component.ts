@@ -30,6 +30,7 @@ export class CenterDialogComponent {
   formulario: FormGroup;
   loading: boolean = false;
   center: centers = {} as centers;
+  new: boolean = false;
 
   readonly data = inject<{ center: centers }>(MAT_DIALOG_DATA);
 
@@ -75,6 +76,12 @@ export class CenterDialogComponent {
   }
 
   ngOnInit() {
+
+    if (this.data.center == undefined) {
+      this.new = true;
+      return;
+    }
+
   this.center = this.data.center;
 
   this.formulario.setValue({
@@ -123,7 +130,7 @@ export class CenterDialogComponent {
       const ahora = new Date().toISOString();
       const noTabla = 50111;
       const systemId = this.center.SystemId
-      const tipoCambio = '1';
+      const tipoCambio = this.new ? "0" : "1"; // 0: Nuevo, 1: Modificación
 
       const registroscambios = (Object.keys(formValues) as (keyof typeof formValues)[]).reduce((arr, key) => {
         const nuevoValor = formValues[key];
@@ -144,6 +151,7 @@ export class CenterDialogComponent {
       }, [] as RegistroCambio[]);
 
       const payload = { registroscambios };
+      console.log('Payload generado:', payload);
       return payload;
     }
 
