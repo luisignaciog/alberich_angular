@@ -30,6 +30,7 @@ export class ContactDialogComponent {
   formulario: FormGroup;
   loading: boolean = false;
   contact: contacts = {} as contacts;
+  new: boolean = false;
 
   readonly data = inject<{ contact: contacts }>(MAT_DIALOG_DATA);
 
@@ -59,6 +60,11 @@ export class ContactDialogComponent {
   }
 
   ngOnInit() {
+    if (this.data.contact === undefined) {
+      this.new = true;
+      return;
+    }
+
     this.contact = this.data.contact;
     this.formulario.setValue({
       Name: this.contact.Name,
@@ -91,7 +97,7 @@ export class ContactDialogComponent {
       const ahora = new Date().toISOString();
       const noTabla = 5050;
       const systemId = this.contact.SystemId
-      const tipoCambio = '1';
+      const tipoCambio = this.new ? "0" : "1"; // 0: Nuevo, 1: Modificación
 
       const registroscambios = (Object.keys(formValues) as (keyof typeof formValues)[]).reduce((arr, key) => {
       const nuevoValor = formValues[key];
@@ -127,6 +133,7 @@ export class ContactDialogComponent {
             const url = environment.url + "registroscambiosHeader?$expand=registroscambios";
             const result = await firstValueFrom(this.http.post(url, body));
             this.loading = false;
+            console.log('Resultado del API:', result);
           } catch (error: any) {
             if (error.status === 0) {
               this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {

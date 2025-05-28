@@ -68,4 +68,11 @@ export class ContactsComponent implements AfterViewInit, OnInit {
       }
     });
   }
+
+  newContact()
+    {
+      const dialogRef = this.dialog.open(ContactDialogComponent, {
+        data: { }
+      });
+    }
 }
