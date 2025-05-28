@@ -12,6 +12,10 @@ import { MatFormFieldModule} from '@angular/material/form-field';
 import { NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { RegistroCambio } from '../../models/registro_cambios';
+import { environment } from '../../../environmets/environment';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -26,30 +30,31 @@ export class HomeComponent {
   loading: boolean = false;
   enableEdit: boolean = false;
 
-  constructor( private snackBar: MatSnackBar, private session: SessionStorageService, private router: Router, private fb: FormBuilder ) {
+  constructor( private snackBar: MatSnackBar, private session: SessionStorageService,
+    private http: HttpClient, private router: Router, private fb: FormBuilder ) {
     this.formulario = this.fb.group({
-      name: ['', [
+      Name: ['', [
         //Validators.required,
         //Validators.maxLength(20)
       ]],
-      address: ['', [
+      Address: ['', [
         //Validators.required,
       ]],
-      city: ['', [
+      City: ['', [
         //Validators.required,
       ]],
-      phoneNo: ['', [
+      PhoneNo: ['', [
         //Validators.required,
         //Validators.pattern(/^\d{10}$/)
       ]],
-      postCode: ['', [
+      PostCode: ['', [
         //Validators.required,
         //Validators.pattern(/^\d{5}$/)
       ]],
-      county: ['', [
+      County: ['', [
         //Validators.required,
       ]],
-      vatRegistrationNo: ['', [
+      VATRegistrationNo: ['', [
         //Validators.required,
       ]],
     });
@@ -63,24 +68,100 @@ export class HomeComponent {
     }
 
     this.formulario.setValue({
-      name: this.centerData.Name,
-      address: this.centerData.Address,
-      city: this.centerData.City,
-      phoneNo: this.centerData.PhoneNo,
-      postCode: this.centerData.PostCode,
-      county: this.centerData.County,
-      vatRegistrationNo: this.centerData.VATRegistrationNo
+      Name: this.centerData.Name,
+      Address: this.centerData.Address,
+      City: this.centerData.City,
+      PhoneNo: this.centerData.PhoneNo,
+      PostCode: this.centerData.PostCode,
+      County: this.centerData.County,
+      VATRegistrationNo: this.centerData.VATRegistrationNo
     });
 
     this.EnableDisableCtrls();
   }
 
-  save() {
+  genChanges()
+  {
+    const formValues = {
+      Name: this.formulario.get('Name')?.value,
+      Address: this.formulario.get('Address')?.value,
+      City: this.formulario.get('City')?.value,
+      PhoneNo: this.formulario.get('PhoneNo')?.value,
+      PostCode: this.formulario.get('PostCode')?.value,
+      County: this.formulario.get('County')?.value,
+      VATRegistrationNo: this.formulario.get('VATRegistrationNo')?.value
+    };
+
+    const camposMap = {
+      Name: 2,
+      Address: 5,
+      City: 7,
+      PhoneNo: 9,
+      PostCode: 91,
+      County: 92,
+      VATRegistrationNo: 86
+    };
+
+    const ahora = new Date().toISOString();
+    const noTabla = 50111;
+    const systemId = this.centerData.SystemId;
+    const tipoCambio = '1';
+
+    const registroscambios = (Object.keys(formValues) as (keyof typeof formValues)[]).reduce((arr, key) => {
+      const nuevoValor = formValues[key];
+      const valorAnterior = this.centerData[key];
+
+      if (nuevoValor !== valorAnterior) {
+        arr.push({
+          FechayHora: ahora,
+          NoTabla: noTabla,
+          NoCampo: camposMap[key],
+          ValorNuevo: String(nuevoValor),
+          SystemIdRegistro: systemId,
+          TipodeCambio: tipoCambio
+        });
+      }
+
+      return arr;
+    }, [] as RegistroCambio[]);
+
+    const payload = { registroscambios };
+    return payload;
+  }
+
+  async save() {
+    const body = this.genChanges();
+
+    try{
+          this.loading = true;
+          const url = environment.url + "registroscambiosHeader?$expand=registroscambios";
+          const result = await firstValueFrom(this.http.post(url, body));
+          this.loading = false;
+
+        } catch (error: any) {
+          if (error.status === 0) {
+            this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {
+              duration: 3000,
+              verticalPosition: 'top' });
+
+            this.loading = false;
+          } else {
+            this.snackBar.open('Error al llamar al API: ' + error, 'Cerrar', {
+              duration: 3000,
+              verticalPosition: 'top' });
+            this.loading = false;
+          }
+        }
+
     this.snackBar.open('Datos guardados', 'Cerrar', {
           duration: 3000,
           verticalPosition: 'top' });
     this.enableEdit = false;
     this.EnableDisableCtrls();
+  }
+
+  toPascalCase(camelCase: string): string {
+    return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
   }
 
   cancel() {
@@ -90,21 +171,21 @@ export class HomeComponent {
 
   EnableDisableCtrls() {
     if (this.enableEdit) {
-      this.formulario.get('name')?.enable();
-      this.formulario.get('address')?.enable();
-      this.formulario.get('city')?.enable();
-      this.formulario.get('phoneNo')?.enable();
-      this.formulario.get('postCode')?.enable();
-      this.formulario.get('county')?.enable();
-      this.formulario.get('vatRegistrationNo')?.enable();
+      this.formulario.get('Name')?.enable();
+      this.formulario.get('Address')?.enable();
+      this.formulario.get('City')?.enable();
+      this.formulario.get('PhoneNo')?.enable();
+      this.formulario.get('PostCode')?.enable();
+      this.formulario.get('County')?.enable();
+      this.formulario.get('VATRegistrationNo')?.enable();
     } else {
-      this.formulario.get('name')?.disable();
-      this.formulario.get('address')?.disable();
-      this.formulario.get('city')?.disable();
-      this.formulario.get('phoneNo')?.disable();
-      this.formulario.get('postCode')?.disable();
-      this.formulario.get('county')?.disable();
-      this.formulario.get('vatRegistrationNo')?.disable();
+      this.formulario.get('Name')?.disable();
+      this.formulario.get('Address')?.disable();
+      this.formulario.get('City')?.disable();
+      this.formulario.get('PhoneNo')?.disable();
+      this.formulario.get('PostCode')?.disable();
+      this.formulario.get('County')?.disable();
+      this.formulario.get('VATRegistrationNo')?.disable();
     }
   }
 
@@ -112,4 +193,22 @@ export class HomeComponent {
     this.enableEdit = !this.enableEdit;
     this.EnableDisableCtrls();
   }
+
+  generateRegistrosCambios(formValues: any, camposMap: { [key: string]: number }, noTabla: number, systemId: string, tipoCambio: string = '1'): { registroscambios: RegistroCambio[] } {
+  const ahora = new Date().toISOString();
+
+  const registroscambios: RegistroCambio[] = Object.keys(formValues).map(key => ({
+      FechayHora: ahora,
+      NoTabla: noTabla,
+      NoCampo: camposMap[key],
+      ValorNuevo: String(formValues[key]),
+      SystemIdRegistro: systemId,
+      TipodeCambio: tipoCambio
+    }));
+
+    return { registroscambios };
+  }
+
+
+
 }
