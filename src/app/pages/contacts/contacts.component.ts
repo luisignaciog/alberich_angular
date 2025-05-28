@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgIf } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
+import { ContactDialogComponent } from '../contact-dialog/contact-dialog.component';
 
 @Component({
   selector: 'app-contacts',
@@ -50,9 +51,21 @@ export class ContactsComponent implements AfterViewInit, OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  openDialogContact() {
+  editContact(contact: contacts) {
+    this.openDialogContact(contact);
   }
 
-  editContact(contact: contacts) {
+  openDialogContact(contact: contacts) {
+    const dialogRef = this.dialog.open(ContactDialogComponent, {
+      data: { contact }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && Array.isArray(result)) {
+        if (result.length > 0) {
+          console.log('Resultado del diálogo:', result);
+        }
+      }
+    });
   }
 }
