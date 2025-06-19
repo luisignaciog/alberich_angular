@@ -16,13 +16,14 @@ import { RegistroCambio } from '../../models/registro_cambios';
 import { environment } from '../../../environmets/environment';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   imports: [NavbarComponent, MatProgressSpinnerModule, FormsModule,ReactiveFormsModule
-    , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule]
+    , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule, MatTooltip]
 })
 export class HomeComponent {
   centerData: CenterData = createEmptyCenterData();
@@ -57,6 +58,12 @@ export class HomeComponent {
       VATRegistrationNo: ['', [
         //Validators.required,
       ]],
+      ShippingAgentCode: ['', [
+        //Validators.required,
+      ]],
+      ShippingAgentNIMA: ['', [
+        //Validators.required,
+      ]]
     });
   }
 
@@ -74,7 +81,9 @@ export class HomeComponent {
       PhoneNo: this.centerData.PhoneNo,
       PostCode: this.centerData.PostCode,
       County: this.centerData.County,
-      VATRegistrationNo: this.centerData.VATRegistrationNo
+      VATRegistrationNo: this.centerData.VATRegistrationNo,
+      ShippingAgentCode: '',
+      ShippingAgentNIMA: ''
     });
 
     this.EnableDisableCtrls();
@@ -178,6 +187,8 @@ export class HomeComponent {
       this.formulario.get('PostCode')?.enable();
       this.formulario.get('County')?.enable();
       this.formulario.get('VATRegistrationNo')?.enable();
+      this.formulario.get('ShippingAgentCode')?.enable();
+      this.formulario.get('ShippingAgentNIMA')?.enable();
     } else {
       this.formulario.get('Name')?.disable();
       this.formulario.get('Address')?.disable();
@@ -186,6 +197,8 @@ export class HomeComponent {
       this.formulario.get('PostCode')?.disable();
       this.formulario.get('County')?.disable();
       this.formulario.get('VATRegistrationNo')?.disable();
+      this.formulario.get('ShippingAgentCode')?.disable();
+      this.formulario.get('ShippingAgentNIMA')?.disable();
     }
   }
 
@@ -209,6 +222,14 @@ export class HomeComponent {
     return { registroscambios };
   }
 
+  centers() {
+    console.log('centers');
+    this.router.navigate(['centers']);
+  }
 
+  contacts() {
+    console.log('contacts');
+    this.router.navigate(['contacts']);
+  }
 
 }

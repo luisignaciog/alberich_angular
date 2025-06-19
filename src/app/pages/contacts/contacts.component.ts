@@ -25,7 +25,7 @@ export class ContactsComponent implements AfterViewInit, OnInit {
   centerData: CenterData = createEmptyCenterData();
   loading: boolean = false;
   dataSource: MatTableDataSource<contacts> = new MatTableDataSource<contacts>();
-  displayedColumns: string[] = ['No','Name','PhoneNo','EMail', 'actions'];
+  displayedColumns: string[] = ['Name','EMail', 'actions'];
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;

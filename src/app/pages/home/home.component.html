@@ -4,12 +4,14 @@
 </div>
 
 <div class="back">
-    <div class="profile-card">
-      <form [formGroup]="formulario">
+  <div class="profile-card">
+    <form [formGroup]="formulario" class="form-container">
+      <div class="form-scrollable">
         <h2>Datos de empresa</h2>
+
         <mat-form-field class="full-width" appearance="outline">
           <mat-label>Nombre empresa</mat-label>
-          <input matInput placeholder="Nombre empresa" value="centerData.Name" formControlName="Name" >
+          <input matInput placeholder="Nombre empresa" formControlName="Name">
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline">
@@ -42,16 +44,39 @@
           <input matInput placeholder="CIF/NIF" value="centerData.VATRegistrationNo" formControlName="VATRegistrationNo" >
         </mat-form-field>
 
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Transportista</mat-label>
+          <input matInput placeholder="Transportista" value="centerData.ShippingAgentCode" formControlName="ShippingAgentCode" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>NIMA</mat-label>
+          <input matInput placeholder="NIMA" formControlName="ShippingAgentNIMA">
+        </mat-form-field>
+      </div>
+
+      <div class="form-buttons">
+        <!--!Boton de editar-->
         <button mat-mini-fab color="primary" (click)="edit()" *ngIf="!enableEdit">
           <mat-icon>edit</mat-icon>
         </button>
 
+        <!--!Boton de guarda-->
         <button mat-mini-fab color="primary" (click)="save()" *ngIf="enableEdit">
           <mat-icon>check</mat-icon>
         </button>
+
+        <!--!Boton de cancelar-->
         <button mat-mini-fab color="primary" style="margin-left: 10px;" (click)="cancel()" *ngIf="enableEdit">
           <mat-icon>close</mat-icon>
         </button>
-      </form>
+
+        <!--!Boton de contactos-->
+        <button mat-raised-button color="primary" (click)="contacts()" *ngIf="!enableEdit">Contactos ({{ centerData!.contactosempresasgreenbc!.length }})</button>
+
+        <!--!Boton de centros-->
+        <button mat-raised-button color="primary" (click)="centers()" *ngIf="!enableEdit">Centros ({{ centerData!.centrosempresasgreenbc!.length }})</button>
+      </div>
+    </form>
   </div>
 </div>
