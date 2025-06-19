@@ -56,8 +56,31 @@ export class CentersComponent implements OnInit, AfterViewInit {
 
   newCenter()
   {
+    const body: centers = {
+        "@odata.etag": "",
+        NoEmpresaGreenBC: "",
+        Code: "",
+        Name: "",
+        Name2: "",
+        Address: "",
+        Address2: "",
+        City: "",
+        PhoneNo: "",
+        CountryRegionCode: "",
+        PostCode: "",
+        County: "",
+        EMail: "",
+        CodProductor: "",
+        CodGestor: "",
+        CodTransportista: "",
+        EMailEnvioServicio: "",
+        EMailEnvioDocAmbiental: "",
+        SystemModifiedAt: "",
+        SystemId: this.centerData.SystemId
+      }
+
     const dialogRef = this.dialog.open(CenterDialogComponent, {
-      data: { }
+      data: { center: body }
     });
   }
 

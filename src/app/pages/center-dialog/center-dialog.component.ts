@@ -77,7 +77,7 @@ export class CenterDialogComponent {
 
   ngOnInit() {
 
-    if (this.data.center == undefined) {
+    if ((this.data.center == undefined) || (this.data.center.NoEmpresaGreenBC == "")) {
       this.new = true;
       return;
     }
@@ -116,7 +116,7 @@ export class CenterDialogComponent {
       };
 
       const camposMap = {
-        Name: 2,
+        Name: 3,
         Address: 5,
         City: 7,
         PhoneNo: 9,
