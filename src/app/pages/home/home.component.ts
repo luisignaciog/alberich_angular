@@ -48,11 +48,18 @@ export class HomeComponent {
         //Validators.required,
         //Validators.pattern(/^\d{10}$/)
       ]],
+      MobilePhoneNo: ['', [
+        //Validators.required,
+        //Validators.pattern(/^\d{10}$/)
+      ]],
       PostCode: ['', [
         //Validators.required,
         //Validators.pattern(/^\d{5}$/)
       ]],
       County: ['', [
+        //Validators.required,
+      ]],
+      CountryRegionCode: ['', [
         //Validators.required,
       ]],
       VATRegistrationNo: ['', [
@@ -62,6 +69,9 @@ export class HomeComponent {
         //Validators.required,
       ]],
       ShippingAgentNIMA: ['', [
+        //Validators.required,
+      ]],
+      BankOwnershipCertificate: ['', [
         //Validators.required,
       ]]
     });
@@ -83,7 +93,10 @@ export class HomeComponent {
       County: this.centerData.County,
       VATRegistrationNo: this.centerData.VATRegistrationNo,
       ShippingAgentCode: '',
-      ShippingAgentNIMA: ''
+      ShippingAgentNIMA: '',
+      CountryRegionCode: this.centerData.CountryRegionCode,
+      MobilePhoneNo: this.centerData.MobilePhoneNo,
+      BankOwnershipCertificate: ''
     });
 
     this.EnableDisableCtrls();
@@ -98,7 +111,9 @@ export class HomeComponent {
       PhoneNo: this.formulario.get('PhoneNo')?.value,
       PostCode: this.formulario.get('PostCode')?.value,
       County: this.formulario.get('County')?.value,
-      VATRegistrationNo: this.formulario.get('VATRegistrationNo')?.value
+      VATRegistrationNo: this.formulario.get('VATRegistrationNo')?.value,
+      CountryRegionCode: this.formulario.get('CountryRegionCode')?.value,
+      MobilePhoneNo: this.formulario.get('MobilePhoneNo')?.value,
     };
 
     const camposMap = {
@@ -108,7 +123,9 @@ export class HomeComponent {
       PhoneNo: 9,
       PostCode: 91,
       County: 92,
-      VATRegistrationNo: 86
+      VATRegistrationNo: 86,
+      CountryRegionCode: 35,
+      MobilePhoneNo: 5061,
     };
 
     const ahora = new Date().toISOString();
@@ -189,6 +206,9 @@ export class HomeComponent {
       this.formulario.get('VATRegistrationNo')?.enable();
       this.formulario.get('ShippingAgentCode')?.enable();
       this.formulario.get('ShippingAgentNIMA')?.enable();
+      this.formulario.get('CountryRegionCode')?.enable();
+      this.formulario.get('MobilePhoneNo')?.enable();
+      this.formulario.get('BankOwnershipCertificate')?.enable();
     } else {
       this.formulario.get('Name')?.disable();
       this.formulario.get('Address')?.disable();
@@ -199,6 +219,9 @@ export class HomeComponent {
       this.formulario.get('VATRegistrationNo')?.disable();
       this.formulario.get('ShippingAgentCode')?.disable();
       this.formulario.get('ShippingAgentNIMA')?.disable();
+      this.formulario.get('CountryRegionCode')?.disable();
+      this.formulario.get('MobilePhoneNo')?.disable();
+      this.formulario.get('BankOwnershipCertificate')?.disable();
     }
   }
 

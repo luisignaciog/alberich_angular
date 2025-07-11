@@ -25,6 +25,11 @@
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Móvil</mat-label>
+          <input matInput placeholder="Móvil" value="centerData.MobilePhoneNo" formControlName="MobilePhoneNo" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
           <mat-label>Ciudad</mat-label>
           <input matInput placeholder="Ciudad" value="centerData.City" formControlName="City" >
         </mat-form-field>
@@ -40,6 +45,11 @@
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline">
+          <mat-label>País</mat-label>
+          <input matInput placeholder="País" value="centerData.CountryRegionCode" formControlName="CountryRegionCode" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
           <mat-label>CIF/NIF</mat-label>
           <input matInput placeholder="CIF/NIF" value="centerData.VATRegistrationNo" formControlName="VATRegistrationNo" >
         </mat-form-field>
@@ -50,8 +60,13 @@
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline">
-          <mat-label>NIMA</mat-label>
-          <input matInput placeholder="NIMA" formControlName="ShippingAgentNIMA">
+          <mat-label>NIMA Transp.</mat-label>
+          <input matInput placeholder="NIMA Transp." formControlName="ShippingAgentNIMA">
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Certificado de propiedad bancaria</mat-label>
+          <input matInput placeholder="Certificado de propiedad bancaria" formControlName="BankOwnershipCertificate">
         </mat-form-field>
       </div>
 
