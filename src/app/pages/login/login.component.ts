@@ -9,7 +9,7 @@ import { environment } from '../../../environmets/environment';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { SessionStorageService } from '../../models/session-storage-service';
-import { CenterData, createEmptyCenterData } from '../../models/center_data_interface';
+import { CompanyData, createEmptyCompanyData } from '../../models/center_data_interface';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
@@ -23,7 +23,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 })
 export class LoginComponent {
   loginData: LoginData = createEmptyLoginData();
-  centerData: CenterData = createEmptyCenterData();
+  companyData: CompanyData = createEmptyCompanyData();
   formulario: FormGroup;
   loading: boolean = false;
 
@@ -69,8 +69,8 @@ export class LoginComponent {
   {
     try{
       const url = environment.url + `empresasgreenbc(${systemId})?$expand=centrosempresasgreenbc,contactosempresasgreenbc`;
-      this.centerData = await lastValueFrom(this.http.get<CenterData>(url));
-      this.session.setData(this.centerData);
+      this.companyData = await lastValueFrom(this.http.get<CompanyData>(url));
+      this.session.setData(this.companyData);
       this.loading = false;
       this.router.navigate(['home']);
     } catch (error: any) {

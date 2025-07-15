@@ -3,7 +3,7 @@ import { NavbarComponent } from "../navbar/navbar.component";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgIf } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
-import { CenterData, centers, createEmptyCenterData } from '../../models/center_data_interface';
+import { CompanyData, centers, createEmptyCompanyData } from '../../models/center_data_interface';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionStorageService } from '../../models/session-storage-service';
 import { Router } from '@angular/router';
@@ -22,7 +22,7 @@ import { CenterDialogComponent } from '../center-dialog/center-dialog.component'
     MatIcon, MatButtonModule],
 })
 export class CentersComponent implements OnInit, AfterViewInit {
-  centerData: CenterData = createEmptyCenterData();
+  centerData: CompanyData = createEmptyCompanyData();
   loading: boolean = false;
   dataSource: MatTableDataSource<centers> = new MatTableDataSource<centers>();
   displayedColumns: string[] = ['Code','Name','City','PhoneNo','EMail', 'actions']; //,'CodProductor','CodGestor','CodTransportista','EMailEnvioServicio','EMailEnvioDocAmbiental'];
@@ -56,8 +56,31 @@ export class CentersComponent implements OnInit, AfterViewInit {
 
   newCenter()
   {
+    const body: centers = {
+        "@odata.etag": "",
+        NoEmpresaGreenBC: "",
+        Code: "",
+        Name: "",
+        Name2: "",
+        Address: "",
+        Address2: "",
+        City: "",
+        PhoneNo: "",
+        CountryRegionCode: "",
+        PostCode: "",
+        County: "",
+        EMail: "",
+        CodProductor: "",
+        CodGestor: "",
+        CodTransportista: "",
+        EMailEnvioServicio: "",
+        EMailEnvioDocAmbiental: "",
+        SystemModifiedAt: "",
+        SystemId: this.centerData.SystemId
+      }
+
     const dialogRef = this.dialog.open(CenterDialogComponent, {
-      data: { }
+      data: { center: body }
     });
   }
 

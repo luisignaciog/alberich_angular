@@ -4,7 +4,7 @@ import { NavbarComponent } from "../navbar/navbar.component";
 import { createEmptyLoginData, LoginData } from '../../models/login_data_interface';
 import { SessionStorageService } from '../../models/session-storage-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CenterData, createEmptyCenterData } from '../../models/center_data_interface';
+import { CompanyData, createEmptyCompanyData } from '../../models/center_data_interface';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +16,7 @@ import { RegistroCambio } from '../../models/registro_cambios';
 import { environment } from '../../../environmets/environment';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-home',
@@ -25,7 +26,7 @@ import { HttpClient } from '@angular/common/http';
     , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule]
 })
 export class HomeComponent {
-  centerData: CenterData = createEmptyCenterData();
+  companyData: CompanyData = createEmptyCompanyData();
   formulario: FormGroup;
   loading: boolean = false;
   enableEdit: boolean = false;
@@ -47,6 +48,10 @@ export class HomeComponent {
         //Validators.required,
         //Validators.pattern(/^\d{10}$/)
       ]],
+      MobilePhoneNo: ['', [
+        //Validators.required,
+        //Validators.pattern(/^\d{10}$/)
+      ]],
       PostCode: ['', [
         //Validators.required,
         //Validators.pattern(/^\d{5}$/)
@@ -54,27 +59,44 @@ export class HomeComponent {
       County: ['', [
         //Validators.required,
       ]],
+      CountryRegionCode: ['', [
+        //Validators.required,
+      ]],
       VATRegistrationNo: ['', [
         //Validators.required,
       ]],
+      ShippingAgentCode: ['', [
+        //Validators.required,
+      ]],
+      ShippingAgentNIMA: ['', [
+        //Validators.required,
+      ]],
+      BankOwnershipCertificate: ['', [
+        //Validators.required,
+      ]]
     });
   }
 
   ngOnInit() {
-    this.centerData = this.session.getData();
+    this.companyData = this.session.getData();
 
-    if (this.centerData === null) {
+    if (this.companyData === null) {
       this.router.navigate(['login']);
     }
 
     this.formulario.setValue({
-      Name: this.centerData.Name,
-      Address: this.centerData.Address,
-      City: this.centerData.City,
-      PhoneNo: this.centerData.PhoneNo,
-      PostCode: this.centerData.PostCode,
-      County: this.centerData.County,
-      VATRegistrationNo: this.centerData.VATRegistrationNo
+      Name: this.companyData.Name,
+      Address: this.companyData.Address,
+      City: this.companyData.City,
+      PhoneNo: this.companyData.PhoneNo,
+      PostCode: this.companyData.PostCode,
+      County: this.companyData.County,
+      VATRegistrationNo: this.companyData.VATRegistrationNo,
+      ShippingAgentCode: '',
+      ShippingAgentNIMA: '',
+      CountryRegionCode: this.companyData.CountryRegionCode,
+      MobilePhoneNo: this.companyData.MobilePhoneNo,
+      BankOwnershipCertificate: ''
     });
 
     this.EnableDisableCtrls();
@@ -89,7 +111,9 @@ export class HomeComponent {
       PhoneNo: this.formulario.get('PhoneNo')?.value,
       PostCode: this.formulario.get('PostCode')?.value,
       County: this.formulario.get('County')?.value,
-      VATRegistrationNo: this.formulario.get('VATRegistrationNo')?.value
+      VATRegistrationNo: this.formulario.get('VATRegistrationNo')?.value,
+      CountryRegionCode: this.formulario.get('CountryRegionCode')?.value,
+      MobilePhoneNo: this.formulario.get('MobilePhoneNo')?.value,
     };
 
     const camposMap = {
@@ -99,17 +123,19 @@ export class HomeComponent {
       PhoneNo: 9,
       PostCode: 91,
       County: 92,
-      VATRegistrationNo: 86
+      VATRegistrationNo: 86,
+      CountryRegionCode: 35,
+      MobilePhoneNo: 5061,
     };
 
     const ahora = new Date().toISOString();
     const noTabla = 50110;
-    const systemId = this.centerData.SystemId;
+    const systemId = this.companyData.SystemId;
     const tipoCambio = '1';
 
     const registroscambios = (Object.keys(formValues) as (keyof typeof formValues)[]).reduce((arr, key) => {
       const nuevoValor = formValues[key];
-      const valorAnterior = this.centerData[key];
+      const valorAnterior = this.companyData[key];
 
       if (nuevoValor !== valorAnterior) {
         arr.push({
@@ -118,7 +144,9 @@ export class HomeComponent {
           NoCampo: camposMap[key],
           ValorNuevo: String(nuevoValor),
           SystemIdRegistro: systemId,
-          TipodeCambio: tipoCambio
+          SystemIdRegistroPrincipal: systemId,
+          TipodeCambio: tipoCambio,
+          CodAgrupacionCambios: this.toPascalCase(key) // Assuming CodAgrupacionCambios is derived from the key
         });
       }
 
@@ -178,6 +206,11 @@ export class HomeComponent {
       this.formulario.get('PostCode')?.enable();
       this.formulario.get('County')?.enable();
       this.formulario.get('VATRegistrationNo')?.enable();
+      this.formulario.get('ShippingAgentCode')?.enable();
+      this.formulario.get('ShippingAgentNIMA')?.enable();
+      this.formulario.get('CountryRegionCode')?.enable();
+      this.formulario.get('MobilePhoneNo')?.enable();
+      this.formulario.get('BankOwnershipCertificate')?.enable();
     } else {
       this.formulario.get('Name')?.disable();
       this.formulario.get('Address')?.disable();
@@ -186,6 +219,11 @@ export class HomeComponent {
       this.formulario.get('PostCode')?.disable();
       this.formulario.get('County')?.disable();
       this.formulario.get('VATRegistrationNo')?.disable();
+      this.formulario.get('ShippingAgentCode')?.disable();
+      this.formulario.get('ShippingAgentNIMA')?.disable();
+      this.formulario.get('CountryRegionCode')?.disable();
+      this.formulario.get('MobilePhoneNo')?.disable();
+      this.formulario.get('BankOwnershipCertificate')?.disable();
     }
   }
 
@@ -203,12 +241,22 @@ export class HomeComponent {
       NoCampo: camposMap[key],
       ValorNuevo: String(formValues[key]),
       SystemIdRegistro: systemId,
+      SystemIdRegistroPrincipal: systemId,
+      CodAgrupacionCambios: this.toPascalCase(key),
       TipodeCambio: tipoCambio
     }));
 
     return { registroscambios };
   }
 
+  centers() {
+    console.log('centers');
+    this.router.navigate(['centers']);
+  }
 
+  contacts() {
+    console.log('contacts');
+    this.router.navigate(['contacts']);
+  }
 
 }
