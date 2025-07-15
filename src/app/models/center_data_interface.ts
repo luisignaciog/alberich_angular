@@ -1,4 +1,4 @@
-export interface CenterData {
+export interface CompanyData {
   "@odata.context": string;
   "@odata.etag": string;
   SystemId: "b4e1af38-b421-f011-add3-00155d037f01",
@@ -52,7 +52,7 @@ export interface contacts {
   EMail: string;
 }
 
-export function createEmptyCenterData (): CenterData {
+export function createEmptyCompanyData (): CompanyData {
   return {
     "@odata.context": "",
     "@odata.etag": "",

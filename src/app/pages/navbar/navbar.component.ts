@@ -1,4 +1,4 @@
-import { CenterData, createEmptyCenterData, centers } from './../../models/center_data_interface';
+import { CompanyData, createEmptyCompanyData, centers } from './../../models/center_data_interface';
 import { Component } from '@angular/core';
 import { MatIconModule} from '@angular/material/icon';
 import { MatButtonModule} from '@angular/material/button';
@@ -16,22 +16,22 @@ import {MatTooltipModule} from '@angular/material/tooltip';
   imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule],
 })
 export class NavbarComponent {
-  centerData: CenterData = createEmptyCenterData();
+  companyData: CompanyData = createEmptyCompanyData();
   userName: string = '';
 
   constructor( private session: SessionStorageService, private router: Router ) { }
 
   ngOnInit() {
-    this.centerData = this.session.getData();
+    this.companyData = this.session.getData();
 
-    if (this.centerData != null) {
-      this.userName = this.centerData.Name;
+    if (this.companyData != null) {
+      this.userName = this.companyData.Name;
     }
   }
 
   logout() {
     this.session.clearData();
-    this.centerData = createEmptyCenterData();
+    this.companyData = createEmptyCompanyData();
     this.userName = '';
     this.router.navigate(['login']);
   }

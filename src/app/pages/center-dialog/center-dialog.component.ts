@@ -11,7 +11,7 @@ import { NgIf } from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { centers } from '../../models/center_data_interface';
+import { centers, CompanyData, createEmptyCompanyData } from '../../models/center_data_interface';
 import { RegistroCambio } from '../../models/registro_cambios';
 import { environment } from '../../../environmets/environment';
 import { firstValueFrom } from 'rxjs';
@@ -31,6 +31,7 @@ export class CenterDialogComponent {
   loading: boolean = false;
   center: centers = {} as centers;
   new: boolean = false;
+  companyData: CompanyData = createEmptyCompanyData();
 
   readonly data = inject<{ center: centers }>(MAT_DIALOG_DATA);
 
@@ -81,6 +82,8 @@ export class CenterDialogComponent {
       this.new = true;
       return;
     }
+
+  this.companyData = this.session.getData();
 
   this.center = this.data.center;
 
@@ -143,7 +146,9 @@ export class CenterDialogComponent {
             NoCampo: camposMap[key],
             ValorNuevo: String(nuevoValor),
             SystemIdRegistro: systemId,
-            TipodeCambio: tipoCambio
+            SystemIdRegistroPrincipal: this.companyData.SystemId,
+            TipodeCambio: tipoCambio,
+            CodAgrupacionCambios: ahora
           });
         }
 

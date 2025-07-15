@@ -87,10 +87,10 @@
         </button>
 
         <!--!Boton de contactos-->
-        <button mat-raised-button color="primary" (click)="contacts()" *ngIf="!enableEdit">Contactos ({{ centerData!.contactosempresasgreenbc!.length }})</button>
+        <button mat-raised-button color="primary" (click)="contacts()" *ngIf="!enableEdit">Contactos ({{ companyData!.contactosempresasgreenbc!.length }})</button>
 
         <!--!Boton de centros-->
-        <button mat-raised-button color="primary" (click)="centers()" *ngIf="!enableEdit">Centros ({{ centerData!.centrosempresasgreenbc!.length }})</button>
+        <button mat-raised-button color="primary" (click)="centers()" *ngIf="!enableEdit">Centros ({{ companyData!.centrosempresasgreenbc!.length }})</button>
       </div>
     </form>
   </div>

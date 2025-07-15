@@ -7,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { contacts } from '../../models/center_data_interface';
+import { CompanyData, contacts, createEmptyCompanyData } from '../../models/center_data_interface';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionStorageService } from '../../models/session-storage-service';
@@ -31,6 +31,7 @@ export class ContactDialogComponent {
   loading: boolean = false;
   contact: contacts = {} as contacts;
   new: boolean = false;
+  companyData: CompanyData = createEmptyCompanyData();
 
   readonly data = inject<{ contact: contacts }>(MAT_DIALOG_DATA);
 
@@ -65,6 +66,7 @@ export class ContactDialogComponent {
       return;
     }
 
+    this.companyData = this.session.getData();
     this.contact = this.data.contact;
     this.formulario.setValue({
       Name: this.contact.Name,
@@ -110,7 +112,9 @@ export class ContactDialogComponent {
           NoCampo: camposMap[key],
           ValorNuevo: String(nuevoValor),
           SystemIdRegistro: systemId,
-          TipodeCambio: tipoCambio
+          SystemIdRegistroPrincipal: this.companyData.SystemId,
+          TipodeCambio: tipoCambio,
+          CodAgrupacionCambios: ahora
         });
       }
 

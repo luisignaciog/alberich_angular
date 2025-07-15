@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { CenterData, contacts, createEmptyCenterData } from '../../models/center_data_interface';
+import { CompanyData, contacts, createEmptyCompanyData } from '../../models/center_data_interface';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionStorageService } from '../../models/session-storage-service';
@@ -22,7 +22,7 @@ import { ContactDialogComponent } from '../contact-dialog/contact-dialog.compone
     MatIcon, MatButtonModule],
 })
 export class ContactsComponent implements AfterViewInit, OnInit {
-  centerData: CenterData = createEmptyCenterData();
+  companyData: CompanyData = createEmptyCompanyData();
   loading: boolean = false;
   dataSource: MatTableDataSource<contacts> = new MatTableDataSource<contacts>();
   displayedColumns: string[] = ['Name','EMail', 'actions'];
@@ -35,14 +35,14 @@ export class ContactsComponent implements AfterViewInit, OnInit {
     private router: Router, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.centerData = this.session.getData();
+    this.companyData = this.session.getData();
 
-    if (this.centerData === null) {
+    if (this.companyData === null) {
       this.router.navigate(['login']);
     }
 
     this.loading = true;
-    this.dataSource = new MatTableDataSource<contacts>(this.centerData.contactosempresasgreenbc);
+    this.dataSource = new MatTableDataSource<contacts>(this.companyData.contactosempresasgreenbc);
     this.loading = false;
   }
 

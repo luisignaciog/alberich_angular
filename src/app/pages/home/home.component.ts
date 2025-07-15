@@ -4,7 +4,7 @@ import { NavbarComponent } from "../navbar/navbar.component";
 import { createEmptyLoginData, LoginData } from '../../models/login_data_interface';
 import { SessionStorageService } from '../../models/session-storage-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CenterData, createEmptyCenterData } from '../../models/center_data_interface';
+import { CompanyData, createEmptyCompanyData } from '../../models/center_data_interface';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
@@ -23,10 +23,10 @@ import { MatTooltip } from '@angular/material/tooltip';
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   imports: [NavbarComponent, MatProgressSpinnerModule, FormsModule,ReactiveFormsModule
-    , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule, MatTooltip]
+    , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule]
 })
 export class HomeComponent {
-  centerData: CenterData = createEmptyCenterData();
+  companyData: CompanyData = createEmptyCompanyData();
   formulario: FormGroup;
   loading: boolean = false;
   enableEdit: boolean = false;
@@ -78,24 +78,24 @@ export class HomeComponent {
   }
 
   ngOnInit() {
-    this.centerData = this.session.getData();
+    this.companyData = this.session.getData();
 
-    if (this.centerData === null) {
+    if (this.companyData === null) {
       this.router.navigate(['login']);
     }
 
     this.formulario.setValue({
-      Name: this.centerData.Name,
-      Address: this.centerData.Address,
-      City: this.centerData.City,
-      PhoneNo: this.centerData.PhoneNo,
-      PostCode: this.centerData.PostCode,
-      County: this.centerData.County,
-      VATRegistrationNo: this.centerData.VATRegistrationNo,
+      Name: this.companyData.Name,
+      Address: this.companyData.Address,
+      City: this.companyData.City,
+      PhoneNo: this.companyData.PhoneNo,
+      PostCode: this.companyData.PostCode,
+      County: this.companyData.County,
+      VATRegistrationNo: this.companyData.VATRegistrationNo,
       ShippingAgentCode: '',
       ShippingAgentNIMA: '',
-      CountryRegionCode: this.centerData.CountryRegionCode,
-      MobilePhoneNo: this.centerData.MobilePhoneNo,
+      CountryRegionCode: this.companyData.CountryRegionCode,
+      MobilePhoneNo: this.companyData.MobilePhoneNo,
       BankOwnershipCertificate: ''
     });
 
@@ -130,12 +130,12 @@ export class HomeComponent {
 
     const ahora = new Date().toISOString();
     const noTabla = 50110;
-    const systemId = this.centerData.SystemId;
+    const systemId = this.companyData.SystemId;
     const tipoCambio = '1';
 
     const registroscambios = (Object.keys(formValues) as (keyof typeof formValues)[]).reduce((arr, key) => {
       const nuevoValor = formValues[key];
-      const valorAnterior = this.centerData[key];
+      const valorAnterior = this.companyData[key];
 
       if (nuevoValor !== valorAnterior) {
         arr.push({
@@ -144,7 +144,9 @@ export class HomeComponent {
           NoCampo: camposMap[key],
           ValorNuevo: String(nuevoValor),
           SystemIdRegistro: systemId,
-          TipodeCambio: tipoCambio
+          SystemIdRegistroPrincipal: systemId,
+          TipodeCambio: tipoCambio,
+          CodAgrupacionCambios: this.toPascalCase(key) // Assuming CodAgrupacionCambios is derived from the key
         });
       }
 
@@ -239,6 +241,8 @@ export class HomeComponent {
       NoCampo: camposMap[key],
       ValorNuevo: String(formValues[key]),
       SystemIdRegistro: systemId,
+      SystemIdRegistroPrincipal: systemId,
+      CodAgrupacionCambios: this.toPascalCase(key),
       TipodeCambio: tipoCambio
     }));
 

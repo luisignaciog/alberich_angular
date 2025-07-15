@@ -4,5 +4,7 @@ export interface RegistroCambio {
   NoCampo: number;
   ValorNuevo: string;
   SystemIdRegistro: string;
+  SystemIdRegistroPrincipal: string;
   TipodeCambio: string; // usualmente sería '1'
+  CodAgrupacionCambios: string;
 }
