@@ -9,7 +9,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule} from '@angular/material/form-field';
-import { NgIf } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RegistroCambio } from '../../models/registro_cambios';
@@ -19,14 +19,15 @@ import { HttpClient } from '@angular/common/http';
 import { v4 as uuidv4 } from 'uuid';
 import { NgClass } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { MatSelectModule } from '@angular/material/select';
+import { CountryData, createEmptyCountryData } from '../../models/country_interface';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
-  imports: [NavbarComponent, MatProgressSpinnerModule, FormsModule,ReactiveFormsModule
-    , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule, NgClass, MatCheckboxModule]
+  imports: [NavbarComponent, MatProgressSpinnerModule, FormsModule,ReactiveFormsModule, CommonModule
+    , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule, NgClass, MatCheckboxModule, MatSelectModule]
 })
 export class HomeComponent {
   companyData: CompanyData = createEmptyCompanyData();
@@ -35,6 +36,8 @@ export class HomeComponent {
   enableEdit: boolean = false;
   cambiosPorCampo: { [nombreCampo: string]: any } = {};
   ficherosBase64: { [key: string]: string } = {};
+  countries: CountryData = createEmptyCountryData();
+  countrySelected: string = '';
   camposMap = {
     Name: 2,
     Address: 5,
@@ -107,6 +110,7 @@ export class HomeComponent {
       this.router.navigate(['login']);
     }
 
+    this.getCountries();
     this.getChanges();
     this.setValueFields();
     this.EnableDisableCtrls();
@@ -123,6 +127,7 @@ export class HomeComponent {
       nifFile = 'Adjuntado';
     }
 
+    this.countrySelected = this.obtenerValorFinal('CountryRegionCode').valor;
     this.formulario.setValue({
       Name: this.obtenerValorFinal('Name').valor,
       Address: this.obtenerValorFinal('Address').valor,
@@ -131,7 +136,7 @@ export class HomeComponent {
       PostCode: this.obtenerValorFinal('PostCode').valor,
       County: this.obtenerValorFinal('County').valor,
       VATRegistrationNo: this.obtenerValorFinal('VATRegistrationNo').valor,
-      CountryRegionCode: this.obtenerValorFinal('CountryRegionCode').valor,
+      CountryRegionCode: this.countrySelected,
       MobilePhoneNo: this.obtenerValorFinal('MobilePhoneNo').valor,
       CodTransportista: this.obtenerValorFinal('CodTransportista').valor,
       NIMATransportista: this.companyData.NIMATransportista,
@@ -198,6 +203,8 @@ export class HomeComponent {
 
   async save() {
     const body = this.genChanges(this.generarCodigoAgrupacion());
+    console.log('Cuerpo de la solicitud:', body);
+    return;
 
     try{
       this.loading = true;
@@ -320,46 +327,61 @@ export class HomeComponent {
   }
 
   tieneCambioPendiente(campo: string): boolean {
-    return !!this.cambiosPorCampo[campo];
+      return !!this.cambiosPorCampo[campo];
+    }
+
+    adjuntarArchivo(campo: string, input: HTMLInputElement): void {
+    const file = input.files?.[0];
+    if (!file) return;
+
+    // Validaciones
+    const tipoPermitido = ['application/pdf', 'image/png', 'image/jpeg'];
+    const maxSizeBytes = 4 * 1024 * 1024; // 5 MB
+
+    if (!tipoPermitido.includes(file.type)) {
+      this.snackBar.open('Tipo de archivo no permitido. Solo PDF, PNG o JPG.', 'Cerrar', {
+        duration: 3000,
+        verticalPosition: 'top',
+      });
+      return;
+    }
+
+    if (file.size > maxSizeBytes) {
+      this.snackBar.open('El archivo supera el tamaño máximo de 4 MB.', 'Cerrar', {
+        duration: 3000,
+        verticalPosition: 'top',
+      });
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const base64 = reader.result as string;
+
+      // Guarda el nombre visible
+      this.formulario.get(campo)?.setValue(file.name);
+
+      // Guarda el base64 vinculado al campo
+      this.ficherosBase64[campo] = base64;
+    };
+
+    reader.readAsDataURL(file);
   }
 
-  adjuntarArchivo(campo: string, input: HTMLInputElement): void {
-  const file = input.files?.[0];
-  if (!file) return;
-
-  // Validaciones
-  const tipoPermitido = ['application/pdf', 'image/png', 'image/jpeg'];
-  const maxSizeBytes = 4 * 1024 * 1024; // 5 MB
-
-  if (!tipoPermitido.includes(file.type)) {
-    this.snackBar.open('Tipo de archivo no permitido. Solo PDF, PNG o JPG.', 'Cerrar', {
-      duration: 3000,
-      verticalPosition: 'top',
-    });
-    return;
+  async getCountries()
+  {
+    try{
+      const url = environment.url + `paisesgreenbc`;
+      this.countries = await lastValueFrom(this.http.get<CountryData>(url));
+    } catch (error: any) {
+      if (error.status === 0) {
+        this.snackBar.open('No hay conexión al servidor.', 'Cerrar', { duration: 3000, verticalPosition: 'top' });
+        this.loading = false;
+      } else {
+        this.snackBar.open('Datos del centro no válidos', 'Cerrar', { duration: 3000, verticalPosition: 'top' });
+        this.loading = false;
+      }
+    }
   }
-
-  if (file.size > maxSizeBytes) {
-    this.snackBar.open('El archivo supera el tamaño máximo de 4 MB.', 'Cerrar', {
-      duration: 3000,
-      verticalPosition: 'top',
-    });
-    return;
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = () => {
-    const base64 = reader.result as string;
-
-    // Guarda el nombre visible
-    this.formulario.get(campo)?.setValue(file.name);
-
-    // Guarda el base64 vinculado al campo
-    this.ficherosBase64[campo] = base64;
-  };
-
-  reader.readAsDataURL(file);
-}
-
 }

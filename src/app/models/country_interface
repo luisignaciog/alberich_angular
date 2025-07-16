@@ -1,5 +1,0 @@
-export interface CountryData {
-  SystemId: string;
-  Code: string;
-  Name: string;
-}
