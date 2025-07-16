@@ -90,3 +90,11 @@ h2 {
   }
 }
 
+.campo-pendiente mat-label,
+.campo-pendiente input {
+  color: red !important;
+}
+
+.campo-pendiente .mat-form-field-outline {
+  stroke: red;
+}

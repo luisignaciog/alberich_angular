@@ -16,20 +16,39 @@ import { RegistroCambio } from '../../models/registro_cambios';
 import { environment } from '../../../environmets/environment';
 import { firstValueFrom, lastValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { MatTooltip } from '@angular/material/tooltip';
+import { v4 as uuidv4 } from 'uuid';
+import { NgClass } from '@angular/common';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   imports: [NavbarComponent, MatProgressSpinnerModule, FormsModule,ReactiveFormsModule
-    , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule]
+    , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule, NgClass, MatCheckboxModule]
 })
 export class HomeComponent {
   companyData: CompanyData = createEmptyCompanyData();
   formulario: FormGroup;
   loading: boolean = false;
   enableEdit: boolean = false;
+  cambiosPorCampo: { [nombreCampo: string]: any } = {};
+  camposMap = {
+    Name: 2,
+    Address: 5,
+    City: 7,
+    PhoneNo: 9,
+    PostCode: 91,
+    County: 92,
+    VATRegistrationNo: 86,
+    CountryRegionCode: 35,
+    MobilePhoneNo: 5061,
+    CodTransportista: 50105,
+    NIMATransportista: 0,
+    CertificadoTitularidadBancariaPresentado: 999,
+    TarjetaNIFEmpresaPresentada: 998
+  };
 
   constructor( private snackBar: MatSnackBar, private session: SessionStorageService,
     private http: HttpClient, private router: Router, private fb: FormBuilder ) {
@@ -65,15 +84,18 @@ export class HomeComponent {
       VATRegistrationNo: ['', [
         //Validators.required,
       ]],
-      ShippingAgentCode: ['', [
+      CodTransportista: ['', [
         //Validators.required,
       ]],
-      ShippingAgentNIMA: ['', [
+      NIMATransportista: ['', [
         //Validators.required,
       ]],
-      BankOwnershipCertificate: ['', [
+      CertificadoTitularidadBancariaPresentado: ['', [
         //Validators.required,
-      ]]
+      ]],
+      TarjetaNIFEmpresaPresentada: ['', [
+        //Validators.required,
+      ]],
     });
   }
 
@@ -84,25 +106,40 @@ export class HomeComponent {
       this.router.navigate(['login']);
     }
 
-    this.formulario.setValue({
-      Name: this.companyData.Name,
-      Address: this.companyData.Address,
-      City: this.companyData.City,
-      PhoneNo: this.companyData.PhoneNo,
-      PostCode: this.companyData.PostCode,
-      County: this.companyData.County,
-      VATRegistrationNo: this.companyData.VATRegistrationNo,
-      ShippingAgentCode: '',
-      ShippingAgentNIMA: '',
-      CountryRegionCode: this.companyData.CountryRegionCode,
-      MobilePhoneNo: this.companyData.MobilePhoneNo,
-      BankOwnershipCertificate: ''
-    });
-
+    this.getChanges();
+    this.setValueFields();
     this.EnableDisableCtrls();
   }
 
-  genChanges()
+  setValueFields() {
+    var certFile: string = 'No adjuntado';
+    var nifFile: string = 'No adjuntado';
+    if (this.companyData.CertificadoTitularidadBancariaPresentado) {
+      certFile = 'Adjuntado';
+    }
+
+    if (this.companyData.TarjetaNIFEmpresaPresentada) {
+      nifFile = 'Adjuntado';
+    }
+
+    this.formulario.setValue({
+      Name: this.obtenerValorFinal('Name').valor,
+      Address: this.obtenerValorFinal('Address').valor,
+      City: this.obtenerValorFinal('City').valor,
+      PhoneNo: this.obtenerValorFinal('PhoneNo').valor,
+      PostCode: this.obtenerValorFinal('PostCode').valor,
+      County: this.obtenerValorFinal('County').valor,
+      VATRegistrationNo: this.obtenerValorFinal('VATRegistrationNo').valor,
+      CountryRegionCode: this.obtenerValorFinal('CountryRegionCode').valor,
+      MobilePhoneNo: this.obtenerValorFinal('MobilePhoneNo').valor,
+      CodTransportista: this.obtenerValorFinal('CodTransportista').valor,
+      NIMATransportista: this.companyData.NIMATransportista,
+      CertificadoTitularidadBancariaPresentado: certFile,
+      TarjetaNIFEmpresaPresentada: nifFile
+    });
+  }
+
+  genChanges(codAgrupacion: string)
   {
     const formValues = {
       Name: this.formulario.get('Name')?.value,
@@ -114,18 +151,8 @@ export class HomeComponent {
       VATRegistrationNo: this.formulario.get('VATRegistrationNo')?.value,
       CountryRegionCode: this.formulario.get('CountryRegionCode')?.value,
       MobilePhoneNo: this.formulario.get('MobilePhoneNo')?.value,
-    };
-
-    const camposMap = {
-      Name: 2,
-      Address: 5,
-      City: 7,
-      PhoneNo: 9,
-      PostCode: 91,
-      County: 92,
-      VATRegistrationNo: 86,
-      CountryRegionCode: 35,
-      MobilePhoneNo: 5061,
+      CodTransportista: this.formulario.get('CodTransportista')?.value,
+      NIMATransportista: this.formulario.get('NIMATransportista')?.value
     };
 
     const ahora = new Date().toISOString();
@@ -141,12 +168,12 @@ export class HomeComponent {
         arr.push({
           FechayHora: ahora,
           NoTabla: noTabla,
-          NoCampo: camposMap[key],
+          NoCampo: this.camposMap[key],
           ValorNuevo: String(nuevoValor),
           SystemIdRegistro: systemId,
           SystemIdRegistroPrincipal: systemId,
           TipodeCambio: tipoCambio,
-          CodAgrupacionCambios: this.toPascalCase(key) // Assuming CodAgrupacionCambios is derived from the key
+          CodAgrupacionCambios: codAgrupacion
         });
       }
 
@@ -158,7 +185,7 @@ export class HomeComponent {
   }
 
   async save() {
-    const body = this.genChanges();
+    const body = this.genChanges(this.generarCodigoAgrupacion());
 
     try{
           this.loading = true;
@@ -206,11 +233,12 @@ export class HomeComponent {
       this.formulario.get('PostCode')?.enable();
       this.formulario.get('County')?.enable();
       this.formulario.get('VATRegistrationNo')?.enable();
-      this.formulario.get('ShippingAgentCode')?.enable();
-      this.formulario.get('ShippingAgentNIMA')?.enable();
+      this.formulario.get('CodTransportista')?.enable();
+      this.formulario.get('NIMATransportista')?.enable();
       this.formulario.get('CountryRegionCode')?.enable();
       this.formulario.get('MobilePhoneNo')?.enable();
-      this.formulario.get('BankOwnershipCertificate')?.enable();
+      this.formulario.get('CertificadoTitularidadBancariaPresentado')?.enable();
+      this.formulario.get('TarjetaNIFEmpresaPresentada')?.enable();
     } else {
       this.formulario.get('Name')?.disable();
       this.formulario.get('Address')?.disable();
@@ -219,34 +247,18 @@ export class HomeComponent {
       this.formulario.get('PostCode')?.disable();
       this.formulario.get('County')?.disable();
       this.formulario.get('VATRegistrationNo')?.disable();
-      this.formulario.get('ShippingAgentCode')?.disable();
-      this.formulario.get('ShippingAgentNIMA')?.disable();
+      this.formulario.get('CodTransportista')?.disable();
+      this.formulario.get('NIMATransportista')?.disable();
       this.formulario.get('CountryRegionCode')?.disable();
       this.formulario.get('MobilePhoneNo')?.disable();
-      this.formulario.get('BankOwnershipCertificate')?.disable();
+      this.formulario.get('CertificadoTitularidadBancariaPresentado')?.disable();
+      this.formulario.get('TarjetaNIFEmpresaPresentada')?.disable();
     }
   }
 
   edit() {
     this.enableEdit = !this.enableEdit;
     this.EnableDisableCtrls();
-  }
-
-  generateRegistrosCambios(formValues: any, camposMap: { [key: string]: number }, noTabla: number, systemId: string, tipoCambio: string = '1'): { registroscambios: RegistroCambio[] } {
-  const ahora = new Date().toISOString();
-
-  const registroscambios: RegistroCambio[] = Object.keys(formValues).map(key => ({
-      FechayHora: ahora,
-      NoTabla: noTabla,
-      NoCampo: camposMap[key],
-      ValorNuevo: String(formValues[key]),
-      SystemIdRegistro: systemId,
-      SystemIdRegistroPrincipal: systemId,
-      CodAgrupacionCambios: this.toPascalCase(key),
-      TipodeCambio: tipoCambio
-    }));
-
-    return { registroscambios };
   }
 
   centers() {
@@ -257,6 +269,52 @@ export class HomeComponent {
   contacts() {
     console.log('contacts');
     this.router.navigate(['contacts']);
+  }
+
+  generarCodigoAgrupacion(): string {
+    const ahora = new Date();
+    const fechaHora = ahora.toISOString().replace(/[-:.TZ]/g, '').slice(0, 14); // "20250715T142012"
+    const uuid = uuidv4().replace(/-/g, '').slice(0, 8); // "8f3c9c2e"
+    return `${fechaHora}-${uuid}`; // Total: 23 caracteres
+  }
+
+  getChanges() {
+    const campoPorNumero: { [noCampo: number]: string } = {};
+    Object.entries(this.camposMap).forEach(([nombre, numero]) => {
+      campoPorNumero[numero] = nombre;
+    });
+
+    const cambios = this.companyData?.cambiosempresasgreenbc ?? [];
+
+    for (const cambio of cambios) {
+      const nombreCampo = campoPorNumero[cambio.No_Campo];
+      if (!nombreCampo) continue;
+
+      if (
+        !this.cambiosPorCampo[nombreCampo] ||
+        cambio.No_Mov > this.cambiosPorCampo[nombreCampo].No_Mov
+      ) {
+        this.cambiosPorCampo[nombreCampo] = cambio;
+      }
+    }
+  }
+
+
+  obtenerValorFinal(campo: string): { valor: string, esPendiente: boolean } {
+    if (this.cambiosPorCampo[campo]) {
+      return {
+        valor: this.cambiosPorCampo[campo].Valor_Nuevo,
+        esPendiente: true
+      };
+    }
+    return {
+      valor: (this.companyData as any)[campo],
+      esPendiente: false
+    };
+  }
+
+  tieneCambioPendiente(campo: string): boolean {
+    return !!this.cambiosPorCampo[campo];
   }
 
 }

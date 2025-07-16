@@ -15,9 +15,15 @@ export interface CompanyData {
   County: string;
   Email: string;
   MobilePhoneNo: string;
+  CodTransportista: string;
+  NIMATransportista: string;
+  CertificadoTitularidadBancariaPresentado: boolean;
+  TarjetaNIFEmpresaPresentada: boolean;
   SystemModifiedAt: string;
   centrosempresasgreenbc: centers[];
   contactosempresasgreenbc: contacts[];
+  cambiosempresasgreenbc: cambiosempresasgreenbc[];
+  [key: string]: any; // <-- Esto permite indexar por string
 }
 
 export interface centers {
@@ -52,6 +58,32 @@ export interface contacts {
   EMail: string;
 }
 
+export interface cambiosempresasgreenbc {
+  No_Mov: number;
+  Fecha_y_Hora: string;
+  No_Tabla: number;
+  Titulo_de_Tabla: string;
+  No_Campo: number;
+  Titulo_de_Campo: string;
+  Tipo_de_Cambio: string;
+  Valor_Anterior: string;
+  Valor_Nuevo: string;
+  Clave_Primaria: string;
+  Clave_Primaria_Campo_No_1: number;
+  Titulo_Clave_Prim_Campo_No_1: string;
+  Valor_Clave_Prim_Campo_No_1: string;
+  Clave_Primaria_Campo_No_2: number;
+  Titulo_Clave_Prim_Campo_No_2: string;
+  Valor_Clave_Prim_Campo_No_2: string;
+  Clave_Primaria_Campo_No_3: number;
+  Titulo_Clave_Prim_Campo_No_3: string;
+  Valor_Clave_Prim_Campo_No_3: string;
+  Record_ID: string;
+  SystemId_Registro: string;
+  SystemId_Registro_Principal: string;
+  Cod_Agrupacion_Cambios: string;
+}
+
 export function createEmptyCompanyData (): CompanyData {
   return {
     "@odata.context": "",
@@ -70,8 +102,13 @@ export function createEmptyCompanyData (): CompanyData {
     County: "",
     Email: "",
     MobilePhoneNo: "",
+    CodTransportista: "",
+    NIMATransportista: "",
+    CertificadoTitularidadBancariaPresentado: false,
+    TarjetaNIFEmpresaPresentada: false,
     SystemModifiedAt: "",
     centrosempresasgreenbc: [],
-    contactosempresasgreenbc: []
+    contactosempresasgreenbc: [],
+    cambiosempresasgreenbc: []
   };
 }

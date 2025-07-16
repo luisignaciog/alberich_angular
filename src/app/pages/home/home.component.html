@@ -9,65 +9,71 @@
       <div class="form-scrollable">
         <h2>Datos de empresa</h2>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('Name') }">
           <mat-label>Nombre empresa</mat-label>
           <input matInput placeholder="Nombre empresa" formControlName="Name">
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('Address') }">
           <mat-label>Dirección</mat-label>
-          <input matInput placeholder="Dirección" value="centerData.Address" formControlName="Address" >
+          <input matInput placeholder="Dirección" formControlName="Address">
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('PhoneNo') }">
           <mat-label>Teléfono</mat-label>
-          <input matInput placeholder="Teléfono" value="centerData.PhoneNo" formControlName="PhoneNo" >
+          <input matInput placeholder="Teléfono" formControlName="PhoneNo" >
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('MobilePhoneNo') }">
           <mat-label>Móvil</mat-label>
-          <input matInput placeholder="Móvil" value="centerData.MobilePhoneNo" formControlName="MobilePhoneNo" >
+          <input matInput placeholder="Móvil" formControlName="MobilePhoneNo">
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('City') }">
           <mat-label>Ciudad</mat-label>
-          <input matInput placeholder="Ciudad" value="centerData.City" formControlName="City" >
+          <input matInput placeholder="Ciudad" formControlName="City">
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('PostCode') }">
           <mat-label>Código postal</mat-label>
-          <input matInput placeholder="Código postal" value="centerData.PostCode" formControlName="PostCode" >
+          <input matInput placeholder="Código postal" formControlName="PostCode">
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('County') }">
           <mat-label>Provincia</mat-label>
-          <input matInput placeholder="Provincia" value="centerData.County" formControlName="County" >
+          <input matInput placeholder="Provincia" formControlName="County">
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CountryRegionCode') }">
           <mat-label>País</mat-label>
-          <input matInput placeholder="País" value="centerData.CountryRegionCode" formControlName="CountryRegionCode" >
+          <input matInput placeholder="País" formControlName="CountryRegionCode">
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('VATRegistrationNo') }">
           <mat-label>CIF/NIF</mat-label>
-          <input matInput placeholder="CIF/NIF" value="centerData.VATRegistrationNo" formControlName="VATRegistrationNo" >
+          <input matInput placeholder="CIF/NIF" formControlName="VATRegistrationNo">
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodTransportista') }">
           <mat-label>Transportista</mat-label>
-          <input matInput placeholder="Transportista" value="centerData.ShippingAgentCode" formControlName="ShippingAgentCode" >
+          <input matInput placeholder="Transportista" formControlName="CodTransportista" >
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMATransportista') }">
           <mat-label>NIMA Transp.</mat-label>
-          <input matInput placeholder="NIMA Transp." formControlName="ShippingAgentNIMA">
+          <input matInput placeholder="NIMA Transp." formControlName="NIMATransportista">
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Certificado de propiedad bancaria</mat-label>
-          <input matInput placeholder="Certificado de propiedad bancaria" formControlName="BankOwnershipCertificate">
+          <mat-label>Certificado Titularidad Bancaria</mat-label>
+          <input matInput placeholder="Certificado Titularidad Bancaria" formControlName="CertificadoTitularidadBancariaPresentado">
         </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+          <mat-label>Tarjeta NIF Empresa</mat-label>
+          <input matInput placeholder="Tarjeta NIF Empresa" formControlName="TarjetaNIFEmpresaPresentada">
+        </mat-form-field>
+
       </div>
 
       <div class="form-buttons">

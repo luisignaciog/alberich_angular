@@ -68,7 +68,7 @@ export class LoginComponent {
   async getCompanyData(systemId: string)
   {
     try{
-      const url = environment.url + `empresasgreenbc(${systemId})?$expand=centrosempresasgreenbc,contactosempresasgreenbc`;
+      const url = environment.url + `empresasgreenbc(${systemId})?$expand=centrosempresasgreenbc,contactosempresasgreenbc,cambiosempresasgreenbc`;
       this.companyData = await lastValueFrom(this.http.get<CompanyData>(url));
       this.session.setData(this.companyData);
       this.loading = false;
@@ -86,6 +86,6 @@ export class LoginComponent {
         this.loading = false;
       }
     }
-
   }
+
 }
