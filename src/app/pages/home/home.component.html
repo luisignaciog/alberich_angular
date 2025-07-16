@@ -66,14 +66,21 @@
 
         <mat-form-field class="full-width" appearance="outline">
           <mat-label>Certificado Titularidad Bancaria</mat-label>
-          <input matInput placeholder="Certificado Titularidad Bancaria" formControlName="CertificadoTitularidadBancariaPresentado">
+          <input matInput placeholder="Certificado" formControlName="CertificadoTitularidadBancariaPresentado" readonly>
+          <button mat-icon-button matSuffix (click)="fileInputCertificado.click()" *ngIf="enableEdit">
+            <mat-icon>attach_file</mat-icon>
+          </button>
+          <input #fileInputCertificado type="file" hidden (change)="adjuntarArchivo('CertificadoTitularidadBancariaPresentado', fileInputCertificado)">
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline">
           <mat-label>Tarjeta NIF Empresa</mat-label>
-          <input matInput placeholder="Tarjeta NIF Empresa" formControlName="TarjetaNIFEmpresaPresentada">
+          <input matInput placeholder="Tarjeta NIF" formControlName="TarjetaNIFEmpresaPresentada" readonly>
+          <button mat-icon-button matSuffix (click)="fileInputNIF.click()" *ngIf="enableEdit">
+            <mat-icon>attach_file</mat-icon>
+          </button>
+          <input #fileInputNIF type="file" hidden (change)="adjuntarArchivo('TarjetaNIFEmpresaPresentada', fileInputNIF)">
         </mat-form-field>
-
       </div>
 
       <div class="form-buttons">

@@ -34,6 +34,7 @@ export class HomeComponent {
   loading: boolean = false;
   enableEdit: boolean = false;
   cambiosPorCampo: { [nombreCampo: string]: any } = {};
+  ficherosBase64: { [key: string]: string } = {};
   camposMap = {
     Name: 2,
     Address: 5,
@@ -45,9 +46,9 @@ export class HomeComponent {
     CountryRegionCode: 35,
     MobilePhoneNo: 5061,
     CodTransportista: 50105,
-    NIMATransportista: 0,
-    CertificadoTitularidadBancariaPresentado: 999,
-    TarjetaNIFEmpresaPresentada: 998
+    NIMATransportista: 999,
+    CertificadoTitularidadBancariaPresentado: 998,
+    TarjetaNIFEmpresaPresentada: 997
   };
 
   constructor( private snackBar: MatSnackBar, private session: SessionStorageService,
@@ -139,8 +140,7 @@ export class HomeComponent {
     });
   }
 
-  genChanges(codAgrupacion: string)
-  {
+  genChanges(codAgrupacion: string) {
     const formValues = {
       Name: this.formulario.get('Name')?.value,
       Address: this.formulario.get('Address')?.value,
@@ -152,7 +152,9 @@ export class HomeComponent {
       CountryRegionCode: this.formulario.get('CountryRegionCode')?.value,
       MobilePhoneNo: this.formulario.get('MobilePhoneNo')?.value,
       CodTransportista: this.formulario.get('CodTransportista')?.value,
-      NIMATransportista: this.formulario.get('NIMATransportista')?.value
+      NIMATransportista: this.formulario.get('NIMATransportista')?.value,
+      CertificadoTitularidadBancariaPresentado: this.formulario.get('CertificadoTitularidadBancariaPresentado')?.value,
+      TarjetaNIFEmpresaPresentada: this.formulario.get('TarjetaNIFEmpresaPresentada')?.value
     };
 
     const ahora = new Date().toISOString();
@@ -164,8 +166,12 @@ export class HomeComponent {
       const nuevoValor = formValues[key];
       const valorAnterior = this.companyData[key];
 
-      if (nuevoValor !== valorAnterior) {
-        arr.push({
+      const hayCambio = nuevoValor !== valorAnterior;
+
+      const tieneFicheroBase64 = this.ficherosBase64?.[key];
+
+      if (hayCambio || tieneFicheroBase64) {
+        const registro: any = {
           FechayHora: ahora,
           NoTabla: noTabla,
           NoCampo: this.camposMap[key],
@@ -174,45 +180,45 @@ export class HomeComponent {
           SystemIdRegistroPrincipal: systemId,
           TipodeCambio: tipoCambio,
           CodAgrupacionCambios: codAgrupacion
-        });
+        };
+
+        if (tieneFicheroBase64) {
+          registro.FicheroCargado = this.ficherosBase64[key];
+        }
+
+        arr.push(registro);
       }
 
       return arr;
     }, [] as RegistroCambio[]);
 
-    const payload = { registroscambios };
-    return payload;
+    return { registroscambios };
   }
+
 
   async save() {
     const body = this.genChanges(this.generarCodigoAgrupacion());
 
     try{
-          this.loading = true;
-          const url = environment.url + "registroscambiosHeader?$expand=registroscambios";
-          const result = await firstValueFrom(this.http.post(url, body));
-          this.loading = false;
+      this.loading = true;
+      const url = environment.url + "registroscambiosHeader?$expand=registroscambios";
+      const result = await firstValueFrom(this.http.post(url, body));
+      console.log('Respuesta del API:', result);
+      this.loading = false;
 
-        } catch (error: any) {
-          if (error.status === 0) {
-            this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {
-              duration: 3000,
-              verticalPosition: 'top' });
+      this.snackBar.open('Datos guardados', 'Cerrar', { duration: 3000, verticalPosition: 'top' });
+      this.enableEdit = false;
+      this.EnableDisableCtrls();
 
-            this.loading = false;
-          } else {
-            this.snackBar.open('Error al llamar al API: ' + error, 'Cerrar', {
-              duration: 3000,
-              verticalPosition: 'top' });
-            this.loading = false;
-          }
-        }
-
-    this.snackBar.open('Datos guardados', 'Cerrar', {
-          duration: 3000,
-          verticalPosition: 'top' });
-    this.enableEdit = false;
-    this.EnableDisableCtrls();
+    } catch (error: any) {
+      if (error.status === 0) {
+        this.snackBar.open('No hay conexión al servidor.', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+        this.loading = false;
+      } else {
+        this.snackBar.open('Error al llamar al API: ' + error.error?.error?.message, 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+        this.loading = false;
+      }
+    }
   }
 
   toPascalCase(camelCase: string): string {
@@ -316,5 +322,44 @@ export class HomeComponent {
   tieneCambioPendiente(campo: string): boolean {
     return !!this.cambiosPorCampo[campo];
   }
+
+  adjuntarArchivo(campo: string, input: HTMLInputElement): void {
+  const file = input.files?.[0];
+  if (!file) return;
+
+  // Validaciones
+  const tipoPermitido = ['application/pdf', 'image/png', 'image/jpeg'];
+  const maxSizeBytes = 4 * 1024 * 1024; // 5 MB
+
+  if (!tipoPermitido.includes(file.type)) {
+    this.snackBar.open('Tipo de archivo no permitido. Solo PDF, PNG o JPG.', 'Cerrar', {
+      duration: 3000,
+      verticalPosition: 'top',
+    });
+    return;
+  }
+
+  if (file.size > maxSizeBytes) {
+    this.snackBar.open('El archivo supera el tamaño máximo de 4 MB.', 'Cerrar', {
+      duration: 3000,
+      verticalPosition: 'top',
+    });
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = () => {
+    const base64 = reader.result as string;
+
+    // Guarda el nombre visible
+    this.formulario.get(campo)?.setValue(file.name);
+
+    // Guarda el base64 vinculado al campo
+    this.ficherosBase64[campo] = base64;
+  };
+
+  reader.readAsDataURL(file);
+}
 
 }
