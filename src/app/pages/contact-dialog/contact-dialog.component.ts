@@ -152,9 +152,7 @@ export class ContactDialogComponent {
             }
           }
 
-      this.snackBar.open('Datos guardados', 'Cerrar', {
-            duration: 3000,
-            verticalPosition: 'top' });
+      this.snackBar.open('Datos pendientes de revisión', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
       this.dialogRef.close(false);
     }
 }
