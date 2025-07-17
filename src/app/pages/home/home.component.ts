@@ -117,15 +117,11 @@ export class HomeComponent {
   }
 
   setValueFields() {
-    var certFile: string = 'No adjuntado';
-    var nifFile: string = 'No adjuntado';
-    if (this.companyData.CertificadoTitularidadBancariaPresentado) {
-      certFile = 'Adjuntado';
-    }
-
-    if (this.companyData.TarjetaNIFEmpresaPresentada) {
-      nifFile = 'Adjuntado';
-    }
+    //var certFile: string = this.obtenerValorFinal('CertificadoTitularidadBancariaPresentado').valor;
+    //var nifFile: string = this.obtenerValorFinal('TarjetaNIFEmpresaPresentada').valor;
+    //if (this.companyData.CertificadoTitularidadBancariaPresentado) { certFile = 'Adjuntado'; }
+    //if (this.companyData.TarjetaNIFEmpresaPresentada) { nifFile = 'Adjuntado'; }
+    conso
 
     this.countrySelected = this.obtenerValorFinal('CountryRegionCode').valor;
     this.formulario.setValue({
@@ -140,12 +136,17 @@ export class HomeComponent {
       MobilePhoneNo: this.obtenerValorFinal('MobilePhoneNo').valor,
       CodTransportista: this.obtenerValorFinal('CodTransportista').valor,
       NIMATransportista: this.companyData.NIMATransportista,
-      CertificadoTitularidadBancariaPresentado: certFile,
-      TarjetaNIFEmpresaPresentada: nifFile
+      CertificadoTitularidadBancariaPresentado: this.obtenerValorFinal('CertificadoTitularidadBancariaPresentado').valor,
+      TarjetaNIFEmpresaPresentada: this.obtenerValorFinal('TarjetaNIFEmpresaPresentada').valor
     });
   }
 
   genChanges(codAgrupacion: string) {
+    var certFile: any = false;
+    var nifFile: any = false;
+    if (this.formulario.get('CertificadoTitularidadBancariaPresentado')?.value != '') { certFile = this.formulario.get('CertificadoTitularidadBancariaPresentado')?.value }
+    if (this.formulario.get('TarjetaNIFEmpresaPresentada')?.value != '') { nifFile = this.formulario.get('TarjetaNIFEmpresaPresentada')?.value }
+
     const formValues = {
       Name: this.formulario.get('Name')?.value,
       Address: this.formulario.get('Address')?.value,
@@ -158,8 +159,8 @@ export class HomeComponent {
       MobilePhoneNo: this.formulario.get('MobilePhoneNo')?.value,
       CodTransportista: this.formulario.get('CodTransportista')?.value,
       NIMATransportista: this.formulario.get('NIMATransportista')?.value,
-      CertificadoTitularidadBancariaPresentado: this.formulario.get('CertificadoTitularidadBancariaPresentado')?.value,
-      TarjetaNIFEmpresaPresentada: this.formulario.get('TarjetaNIFEmpresaPresentada')?.value
+      CertificadoTitularidadBancariaPresentado: certFile,
+      TarjetaNIFEmpresaPresentada: nifFile
     };
 
     const ahora = new Date().toISOString();
@@ -203,14 +204,11 @@ export class HomeComponent {
 
   async save() {
     const body = this.genChanges(this.generarCodigoAgrupacion());
-    console.log('Cuerpo de la solicitud:', body);
-    return;
 
     try{
       this.loading = true;
       const url = environment.url + "registroscambiosHeader?$expand=registroscambios";
       const result = await firstValueFrom(this.http.post(url, body));
-      console.log('Respuesta del API:', result);
       this.loading = false;
 
       this.snackBar.open('Datos guardados', 'Cerrar', { duration: 3000, verticalPosition: 'top' });
