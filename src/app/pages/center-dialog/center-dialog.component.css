@@ -1,3 +1,40 @@
 .profile-card{
   padding: 20px;
 }
+
+/* Limita la altura total del diálogo */
+mat-card.example-card {
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hace que el contenido sea scrollable */
+.scrollable-content {
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 8px;
+  padding-top: 8px;
+}
+
+/* Fija el footer al fondo del diálogo */
+.dialog-footer {
+  text-align: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border-top: 1px solid #ccc;
+  background: #fff;
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+}
+
+.campo-pendiente mat-label,
+.campo-pendiente input {
+  color: red !important;
+}
+
+.campo-pendiente .mat-form-field-outline {
+  stroke: red;
+}

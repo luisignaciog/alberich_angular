@@ -41,8 +41,9 @@ export interface centers {
   County: string;
   EMail: string;
   CodProductor: string;
+  NIMAProductor: string;
+  NIMAGestor: string;
   CodGestor: string;
-  CodTransportista: string;
   EMailEnvioServicio: string;
   EMailEnvioDocAmbiental: string;
   SystemModifiedAt: string;

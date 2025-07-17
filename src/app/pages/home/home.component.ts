@@ -38,6 +38,7 @@ export class HomeComponent {
   ficherosBase64: { [key: string]: string } = {};
   countries: CountryData = createEmptyCountryData();
   countrySelected: string = '';
+  noTabla = 50110;
   camposMap = {
     Name: 2,
     Address: 5,
@@ -117,11 +118,10 @@ export class HomeComponent {
   }
 
   setValueFields() {
-    //var certFile: string = this.obtenerValorFinal('CertificadoTitularidadBancariaPresentado').valor;
-    //var nifFile: string = this.obtenerValorFinal('TarjetaNIFEmpresaPresentada').valor;
-    //if (this.companyData.CertificadoTitularidadBancariaPresentado) { certFile = 'Adjuntado'; }
-    //if (this.companyData.TarjetaNIFEmpresaPresentada) { nifFile = 'Adjuntado'; }
-    conso
+    var certFile: string = this.obtenerValorFinal('CertificadoTitularidadBancariaPresentado').valor;
+    if (certFile === 'false') { certFile = ''; }
+    var nifFile: string = this.obtenerValorFinal('TarjetaNIFEmpresaPresentada').valor;
+    if (nifFile === 'false') { nifFile = ''; }
 
     this.countrySelected = this.obtenerValorFinal('CountryRegionCode').valor;
     this.formulario.setValue({
@@ -136,8 +136,8 @@ export class HomeComponent {
       MobilePhoneNo: this.obtenerValorFinal('MobilePhoneNo').valor,
       CodTransportista: this.obtenerValorFinal('CodTransportista').valor,
       NIMATransportista: this.companyData.NIMATransportista,
-      CertificadoTitularidadBancariaPresentado: this.obtenerValorFinal('CertificadoTitularidadBancariaPresentado').valor,
-      TarjetaNIFEmpresaPresentada: this.obtenerValorFinal('TarjetaNIFEmpresaPresentada').valor
+      CertificadoTitularidadBancariaPresentado: certFile,
+      TarjetaNIFEmpresaPresentada: nifFile
     });
   }
 
@@ -164,7 +164,7 @@ export class HomeComponent {
     };
 
     const ahora = new Date().toISOString();
-    const noTabla = 50110;
+    const noTabla = this.noTabla;
     const systemId = this.companyData.SystemId;
     const tipoCambio = '1';
 
@@ -295,7 +295,9 @@ export class HomeComponent {
       campoPorNumero[numero] = nombre;
     });
 
-    const cambios = this.companyData?.cambiosempresasgreenbc ?? [];
+    const cambios = (this.companyData?.cambiosempresasgreenbc ?? []).filter(
+      c => c.No_Tabla === this.noTabla
+    );
 
     for (const cambio of cambios) {
       const nombreCampo = campoPorNumero[cambio.No_Campo];

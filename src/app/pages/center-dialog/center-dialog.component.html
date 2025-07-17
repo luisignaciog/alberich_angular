@@ -11,55 +11,85 @@
         <!--<mat-card-subtitle>Nuevo</mat-card-subtitle>-->
       </mat-card-header>
 
-      <mat-card-content>
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Nombre empresa</mat-label>
-          <input matInput placeholder="Nombre empresa" value="centerData.Name" formControlName="Name" >
+      <mat-card-content class="scrollable-content">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('Name') }">
+          <mat-label>Nombre centro</mat-label>
+          <input matInput placeholder="Nombre centro" formControlName="Name" >
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('Address') }">
           <mat-label>Dirección</mat-label>
-          <input matInput placeholder="Dirección" value="centerData.Address" formControlName="Address" >
+          <input matInput placeholder="Dirección" formControlName="Address" >
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('PhoneNo') }">
           <mat-label>Teléfono</mat-label>
-          <input matInput placeholder="Teléfono" value="centerData.PhoneNo" formControlName="PhoneNo" >
+          <input matInput placeholder="Teléfono" formControlName="PhoneNo" >
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('City') }">
           <mat-label>Ciudad</mat-label>
-          <input matInput placeholder="Ciudad" value="centerData.City" formControlName="City" >
+          <input matInput placeholder="Ciudad" formControlName="City" >
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('PostCode') }">
           <mat-label>Código postal</mat-label>
-          <input matInput placeholder="Código postal" value="centerData.PostCode" formControlName="PostCode" >
+          <input matInput placeholder="Código postal" formControlName="PostCode" >
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('County') }">
           <mat-label>Provincia</mat-label>
-          <input matInput placeholder="Provincia" value="centerData.County" formControlName="County" >
+          <input matInput placeholder="Provincia" formControlName="County" >
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <!--! País -->
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CountryRegionCode') }">
+          <mat-label>País</mat-label>
+          <mat-select [(value)]="countrySelected" formControlName="CountryRegionCode">
+            <mat-option *ngFor="let country of countries.value" [value]="country.Code">
+              {{ country.Name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMail') }">
           <mat-label>E-mail</mat-label>
-          <input matInput placeholder="E-mail" value="centerData.EMail" formControlName="EMail" >
+          <input matInput placeholder="E-mail" formControlName="EMail" >
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodProductor') }">
+          <mat-label>Código productor</mat-label>
+          <input matInput placeholder="Código productor" formControlName="CodProductor" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMAProductor') }">
+          <mat-label>NIMA productor</mat-label>
+          <input matInput placeholder="NIMA productor" formControlName="NIMAProductor" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodGestor') }">
+          <mat-label>Código gestor</mat-label>
+          <input matInput placeholder="Código gestor" formControlName="CodGestor" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMAGestor') }">
+          <mat-label>NIMA gestor</mat-label>
+          <input matInput placeholder="NIMA gestor" formControlName="NIMAGestor" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMailEnvioServicio') }">
           <mat-label>E-mail envío servicio</mat-label>
-          <input matInput placeholder="E-mail" value="centerData.EMailEnvioServicio" formControlName="EMailEnvioServicio" >
+          <input matInput placeholder="E-mail" formControlName="EMailEnvioServicio" >
         </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>E-mail servicio ambieltal</mat-label>
-          <input matInput placeholder="E-mail" value="centerData.EMailEnvioDocAmbiental" formControlName="EMailEnvioDocAmbiental" >
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMailEnvioDocAmbiental') }">
+          <mat-label>E-mail servicio ambiental</mat-label>
+          <input matInput placeholder="E-mail" formControlName="EMailEnvioDocAmbiental" >
         </mat-form-field>
 
       </mat-card-content>
 
-      <mat-card-actions>
+      <mat-card-actions class="dialog-footer">
         <button mat-mini-fab color="primary" (click)="save()">
           <mat-icon>check</mat-icon>
         </button>
