@@ -76,14 +76,16 @@ export class ContactDialogComponent {
     }
 
     this.setValueFields();
+    this.getChanges();
+    this.setValueFields();
   }
 
   setValueFields() {
     this.formulario.setValue({
-      Name: this.contact.Name,
-      Name2: this.contact.Name2,
-      PhoneNo: this.contact.PhoneNo,
-      EMail: this.contact.EMail
+      Name: this.obtenerValorFinal('Name').valor,
+      Name2: this.obtenerValorFinal('Name2').valor,
+      PhoneNo: this.obtenerValorFinal('PhoneNo').valor,
+      EMail: this.obtenerValorFinal('EMail').valor
     });
   }
 
@@ -136,27 +138,23 @@ export class ContactDialogComponent {
       }
 
       try{
-            this.loading = true;
-            const url = environment.url + "registroscambiosHeader?$expand=registroscambios";
-            const result = await firstValueFrom(this.http.post(url, body));
-            this.loading = false;
-                      } catch (error: any) {
-            if (error.status === 0) {
-              this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {
-                duration: 3000,
-                verticalPosition: 'top' });
+        this.loading = true;
+        const url = environment.url + "registroscambiosHeader?$expand=registroscambios";
+        const result = await firstValueFrom(this.http.post(url, body));
+        this.loading = false;
 
-              this.loading = false;
-            } else {
-              this.snackBar.open('Error al llamar al API: ' + error, 'Cerrar', {
-                duration: 3000,
-                verticalPosition: 'top' });
-              this.loading = false;
-            }
-          }
+        this.snackBar.open('Datos pendientes de revisión', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+        this.dialogRef.close(false);
+      } catch (error: any) {
+        if (error.status === 0) {
+          this.snackBar.open('No hay conexión al servidor.', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+          this.loading = false;
+        } else {
+          this.snackBar.open('Error al llamar al API: ' + error.error?.error?.message, 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+          this.loading = false;
+        }
+      }
 
-      this.snackBar.open('Datos pendientes de revisión', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
-      this.dialogRef.close(false);
     }
 
   generarCodigoAgrupacion(): string {

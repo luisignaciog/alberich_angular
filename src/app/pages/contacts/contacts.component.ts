@@ -26,6 +26,7 @@ export class ContactsComponent implements AfterViewInit, OnInit {
   loading: boolean = false;
   dataSource: MatTableDataSource<contacts> = new MatTableDataSource<contacts>();
   displayedColumns: string[] = ['Name','EMail', 'estado', 'actions'];
+  noTabla = 5050; // Tabla de contactos en GreenBC
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -42,7 +43,37 @@ export class ContactsComponent implements AfterViewInit, OnInit {
     }
 
     this.loading = true;
-    this.dataSource = new MatTableDataSource<contacts>(this.companyData.contactosempresasgreenbc);
+    //this.dataSource = new MatTableDataSource<contacts>(this.companyData.contactosempresasgreenbc);
+    const cambios = this.companyData.cambiosempresasgreenbc ?? [];
+
+  // Filtra cambios nuevos (que no tienen registro principal aún)
+    const nuevosPendientes = cambios
+      .filter(c =>
+        c.No_Tabla === this.noTabla &&
+        c.Tipo_de_Cambio === 'Insertion'
+      )
+      .reduce((acc, cambio) => {
+        if (!acc.some(e => e.SystemId === cambio.SystemId_Registro)) {
+          acc.push({
+            SystemId: cambio.SystemId_Registro,
+            No: '(nuevo)',
+            Name: '(Nuevo contacto)',
+            Name2: '',
+            PhoneNo: '',
+            EMail: '',
+            esNuevo: true // <- marcar que es un nuevo
+          });
+        }
+        return acc;
+      }, [] as (contacts & { esNuevo?: boolean })[]);
+
+    // Combina centros reales + nuevos pendientes
+    const centrosConMarcado = [
+      ...this.companyData.contactosempresasgreenbc.map(c => ({ ...c, esNuevo: false })),
+      ...nuevosPendientes
+    ];
+
+    this.dataSource = new MatTableDataSource(centrosConMarcado);
     this.loading = false;
   }
 
@@ -78,7 +109,7 @@ export class ContactsComponent implements AfterViewInit, OnInit {
 
   tieneCambiosPendientes(contact: contacts): boolean {
     return this.companyData.cambiosempresasgreenbc?.some(cambio =>
-      cambio.No_Tabla === 5050 && // o usa this.noTabla si lo defines
+      cambio.No_Tabla === this.noTabla && // o usa this.noTabla si lo defines
       cambio.Tipo_de_Cambio === 'Modification' &&
       cambio.SystemId_Registro === contact.SystemId
     ) ?? false;

@@ -40,8 +40,9 @@
                 <ng-container matColumnDef="estado">
                   <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
                   <mat-cell *matCellDef="let centro">
-                    <mat-icon *ngIf="tieneCambiosPendientes(centro)" color="primary">warning</mat-icon>
-                    <span *ngIf="!tieneCambiosPendientes(centro)">✓</span>
+                    <mat-icon *ngIf="centro.esNuevo" color="primary">add_circle</mat-icon>
+                    <mat-icon *ngIf="!centro.esNuevo && tieneCambiosPendientes(centro)" color="warn">warning</mat-icon>
+                    <span *ngIf="!centro.esNuevo && !tieneCambiosPendientes(centro)">✓</span>
                   </mat-cell>
                 </ng-container>
 
@@ -76,7 +77,7 @@
                 <ng-container matColumnDef="actions">
                   <mat-header-cell *matHeaderCellDef></mat-header-cell>
                   <mat-cell *matCellDef="let centerRow">
-                    <mat-icon *ngIf="!centerRow.centerRow" style="cursor: pointer;" (click)="editCenter(centerRow)" title="Editar">edit</mat-icon>
+                    <mat-icon *ngIf="!centerRow.centerRow && !centerRow.esNuevo" style="cursor: pointer;" (click)="editCenter(centerRow)" title="Editar">edit</mat-icon>
                   </mat-cell>
               </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

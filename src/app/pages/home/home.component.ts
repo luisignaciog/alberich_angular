@@ -59,7 +59,7 @@ export class HomeComponent {
     private http: HttpClient, private router: Router, private fb: FormBuilder ) {
     this.formulario = this.fb.group({
       Name: ['', [
-        //Validators.required,
+        Validators.required,
         //Validators.maxLength(20)
       ]],
       Address: ['', [

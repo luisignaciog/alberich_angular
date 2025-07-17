@@ -26,6 +26,7 @@ export class CentersComponent implements OnInit, AfterViewInit {
   loading: boolean = false;
   dataSource: MatTableDataSource<centers> = new MatTableDataSource<centers>();
   displayedColumns: string[] = ['Code','Name','City', 'estado','actions']; //,'CodProductor','CodGestor','CodTransportista','EMailEnvioServicio','EMailEnvioDocAmbiental'];
+  noTabla = 50111; // Tabla de centros en GreenBC
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -34,16 +35,63 @@ export class CentersComponent implements OnInit, AfterViewInit {
     private router: Router, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.centerData = this.session.getData();
+  this.centerData = this.session.getData();
 
-    if (this.centerData === null) {
-      this.router.navigate(['login']);
-    }
-
-    this.loading = true;
-    this.dataSource = new MatTableDataSource<centers>(this.centerData.centrosempresasgreenbc);
-    this.loading = false;
+  if (this.centerData === null) {
+    this.router.navigate(['login']);
+    return;
   }
+
+  this.loading = true;
+
+  const cambios = this.centerData.cambiosempresasgreenbc ?? [];
+
+  // Filtra cambios nuevos (que no tienen registro principal aún)
+  const nuevosPendientes = cambios
+    .filter(c =>
+      c.No_Tabla === this.noTabla &&
+      c.Tipo_de_Cambio === 'Insertion'
+    )
+    .reduce((acc, cambio) => {
+      if (!acc.some(e => e.SystemId === cambio.SystemId_Registro)) {
+        acc.push({
+          "@odata.etag": "",
+          NoEmpresaGreenBC: "",
+          SystemId: cambio.SystemId_Registro,
+          Code: '(nuevo)',
+          Name: '(Nuevo centro)',
+          Name2: '',
+          Address: '',
+          Address2: '',
+          City: '',
+          PhoneNo: '',
+          CountryRegionCode: '',
+          PostCode: '',
+          County: '',
+          EMail: '',
+          CodProductor: '',
+          NIMAProductor: '',
+          CodGestor: '',
+          NIMAGestor: '',
+          EMailEnvioServicio: '',
+          EMailEnvioDocAmbiental: '',
+          SystemModifiedAt: '',
+          esNuevo: true // <- marcar que es un nuevo
+        });
+      }
+      return acc;
+    }, [] as (centers & { esNuevo?: boolean })[]);
+
+  // Combina centros reales + nuevos pendientes
+  const centrosConMarcado = [
+    ...this.centerData.centrosempresasgreenbc.map(c => ({ ...c, esNuevo: false })),
+    ...nuevosPendientes
+  ];
+
+  this.dataSource = new MatTableDataSource(centrosConMarcado);
+  this.loading = false;
+}
+
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -105,7 +153,7 @@ export class CentersComponent implements OnInit, AfterViewInit {
 
   tieneCambiosPendientes(centro: centers): boolean {
     return this.centerData.cambiosempresasgreenbc?.some(cambio =>
-      cambio.No_Tabla === 50111 && // o usa this.noTabla si lo defines
+      cambio.No_Tabla === this.noTabla && // o usa this.noTabla si lo defines
       cambio.Tipo_de_Cambio === 'Modification' &&
       cambio.SystemId_Registro === centro.SystemId
     ) ?? false;
