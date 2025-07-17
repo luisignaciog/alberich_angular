@@ -25,7 +25,7 @@ export class CentersComponent implements OnInit, AfterViewInit {
   centerData: CompanyData = createEmptyCompanyData();
   loading: boolean = false;
   dataSource: MatTableDataSource<centers> = new MatTableDataSource<centers>();
-  displayedColumns: string[] = ['Code','Name','City','PhoneNo','EMail', 'actions']; //,'CodProductor','CodGestor','CodTransportista','EMailEnvioServicio','EMailEnvioDocAmbiental'];
+  displayedColumns: string[] = ['Code','Name','City','PhoneNo','EMail', 'estado','actions']; //,'CodProductor','CodGestor','CodTransportista','EMailEnvioServicio','EMailEnvioDocAmbiental'];
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -103,5 +103,12 @@ export class CentersComponent implements OnInit, AfterViewInit {
     });
   }
 
+  tieneCambiosPendientes(centro: centers): boolean {
+    return this.centerData.cambiosempresasgreenbc?.some(cambio =>
+      cambio.No_Tabla === 50111 && // o usa this.noTabla si lo defines
+      cambio.Tipo_de_Cambio === 'Modification' &&
+      cambio.SystemId_Registro === centro.SystemId
+    ) ?? false;
+  }
 
 }

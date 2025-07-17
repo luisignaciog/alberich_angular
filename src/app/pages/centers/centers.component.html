@@ -37,6 +37,15 @@
               <mat-cell *matCellDef="let centerRow">{{centerRow.EMail}}</mat-cell>
           </ng-container>
 
+          <ng-container matColumnDef="estado">
+            <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+            <mat-cell *matCellDef="let centro">
+              <mat-icon *ngIf="tieneCambiosPendientes(centro)" color="primary">warning</mat-icon>
+              <span *ngIf="!tieneCambiosPendientes(centro)">✓</span>
+            </mat-cell>
+          </ng-container>
+
+
           <!--
           <ng-container matColumnDef="CodProductor">
               <mat-header-cell *matHeaderCellDef mat-sort-header>Productor</mat-header-cell>

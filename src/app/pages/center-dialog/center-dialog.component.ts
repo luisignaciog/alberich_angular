@@ -127,6 +127,7 @@ export class CenterDialogComponent {
     this.getCountries();
     this.getChanges();
     this.setValueFields();
+    this.EnableDisableCtrls();
   }
 
   setValueFields() {
@@ -248,7 +249,10 @@ export class CenterDialogComponent {
     });
 
     const cambios = (this.companyData?.cambiosempresasgreenbc ?? []).filter(
-      c => c.No_Tabla === this.noTabla
+      c =>
+      c.No_Tabla === this.noTabla &&
+      c.Tipo_de_Cambio === 'Modification' &&
+      c.SystemId_Registro === this.center.SystemId
     );
 
 
@@ -274,7 +278,7 @@ export class CenterDialogComponent {
       };
     }
     return {
-      valor: (this.companyData as any)[campo] ?? '',
+      valor: (this.center as any)[campo] ?? '',
       esPendiente: false
     };
   }
@@ -295,6 +299,20 @@ export class CenterDialogComponent {
         this.snackBar.open('Datos del centro no válidos', 'Cerrar', { duration: 3000, verticalPosition: 'top' });
         this.loading = false;
       }
+    }
+  }
+
+  EnableDisableCtrls() {
+    if (this.center.Code.trim() === "001") {
+      this.formulario.get('Name')?.disable();
+      this.formulario.get('Address')?.disable();
+      this.formulario.get('City')?.disable();
+      this.formulario.get('PhoneNo')?.disable();
+      this.formulario.get('PostCode')?.disable();
+      this.formulario.get('County')?.disable();
+      this.formulario.get('EMail')?.disable();
+      this.formulario.get('CountryRegionCode')?.disable();
+
     }
   }
 }
