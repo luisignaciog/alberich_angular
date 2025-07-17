@@ -25,7 +25,7 @@ export class CentersComponent implements OnInit, AfterViewInit {
   centerData: CompanyData = createEmptyCompanyData();
   loading: boolean = false;
   dataSource: MatTableDataSource<centers> = new MatTableDataSource<centers>();
-  displayedColumns: string[] = ['Code','Name','City','PhoneNo','EMail', 'estado','actions']; //,'CodProductor','CodGestor','CodTransportista','EMailEnvioServicio','EMailEnvioDocAmbiental'];
+  displayedColumns: string[] = ['Code','Name','City', 'estado','actions']; //,'CodProductor','CodGestor','CodTransportista','EMailEnvioServicio','EMailEnvioDocAmbiental'];
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
