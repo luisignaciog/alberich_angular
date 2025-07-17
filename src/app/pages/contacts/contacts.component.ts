@@ -25,7 +25,7 @@ export class ContactsComponent implements AfterViewInit, OnInit {
   companyData: CompanyData = createEmptyCompanyData();
   loading: boolean = false;
   dataSource: MatTableDataSource<contacts> = new MatTableDataSource<contacts>();
-  displayedColumns: string[] = ['Name','EMail', 'actions'];
+  displayedColumns: string[] = ['Name','EMail', 'estado', 'actions'];
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -75,4 +75,12 @@ export class ContactsComponent implements AfterViewInit, OnInit {
         data: { }
       });
     }
+
+  tieneCambiosPendientes(contact: contacts): boolean {
+    return this.companyData.cambiosempresasgreenbc?.some(cambio =>
+      cambio.No_Tabla === 5050 && // o usa this.noTabla si lo defines
+      cambio.Tipo_de_Cambio === 'Modification' &&
+      cambio.SystemId_Registro === contact.SystemId
+    ) ?? false;
+  }
 }

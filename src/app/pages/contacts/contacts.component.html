@@ -32,6 +32,14 @@
                   <mat-cell *matCellDef="let contactRow">{{contactRow.EMail}}</mat-cell>
               </ng-container>
 
+              <ng-container matColumnDef="estado">
+                <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                <mat-cell *matCellDef="let centro">
+                  <mat-icon *ngIf="tieneCambiosPendientes(centro)" color="primary">warning</mat-icon>
+                  <span *ngIf="!tieneCambiosPendientes(centro)">✓</span>
+                </mat-cell>
+              </ng-container>
+
               <ng-container matColumnDef="actions">
                 <mat-header-cell *matHeaderCellDef></mat-header-cell>
                 <mat-cell *matCellDef="let contactRow">
