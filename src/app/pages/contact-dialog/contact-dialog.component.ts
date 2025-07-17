@@ -1,6 +1,6 @@
 import { CommonModule, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -51,19 +51,19 @@ export class ContactDialogComponent {
     private http: HttpClient, private router: Router, private fb: FormBuilder ) {
     this.formulario = this.fb.group({
       Name: ['', [
-        //Validators.required,
+        Validators.required,
         //Validators.maxLength(20)
       ]],
       Name2: ['', [
         //Validators.required,
       ]],
       PhoneNo: ['', [
-        //Validators.required,
+        Validators.required,
         //Validators.pattern(/^\d{10}$/)
       ]],
       EMail: ['', [
-        //Validators.required,
-        //Validators.email
+        Validators.required,
+        Validators.email
       ]]
     });
 
@@ -128,34 +128,39 @@ export class ContactDialogComponent {
 
     const payload = { registroscambios };
     return payload;
+  }
+
+  async save() {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched(); // marca campos para mostrar errores
+      this.snackBar.open('Por favor completa los campos obligatorios.', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+      return;
     }
 
-    async save() {
-      const body = this.genChanges(this.generarCodigoAgrupacion());
-      if (body.registroscambios.length === 0) {
-        this.dialogRef.close(false);
-        return;
-      }
+    const body = this.genChanges(this.generarCodigoAgrupacion());
+    if (body.registroscambios.length === 0) {
+      this.dialogRef.close(false);
+      return;
+    }
 
-      try{
-        this.loading = true;
-        const url = environment.url + "registroscambiosHeader?$expand=registroscambios";
-        const result = await firstValueFrom(this.http.post(url, body));
+    try{
+      this.loading = true;
+      const url = environment.url + "registroscambiosHeader?$expand=registroscambios";
+      const result = await firstValueFrom(this.http.post(url, body));
+      this.loading = false;
+
+      this.snackBar.open('Datos pendientes de revisión', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+      this.dialogRef.close(false);
+    } catch (error: any) {
+      if (error.status === 0) {
+        this.snackBar.open('No hay conexión al servidor.', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
         this.loading = false;
-
-        this.snackBar.open('Datos pendientes de revisión', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
-        this.dialogRef.close(false);
-      } catch (error: any) {
-        if (error.status === 0) {
-          this.snackBar.open('No hay conexión al servidor.', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
-          this.loading = false;
-        } else {
-          this.snackBar.open('Error al llamar al API: ' + error.error?.error?.message, 'Cerrar', { duration: 4000, verticalPosition: 'top' });
-          this.loading = false;
-        }
+      } else {
+        this.snackBar.open('Error al llamar al API: ' + error.error?.error?.message, 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+        this.loading = false;
       }
-
     }
+  }
 
   generarCodigoAgrupacion(): string {
     const ahora = new Date();

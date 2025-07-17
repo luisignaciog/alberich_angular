@@ -46,6 +46,7 @@ export class HomeComponent {
     PhoneNo: 9,
     PostCode: 91,
     County: 92,
+    EMail: 102,
     VATRegistrationNo: 86,
     CountryRegionCode: 35,
     MobilePhoneNo: 5061,
@@ -63,31 +64,35 @@ export class HomeComponent {
         //Validators.maxLength(20)
       ]],
       Address: ['', [
-        //Validators.required,
+        Validators.required,
       ]],
       City: ['', [
-        //Validators.required,
+        Validators.required,
       ]],
       PhoneNo: ['', [
-        //Validators.required,
+        Validators.required,
         //Validators.pattern(/^\d{10}$/)
       ]],
       MobilePhoneNo: ['', [
-        //Validators.required,
+        Validators.required,
         //Validators.pattern(/^\d{10}$/)
       ]],
       PostCode: ['', [
-        //Validators.required,
+        Validators.required,
         //Validators.pattern(/^\d{5}$/)
       ]],
       County: ['', [
-        //Validators.required,
+        Validators.required,
+      ]],
+      EMail: ['', [
+        Validators.required,
+        Validators.email
       ]],
       CountryRegionCode: ['', [
-        //Validators.required,
+        Validators.required,
       ]],
       VATRegistrationNo: ['', [
-        //Validators.required,
+        Validators.required,
       ]],
       CodTransportista: ['', [
         //Validators.required,
@@ -131,6 +136,7 @@ export class HomeComponent {
       PhoneNo: this.obtenerValorFinal('PhoneNo').valor,
       PostCode: this.obtenerValorFinal('PostCode').valor,
       County: this.obtenerValorFinal('County').valor,
+      EMail: this.obtenerValorFinal('EMail').valor,
       VATRegistrationNo: this.obtenerValorFinal('VATRegistrationNo').valor,
       CountryRegionCode: this.countrySelected,
       MobilePhoneNo: this.obtenerValorFinal('MobilePhoneNo').valor,
@@ -154,6 +160,7 @@ export class HomeComponent {
       PhoneNo: this.formulario.get('PhoneNo')?.value,
       PostCode: this.formulario.get('PostCode')?.value,
       County: this.formulario.get('County')?.value,
+      EMail: this.formulario.get('EMail')?.value,
       VATRegistrationNo: this.formulario.get('VATRegistrationNo')?.value,
       CountryRegionCode: this.formulario.get('CountryRegionCode')?.value,
       MobilePhoneNo: this.formulario.get('MobilePhoneNo')?.value,
@@ -203,6 +210,12 @@ export class HomeComponent {
 
 
   async save() {
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched(); // marca campos para mostrar errores
+      this.snackBar.open('Por favor completa los campos obligatorios.', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+      return;
+    }
+
     const body = this.genChanges(this.generarCodigoAgrupacion());
 
     try{
@@ -243,6 +256,7 @@ export class HomeComponent {
       this.formulario.get('PhoneNo')?.enable();
       this.formulario.get('PostCode')?.enable();
       this.formulario.get('County')?.enable();
+      this.formulario.get('EMail')?.enable();
       this.formulario.get('VATRegistrationNo')?.enable();
       this.formulario.get('CodTransportista')?.enable();
       this.formulario.get('NIMATransportista')?.enable();
@@ -257,6 +271,7 @@ export class HomeComponent {
       this.formulario.get('PhoneNo')?.disable();
       this.formulario.get('PostCode')?.disable();
       this.formulario.get('County')?.disable();
+      this.formulario.get('EMail')?.disable();
       this.formulario.get('VATRegistrationNo')?.disable();
       this.formulario.get('CodTransportista')?.disable();
       this.formulario.get('NIMATransportista')?.disable();

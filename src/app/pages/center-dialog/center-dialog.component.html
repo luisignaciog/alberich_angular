@@ -55,6 +55,14 @@
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMail') }">
           <mat-label>E-mail</mat-label>
           <input matInput placeholder="E-mail" formControlName="EMail" >
+
+          <mat-error *ngIf="formulario.get('EMail')?.hasError('required')">
+            El correo es obligatorio.
+          </mat-error>
+
+          <mat-error *ngIf="formulario.get('EMail')?.hasError('email') && !formulario.get('EMail')?.hasError('required')">
+            El correo no es válido.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodProductor') }">

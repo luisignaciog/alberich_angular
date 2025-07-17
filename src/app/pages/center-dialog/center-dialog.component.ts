@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionStorageService } from '../../models/session-storage-service';
 import { Router } from '@angular/router';
@@ -64,32 +64,32 @@ export class CenterDialogComponent {
     private http: HttpClient, private router: Router, private fb: FormBuilder ) {
     this.formulario = this.fb.group({
       Name: ['', [
-        //Validators.required,
+        Validators.required,
         //Validators.maxLength(20)
       ]],
       Address: ['', [
-        //Validators.required,
+        Validators.required,
       ]],
       City: ['', [
-        //Validators.required,
+        Validators.required,
       ]],
       PhoneNo: ['', [
-        //Validators.required,
+        Validators.required,
         //Validators.pattern(/^\d{10}$/)
       ]],
       PostCode: ['', [
-        //Validators.required,
+        Validators.required,
         //Validators.pattern(/^\d{5}$/)
       ]],
       County: ['', [
-        //Validators.required,
+        Validators.required,
       ]],
       CountryRegionCode: ['', [
-        //Validators.required,
+        Validators.required,
       ]],
       EMail: ['', [
-        //Validators.required,
-        //Validators.email
+        Validators.required,
+        Validators.email
       ]],
       CodProductor: ['', [
         // Validadores
