@@ -345,7 +345,7 @@ export class HomeComponent {
       return !!this.cambiosPorCampo[campo];
     }
 
-    adjuntarArchivo(campo: string, input: HTMLInputElement): void {
+  adjuntarArchivo(campo: string, input: HTMLInputElement): void {
     const file = input.files?.[0];
     if (!file) return;
 
@@ -371,13 +371,24 @@ export class HomeComponent {
 
     const reader = new FileReader();
 
+    //reader.onload = () => {
+    //  const base64 = reader.result as string;
+//
+    //  // Guarda el nombre visible
+    //  this.formulario.get(campo)?.setValue(file.name);
+//
+    //  // Guarda el base64 vinculado al campo
+    //  this.ficherosBase64[campo] = base64;
+    //};
+
     reader.onload = () => {
-      const base64 = reader.result as string;
+      const result = reader.result as string;
+      const base64 = result.split(',')[1]; // quita el prefijo
 
       // Guarda el nombre visible
       this.formulario.get(campo)?.setValue(file.name);
 
-      // Guarda el base64 vinculado al campo
+      // Guarda solo el base64 puro
       this.ficherosBase64[campo] = base64;
     };
 
