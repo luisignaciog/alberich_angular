@@ -99,6 +99,36 @@
           </button>
           <input #fileInputNIF type="file" hidden (change)="adjuntarArchivo('TarjetaNIFEmpresaPresentada', fileInputNIF)">
         </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodProductor') }">
+          <mat-label>Cód. Productor</mat-label>
+          <input matInput formControlName="CodProductor">
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMAProductor') }">
+          <mat-label>NIMA productor</mat-label>
+          <input matInput placeholder="NIMA productor" formControlName="NIMAProductor" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodGestor') }">
+          <mat-label>Código gestor</mat-label>
+          <input matInput placeholder="Código gestor" formControlName="CodGestor" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMAGestor') }">
+          <mat-label>NIMA gestor</mat-label>
+          <input matInput placeholder="NIMA gestor" formControlName="NIMAGestor" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMailEnvioServicio') }">
+          <mat-label>E-mail envío servicio</mat-label>
+          <input matInput placeholder="E-mail" formControlName="EMailEnvioServicio" >
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMailEnvioDocAmbiental') }">
+          <mat-label>E-mail servicio ambiental</mat-label>
+          <input matInput placeholder="E-mail" formControlName="EMailEnvioDocAmbiental" >
+        </mat-form-field>
       </div>
 
       <div class="form-buttons">

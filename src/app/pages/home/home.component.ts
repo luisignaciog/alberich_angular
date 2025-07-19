@@ -54,60 +54,66 @@ export class HomeComponent {
     CodTransportista: 50105,
     NIMATransportista: 999,
     CertificadoTitularidadBancariaPresentado: 998,
-    TarjetaNIFEmpresaPresentada: 997
+    TarjetaNIFEmpresaPresentada: 997,
+
+    // Campos especiales del centro 001:
+    CodProductor: 50103,
+    NIMAProductor: 999,
+    CodGestor: 50104,
+    NIMAGestor: 998,
+    EMailEnvioServicio: 50125,
+    EMailEnvioDocAmbiental: 50127,
+  };
+
+  campoTablaMap: { [campo: string]: number } = {
+    Name: 50110,
+    Address: 50110,
+    PhoneNo: 50110,
+    City: 50110,
+    PostCode: 50110,
+    County: 50110,
+    EMail: 50110,
+    CountryRegionCode: 50110,
+    VATRegistrationNo: 50110,
+    MobilePhoneNo: 50110,
+    CodTransportista: 50110,
+    NIMATransportista: 50110,
+    CertificadoTitularidadBancariaPresentado: 50110,
+    TarjetaNIFEmpresaPresentada: 50110,
+
+    // Campos especiales del centro 001:
+    CodProductor: 50111,
+    NIMAProductor: 50111,
+    CodGestor: 50111,
+    NIMAGestor: 50111,
+    EMailEnvioServicio: 50111,
+    EMailEnvioDocAmbiental: 50111
   };
 
   constructor( private snackBar: MatSnackBar, private session: SessionStorageService,
     private http: HttpClient, private router: Router, private fb: FormBuilder,
     private companyService: CompanyService) {
     this.formulario = this.fb.group({
-      Name: ['', [
-        Validators.required,
-        //Validators.maxLength(20)
-      ]],
-      Address: ['', [
-        Validators.required,
-      ]],
-      City: ['', [
-        Validators.required,
-      ]],
-      PhoneNo: ['', [
-        Validators.required,
-        //Validators.pattern(/^\d{10}$/)
-      ]],
-      MobilePhoneNo: ['', [
-        Validators.required,
-        //Validators.pattern(/^\d{10}$/)
-      ]],
-      PostCode: ['', [
-        Validators.required,
-        //Validators.pattern(/^\d{5}$/)
-      ]],
-      County: ['', [
-        Validators.required,
-      ]],
-      EMail: ['', [
-        Validators.required,
-        Validators.email
-      ]],
-      CountryRegionCode: ['', [
-        Validators.required,
-      ]],
-      VATRegistrationNo: ['', [
-        Validators.required,
-      ]],
-      CodTransportista: ['', [
-        //Validators.required,
-      ]],
-      NIMATransportista: ['', [
-        //Validators.required,
-      ]],
-      CertificadoTitularidadBancariaPresentado: ['', [
-        //Validators.required,
-      ]],
-      TarjetaNIFEmpresaPresentada: ['', [
-        //Validators.required,
-      ]],
+      Name: ['', [ Validators.required ]],
+      Address: ['', [ Validators.required ]],
+      City: ['', [ Validators.required ]],
+      PhoneNo: ['', [ Validators.required ]],
+      MobilePhoneNo: ['', [ Validators.required ]],
+      PostCode: ['', [ Validators.required ]],
+      County: ['', [ Validators.required ]],
+      EMail: ['', [ Validators.required, Validators.email ]],
+      CountryRegionCode: ['', [ Validators.required ]],
+      VATRegistrationNo: ['', [ Validators.required ]],
+      CodTransportista: ['', [ ]],
+      NIMATransportista: ['', [ ]],
+      CertificadoTitularidadBancariaPresentado: ['', [ ]],
+      TarjetaNIFEmpresaPresentada: ['', [ ]],
+      CodProductor: ['', [ ]],
+      NIMAProductor: ['', [ ]],
+      CodGestor: ['', [ ]],
+      NIMAGestor: ['', [ ]],
+      EMailEnvioServicio: ['', [ Validators.email ]],
+      EMailEnvioDocAmbiental: ['', [ Validators.email ]],
     });
   }
 
@@ -145,53 +151,62 @@ export class HomeComponent {
       CodTransportista: this.obtenerValorFinal('CodTransportista').valor,
       NIMATransportista: this.companyData.NIMATransportista,
       CertificadoTitularidadBancariaPresentado: certFile,
-      TarjetaNIFEmpresaPresentada: nifFile
+      TarjetaNIFEmpresaPresentada: nifFile,
+      CodProductor: this.obtenerValorFinal('CodProductor').valor,
+      NIMAProductor: this.obtenerValorFinal('NIMAProductor').valor,
+      CodGestor: this.obtenerValorFinal('CodGestor').valor,
+      NIMAGestor: this.obtenerValorFinal('NIMAGestor').valor,
+      EMailEnvioServicio: this.obtenerValorFinal('EMailEnvioServicio').valor,
+      EMailEnvioDocAmbiental: this.obtenerValorFinal('EMailEnvioDocAmbiental').valor,
     });
   }
 
   genChanges(codAgrupacion: string) {
-    var certFile: any = false;
-    var nifFile: any = false;
-    if (this.formulario.get('CertificadoTitularidadBancariaPresentado')?.value != '') { certFile = this.formulario.get('CertificadoTitularidadBancariaPresentado')?.value }
-    if (this.formulario.get('TarjetaNIFEmpresaPresentada')?.value != '') { nifFile = this.formulario.get('TarjetaNIFEmpresaPresentada')?.value }
+    const ahora = new Date().toISOString();
+    const systemId = this.companyData.SystemId;
+    const tipoCambio = '1'; // Modification
 
-    const formValues = {
-      Name: this.formulario.get('Name')?.value,
-      Address: this.formulario.get('Address')?.value,
-      City: this.formulario.get('City')?.value,
-      PhoneNo: this.formulario.get('PhoneNo')?.value,
-      PostCode: this.formulario.get('PostCode')?.value,
-      County: this.formulario.get('County')?.value,
-      EMail: this.formulario.get('EMail')?.value,
-      VATRegistrationNo: this.formulario.get('VATRegistrationNo')?.value,
-      CountryRegionCode: this.formulario.get('CountryRegionCode')?.value,
-      MobilePhoneNo: this.formulario.get('MobilePhoneNo')?.value,
-      CodTransportista: this.formulario.get('CodTransportista')?.value,
-      NIMATransportista: this.formulario.get('NIMATransportista')?.value,
-      CertificadoTitularidadBancariaPresentado: certFile,
-      TarjetaNIFEmpresaPresentada: nifFile
+    const camposFormulario = this.formulario.value;
+
+    const centro001 = this.companyData.centrosempresasgreenbc.find(c => c.Code === '001');
+    const systemIdCentro001 = centro001?.SystemId;
+    const camposFichero = ['CertificadoTitularidadBancariaPresentado', 'TarjetaNIFEmpresaPresentada'];
+
+
+    // Función para saber a qué tabla pertenece un campo
+    const obtenerTablaParaCampo = (campo: string): number => {
+      const camposCentro001 = [
+        'CodProductor', 'NIMAProductor', 'CodGestor',
+        'NIMAGestor', 'EMailEnvioServicio', 'EMailEnvioDocAmbiental'
+      ];
+      return camposCentro001.includes(campo) ? 50111 : this.noTabla;
     };
 
-    const ahora = new Date().toISOString();
-    const noTabla = this.noTabla;
-    const systemId = this.companyData.SystemId;
-    const tipoCambio = '1';
-
-    const registroscambios = (Object.keys(formValues) as (keyof typeof formValues)[]).reduce((arr, key) => {
-      const nuevoValor = formValues[key];
-      const valorAnterior = this.companyData[key];
+    const registroscambios = Object.keys(camposFormulario).reduce((arr, key) => {
+      const nuevoValor = camposFormulario[key];
+      const tabla = obtenerTablaParaCampo(key);
+      const valorAnterior =
+        tabla === 50111
+          ? centro001?.[key as keyof typeof centro001]
+          : this.companyData?.[key as keyof typeof this.companyData];
 
       const hayCambio = nuevoValor !== valorAnterior;
-
       const tieneFicheroBase64 = this.ficherosBase64?.[key];
+
+      if (camposFichero.includes(key)) {
+        if (!tieneFicheroBase64) return arr; // No se adjuntó nuevo → no enviar cambio
+      } else {
+        const hayCambio = nuevoValor !== valorAnterior;
+        if (!hayCambio && !tieneFicheroBase64) return arr; // No hay cambio real
+      }
 
       if (hayCambio || tieneFicheroBase64) {
         const registro: any = {
           FechayHora: ahora,
-          NoTabla: noTabla,
-          NoCampo: this.camposMap[key],
+          NoTabla: tabla,
+          NoCampo: this.camposMap[key as keyof typeof this.camposMap],
           ValorNuevo: String(nuevoValor),
-          SystemIdRegistro: systemId,
+          SystemIdRegistro: tabla === 50111 ? systemIdCentro001 : systemId,
           SystemIdRegistroPrincipal: systemId,
           TipodeCambio: tipoCambio,
           CodAgrupacionCambios: codAgrupacion
@@ -219,6 +234,7 @@ export class HomeComponent {
     }
 
     const body = this.genChanges(this.generarCodigoAgrupacion());
+    console.log('Cuerpo del cambio:', body);
 
     try{
       this.loading = true;
@@ -273,6 +289,12 @@ export class HomeComponent {
       this.formulario.get('MobilePhoneNo')?.enable();
       this.formulario.get('CertificadoTitularidadBancariaPresentado')?.enable();
       this.formulario.get('TarjetaNIFEmpresaPresentada')?.enable();
+      this.formulario.get('CodProductor')?.enable();
+      this.formulario.get('NIMAProductor')?.enable();
+      this.formulario.get('CodGestor')?.enable();
+      this.formulario.get('NIMAGestor')?.enable();
+      this.formulario.get('EMailEnvioServicio')?.enable();
+      this.formulario.get('EMailEnvioDocAmbiental')?.enable();
     } else {
       this.formulario.get('Name')?.disable();
       this.formulario.get('Address')?.disable();
@@ -288,6 +310,12 @@ export class HomeComponent {
       this.formulario.get('MobilePhoneNo')?.disable();
       this.formulario.get('CertificadoTitularidadBancariaPresentado')?.disable();
       this.formulario.get('TarjetaNIFEmpresaPresentada')?.disable();
+      this.formulario.get('CodProductor')?.disable();
+      this.formulario.get('NIMAProductor')?.disable();
+      this.formulario.get('CodGestor')?.disable();
+      this.formulario.get('NIMAGestor')?.disable();
+      this.formulario.get('EMailEnvioServicio')?.disable();
+      this.formulario.get('EMailEnvioDocAmbiental')?.disable();
     }
   }
 
@@ -320,7 +348,9 @@ export class HomeComponent {
     });
 
     const cambios = (this.companyData?.cambiosempresasgreenbc ?? []).filter(
-      c => c.No_Tabla === this.noTabla
+      c =>
+      (c.No_Tabla === this.noTabla && c.SystemId_Registro === this.companyData.SystemId) ||
+      (c.No_Tabla === 50111 && c.SystemId_Registro === this.getCentro001()?.SystemId)
     );
 
     for (const cambio of cambios) {
@@ -338,21 +368,35 @@ export class HomeComponent {
 
 
   obtenerValorFinal(campo: string): { valor: string, esPendiente: boolean } {
-    if (this.cambiosPorCampo[campo]) {
-      return {
-        valor: this.cambiosPorCampo[campo].Valor_Nuevo,
-        esPendiente: true
-      };
+    const tabla = this.campoTablaMap[campo];
+
+    if (!tabla) return { valor: '', esPendiente: false }; // campo desconocido
+
+    // Buscar en los cambios pendientes filtrando también por tabla
+    const cambios = (this.companyData?.cambiosempresasgreenbc ?? []).filter(
+      c => c.No_Tabla === tabla && this.camposMap[campo as keyof typeof this.camposMap] === c.No_Campo
+    );
+
+    if (cambios.length > 0) {
+      const cambio = cambios.reduce((a, b) => a.No_Mov > b.No_Mov ? a : b);
+      return { valor: cambio.Valor_Nuevo ?? '', esPendiente: true };
     }
-    return {
-      valor: (this.companyData as any)[campo],
-      esPendiente: false
-    };
+
+    if (tabla === 50111) {
+      const centro001 = this.companyData.centrosempresasgreenbc.find(c => c.Code === '001');
+      return { valor: (centro001 as any)?.[campo] ?? '', esPendiente: false };
+    } else {
+      return { valor: (this.companyData as any)?.[campo] ?? '', esPendiente: false };
+    }
+  }
+
+  getCentro001() {
+    return this.companyData.centrosempresasgreenbc.find(c => c.Code === '001');
   }
 
   tieneCambioPendiente(campo: string): boolean {
-      return !!this.cambiosPorCampo[campo];
-    }
+    return !!this.cambiosPorCampo[campo];
+  }
 
   adjuntarArchivo(campo: string, input: HTMLInputElement): void {
     const file = input.files?.[0];
@@ -379,16 +423,6 @@ export class HomeComponent {
     }
 
     const reader = new FileReader();
-
-    //reader.onload = () => {
-    //  const base64 = reader.result as string;
-//
-    //  // Guarda el nombre visible
-    //  this.formulario.get(campo)?.setValue(file.name);
-//
-    //  // Guarda el base64 vinculado al campo
-    //  this.ficherosBase64[campo] = base64;
-    //};
 
     reader.onload = () => {
       const result = reader.result as string;
