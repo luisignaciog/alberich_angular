@@ -24,7 +24,8 @@ import { ContactDialogComponent } from '../contact-dialog/contact-dialog.compone
 export class ContactsComponent implements AfterViewInit, OnInit {
   companyData: CompanyData = createEmptyCompanyData();
   loading: boolean = false;
-  dataSource: MatTableDataSource<contacts> = new MatTableDataSource<contacts>();
+  dataSource: MatTableDataSource<contacts & { esNuevo?: boolean }> = new MatTableDataSource();
+
   displayedColumns: string[] = ['Name','EMail', 'estado', 'actions'];
   noTabla = 5050; // Tabla de contactos en GreenBC
 
@@ -40,42 +41,39 @@ export class ContactsComponent implements AfterViewInit, OnInit {
 
     if (this.companyData === null) {
       this.router.navigate(['login']);
+      return;
     }
 
     this.loading = true;
-    //this.dataSource = new MatTableDataSource<contacts>(this.companyData.contactosempresasgreenbc);
+
     const cambios = this.companyData.cambiosempresasgreenbc ?? [];
 
-  // Filtra cambios nuevos (que no tienen registro principal aún)
     const nuevosPendientes = cambios
       .filter(c =>
         c.No_Tabla === this.noTabla &&
-        c.Tipo_de_Cambio === 'Insertion'
+        c.Tipo_de_Cambio === 'Insertion' &&
+        c.No_Campo === 2
       )
-      .reduce((acc, cambio) => {
-        if (!acc.some(e => e.SystemId === cambio.SystemId_Registro)) {
-          acc.push({
-            SystemId: cambio.SystemId_Registro,
-            No: '(nuevo)',
-            Name: '(Nuevo contacto)',
-            Name2: '',
-            PhoneNo: '',
-            EMail: '',
-            esNuevo: true // <- marcar que es un nuevo
-          });
-        }
-        return acc;
-      }, [] as (contacts & { esNuevo?: boolean })[]);
+      .map(cambio => ({
+        SystemId: cambio.SystemId_Registro,
+        No: '(nuevo)',
+        Name: cambio.Valor_Nuevo,
+        Name2: '',
+        PhoneNo: '',
+        EMail: '',
+        esNuevo: true // <- marcar que es un nuevo
+      }));
 
-    // Combina centros reales + nuevos pendientes
-    const centrosConMarcado = [
+    const contactosCompletos = [
       ...this.companyData.contactosempresasgreenbc.map(c => ({ ...c, esNuevo: false })),
       ...nuevosPendientes
     ];
 
-    this.dataSource = new MatTableDataSource(centrosConMarcado);
+    this.dataSource = new MatTableDataSource<contacts & { esNuevo?: boolean }>(contactosCompletos);
+
     this.loading = false;
   }
+
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;

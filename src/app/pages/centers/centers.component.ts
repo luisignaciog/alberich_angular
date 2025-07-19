@@ -50,7 +50,8 @@ export class CentersComponent implements OnInit, AfterViewInit {
   const nuevosPendientes = cambios
     .filter(c =>
       c.No_Tabla === this.noTabla &&
-      c.Tipo_de_Cambio === 'Insertion'
+      c.Tipo_de_Cambio === 'Insertion' &&
+      c.No_Campo === 2
     )
     .reduce((acc, cambio) => {
       if (!acc.some(e => e.SystemId === cambio.SystemId_Registro)) {
@@ -59,7 +60,7 @@ export class CentersComponent implements OnInit, AfterViewInit {
           NoEmpresaGreenBC: "",
           SystemId: cambio.SystemId_Registro,
           Code: '(nuevo)',
-          Name: '(Nuevo centro)',
+          Name: cambio.Valor_Nuevo,
           Name2: '',
           Address: '',
           Address2: '',

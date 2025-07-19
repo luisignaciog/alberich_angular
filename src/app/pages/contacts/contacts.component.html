@@ -35,7 +35,7 @@
               <ng-container matColumnDef="estado">
                 <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
                 <mat-cell *matCellDef="let contactRow">
-                  <mat-icon *ngIf="contactRow.esNuevo" color="primary">add_circle</mat-icon>
+                  <span *ngIf="contactRow.esNuevo">(Pendiente)</span>
                   <mat-icon *ngIf="!contactRow.esNuevo && tieneCambiosPendientes(contactRow)" color="warn">warning</mat-icon>
                   <span *ngIf="!contactRow.esNuevo && !tieneCambiosPendientes(contactRow)">✓</span>
                 </mat-cell>
