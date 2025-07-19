@@ -80,6 +80,11 @@
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMATransportista') }">
           <mat-label>NIMA Transp.</mat-label>
           <input matInput placeholder="NIMA Transp." formControlName="NIMATransportista">
+
+          <mat-error *ngIf="formulario.get('NIMATransportista')?.hasError('requerido')">
+            El NIMA del transportista es obligatorio si se indica un transportista.
+          </mat-error>
+
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline">
@@ -108,6 +113,10 @@
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMAProductor') }">
           <mat-label>NIMA productor</mat-label>
           <input matInput placeholder="NIMA productor" formControlName="NIMAProductor" >
+
+          <mat-error *ngIf="formulario.get('NIMAProductor')?.hasError('requerido')">
+            El NIMA del productor es obligatorio si se indica un productor.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodGestor') }">
@@ -118,6 +127,10 @@
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMAGestor') }">
           <mat-label>NIMA gestor</mat-label>
           <input matInput placeholder="NIMA gestor" formControlName="NIMAGestor" >
+
+          <mat-error *ngIf="formulario.get('NIMAGestor')?.hasError('requerido')">
+            El NIMA del gestor es obligatorio si se indica un gestor.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMailEnvioServicio') }">

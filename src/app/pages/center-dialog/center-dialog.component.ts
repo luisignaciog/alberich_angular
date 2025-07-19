@@ -19,6 +19,8 @@ import { HttpClient } from '@angular/common/http';
 import { CountryData, createEmptyCountryData } from '../../models/country_interface';
 import { v4 as uuidv4 } from 'uuid';
 import { MatSelectModule } from '@angular/material/select';
+import { validarProductor } from '../../validators/validate_productor';
+import { validarGestor } from '../../validators/validate_gestor';
 
 @Component({
   selector: 'app-center-dialog',
@@ -111,6 +113,8 @@ export class CenterDialogComponent {
         //Validators.required,
         //Validators.email
       ]],
+    }, {
+      validators: [validarProductor(), validarGestor()]
     });
   }
 
@@ -202,6 +206,12 @@ export class CenterDialogComponent {
     }
 
     async save() {
+      if (this.formulario.invalid) {
+        this.formulario.markAllAsTouched(); // marca campos para mostrar errores
+        this.snackBar.open('Por favor completa los campos obligatorios.', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+        return;
+      }
+
       const body = this.genChanges(this.generarCodigoAgrupacion());
       if (body.registroscambios.length === 0) {
         this.dialogRef.close(false);

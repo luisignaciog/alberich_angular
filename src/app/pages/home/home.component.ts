@@ -22,6 +22,9 @@ import { NgClass } from '@angular/common';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { CountryData, createEmptyCountryData } from '../../models/country_interface';
+import { validarShippingAgent } from '../../validators/validate_shipping_agent';
+import { validarProductor } from '../../validators/validate_productor';
+import { validarGestor } from '../../validators/validate_gestor';
 
 @Component({
   selector: 'app-home',
@@ -114,6 +117,8 @@ export class HomeComponent {
       NIMAGestor: ['', [ ]],
       EMailEnvioServicio: ['', [ Validators.email ]],
       EMailEnvioDocAmbiental: ['', [ Validators.email ]],
+    }, {
+      validators: [validarShippingAgent(), validarProductor(), validarGestor()]
     });
   }
 
