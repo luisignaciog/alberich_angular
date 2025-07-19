@@ -310,7 +310,12 @@ export class CenterDialogComponent {
       this.formulario.get('County')?.disable();
       this.formulario.get('EMail')?.disable();
       this.formulario.get('CountryRegionCode')?.disable();
-
+      this.formulario.get('CodProductor')?.disable();
+      this.formulario.get('NIMAProductor')?.disable();
+      this.formulario.get('CodGestor')?.disable();
+      this.formulario.get('NIMAGestor')?.disable();
+      this.formulario.get('EMailEnvioServicio')?.disable();
+      this.formulario.get('EMailEnvioDocAmbiental')?.disable();
     }
   }
 }
