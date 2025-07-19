@@ -1,3 +1,4 @@
+import { CompanyService } from './../../services/company_service';
 import { Component } from '@angular/core';
 
 import { createEmptyLoginData, LoginData } from '../../models/login_data_interface';
@@ -29,7 +30,7 @@ export class LoginComponent {
 
   constructor(private router: Router, private http: HttpClient,
     private snackBar: MatSnackBar, private fb: FormBuilder,
-    private session: SessionStorageService)
+    private session: SessionStorageService, private companyService: CompanyService)
   {
     this.formulario = this.fb.group({
       userName: ['', [
@@ -48,7 +49,7 @@ export class LoginComponent {
       this.loading = true;
       const url = environment.url + `passwordempresasgreenbc('${this.formulario.value.userName}', '${this.formulario.value.password}')`;
       this.loginData = await lastValueFrom(this.http.get<LoginData>(url));
-      this.getCompanyData(this.loginData.SystemId);
+      this.companyService.refreshCompanyData(this.loginData.SystemId, true);
     } catch (error: any) {
       if (error.status === 0) {
         this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {
@@ -58,29 +59,6 @@ export class LoginComponent {
         this.loading = false;
       } else {
         this.snackBar.open('Usuario o contraseña no válidos', 'Cerrar', {
-          duration: 3000,
-          verticalPosition: 'top' });
-        this.loading = false;
-      }
-    }
-  }
-
-  async getCompanyData(systemId: string)
-  {
-    try{
-      const url = environment.url + `empresasgreenbc(${systemId})?$expand=centrosempresasgreenbc,contactosempresasgreenbc,cambiosempresasgreenbc`;
-      this.companyData = await lastValueFrom(this.http.get<CompanyData>(url));
-      this.session.setData(this.companyData);
-      this.loading = false;
-      this.router.navigate(['home']);
-    } catch (error: any) {
-      if (error.status === 0) {
-        this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {
-          duration: 3000,
-          verticalPosition: 'top' });
-        this.loading = false;
-      } else {
-        this.snackBar.open('Datos del centro no válidos', 'Cerrar', {
           duration: 3000,
           verticalPosition: 'top' });
         this.loading = false;

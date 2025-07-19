@@ -1,31 +1,44 @@
+// company.service.ts
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
+import { CompanyData } from '../models/center_data_interface';
+import { SessionStorageService } from '../models/session-storage-service';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../environmets/environment';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class CompanyService {
-    private companyDataMap = new Map<string, BehaviorSubject<any>>();
+  constructor(
+    private http: HttpClient,
+    private session: SessionStorageService,
+    private router: Router,
+    private snackBar: MatSnackBar
+  ) {}
 
-    setCompanyData(systemId: string, data: any) {
-        if (!this.companyDataMap.has(systemId)) {
-            this.companyDataMap.set(systemId, new BehaviorSubject<any>(null));
-        }
-        this.companyDataMap.get(systemId)?.next(data);
-        sessionStorage.setItem(`companyData_${systemId}`, JSON.stringify(data));
+  async refreshCompanyData(systemId: string, navigate = false): Promise<CompanyData | null> {
+    try {
+      const url = environment.url + `empresasgreenbc(${systemId})?$expand=centrosempresasgreenbc,contactosempresasgreenbc,cambiosempresasgreenbc`;
+      const companyData = await lastValueFrom(this.http.get<CompanyData>(url));
+      this.session.setData(companyData);
+
+      if (navigate) {
+        this.router.navigate(['home']);
+      }
+
+      return companyData;
+    } catch (error: any) {
+      const msg = error?.status === 0
+        ? 'No hay conexión al servidor.'
+        : 'Error al obtener los datos de la empresa.';
+      this.snackBar.open(msg, 'Cerrar', {
+        duration: 3000,
+        verticalPosition: 'top'
+      });
+      return null;
     }
-
-    getCompanyData(systemId: string) {
-      const storedData = sessionStorage.getItem(`companyData_${systemId}`);
-
-        if (storedData) {
-            return JSON.parse(storedData);
-        }
-        return this.companyDataMap.get(systemId)?.value || null;
-    }
-
-    getCompanyDataObservable(systemId: string) {
-        if (!this.companyDataMap.has(systemId)) {
-            this.companyDataMap.set(systemId, new BehaviorSubject<any>(null));
-        }
-        return this.companyDataMap.get(systemId)?.asObservable();
-    }
+  }
 }

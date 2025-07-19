@@ -1,3 +1,4 @@
+import { CompanyService } from './../../services/company_service';
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
@@ -57,7 +58,8 @@ export class HomeComponent {
   };
 
   constructor( private snackBar: MatSnackBar, private session: SessionStorageService,
-    private http: HttpClient, private router: Router, private fb: FormBuilder ) {
+    private http: HttpClient, private router: Router, private fb: FormBuilder,
+    private companyService: CompanyService) {
     this.formulario = this.fb.group({
       Name: ['', [
         Validators.required,
@@ -226,6 +228,13 @@ export class HomeComponent {
 
       this.snackBar.open('Datos pendientes de revisión', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
       this.enableEdit = false;
+
+      const updatedData = await this.companyService.refreshCompanyData(this.companyData.SystemId, false);
+      if (updatedData) {
+        this.companyData = updatedData;
+      }
+      this.getChanges();
+      this.setValueFields();
       this.EnableDisableCtrls();
 
     } catch (error: any) {

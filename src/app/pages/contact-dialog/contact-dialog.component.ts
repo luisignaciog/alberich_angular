@@ -1,3 +1,4 @@
+import { CompanyService } from './../../services/company_service';
 import { CommonModule, NgIf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -48,6 +49,7 @@ export class ContactDialogComponent {
     public dialogRef: MatDialogRef<ContactDialogComponent>,
     private snackBar: MatSnackBar,
     private session: SessionStorageService,
+    private companyService: CompanyService,
     private http: HttpClient, private router: Router, private fb: FormBuilder ) {
     this.formulario = this.fb.group({
       Name: ['', [
@@ -151,6 +153,8 @@ export class ContactDialogComponent {
 
       this.snackBar.open('Datos pendientes de revisión', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
       this.dialogRef.close(false);
+      this.companyService.refreshCompanyData(this.companyData.SystemId, true);
+
     } catch (error: any) {
       if (error.status === 0) {
         this.snackBar.open('No hay conexión al servidor.', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
