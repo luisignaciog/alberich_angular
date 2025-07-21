@@ -8,7 +8,7 @@
       <mat-card-header>
         <div mat-card-avatar class="example-header-image"></div>
         <mat-card-title>Datos del centro {{center.Code}}</mat-card-title>
-        <!--<mat-card-subtitle>Nuevo</mat-card-subtitle>-->
+        <mat-card-subtitle *ngIf="center.Code === '001'">Datos del centro 001 no se puede modificar porque son los mismos que los datos de la empresa</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content class="scrollable-content">
@@ -106,12 +106,20 @@
       </mat-card-content>
 
       <mat-card-actions class="dialog-footer">
-        <button mat-mini-fab color="primary" (click)="save()">
-          <mat-icon>check</mat-icon>
-        </button>
-        <button mat-mini-fab color="primary" style="margin-left: 10px;" (click)="cancel()">
-          <mat-icon>close</mat-icon>
-        </button>
+        <div class="leyenda-cambios" *ngIf="hayCambiosPendientes">
+          <mat-icon color="primary">warning</mat-icon>
+          <strong>Cambios pendientes</strong>de validación.
+        </div>
+
+        <div style="margin-top: 10px; display: flex; justify-content: center; gap: 10px;">
+          <button mat-mini-fab color="primary" (click)="save()" *ngIf="center.Code != '001'">
+            <mat-icon>check</mat-icon>
+          </button>
+          <button mat-mini-fab color="primary" (click)="cancel()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+
       </mat-card-actions>
     </mat-card>
   </form>
