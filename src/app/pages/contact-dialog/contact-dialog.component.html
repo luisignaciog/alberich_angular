@@ -42,12 +42,21 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-mini-fab color="primary" (click)="save()">
-          <mat-icon>check</mat-icon>
-        </button>
-        <button mat-mini-fab color="primary" style="margin-left: 10px;" (click)="onNoClick()">
-          <mat-icon>close</mat-icon>
-        </button>
+        <div class="footer-content">
+          <div class="leyenda-cambios" *ngIf="hayCambiosPendientes">
+            <mat-icon color="primary">warning</mat-icon>
+            <strong>Cambios pendientes</strong> de validación.
+          </div>
+
+          <div class="footer-buttons">
+            <button mat-mini-fab color="primary" (click)="save()">
+              <mat-icon>check</mat-icon>
+            </button>
+            <button mat-mini-fab color="primary" style="margin-left: 10px;" (click)="onNoClick()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
       </mat-card-actions>
     </mat-card>
   </form>

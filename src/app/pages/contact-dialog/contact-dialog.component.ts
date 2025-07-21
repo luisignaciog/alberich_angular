@@ -77,7 +77,9 @@ export class ContactDialogComponent {
       return;
     }
 
-    this.setValueFields();
+    this.companyData = this.session.getData();
+    this.contact = this.data.contact;
+
     this.getChanges();
     this.setValueFields();
   }
@@ -215,5 +217,9 @@ export class ContactDialogComponent {
 
   tieneCambioPendiente(campo: string): boolean {
     return !!this.cambiosPorCampo[campo];
+  }
+
+  get hayCambiosPendientes(): boolean {
+    return Object.keys(this.cambiosPorCampo).length > 0;
   }
 }

@@ -73,8 +73,8 @@
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodTransportista') }">
-          <mat-label>Transportista</mat-label>
-          <input matInput placeholder="Transportista" formControlName="CodTransportista" >
+          <mat-label>Cód. transportista</mat-label>
+          <input matInput placeholder="Cód. transportista" formControlName="CodTransportista" >
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMATransportista') }">
@@ -106,7 +106,7 @@
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodProductor') }">
-          <mat-label>Cód. Productor</mat-label>
+          <mat-label>Cód. productor</mat-label>
           <input matInput formControlName="CodProductor">
         </mat-form-field>
 
@@ -145,26 +145,35 @@
       </div>
 
       <div class="form-buttons">
-        <!--!Boton de editar-->
-        <button mat-mini-fab color="primary" (click)="edit()" *ngIf="!enableEdit">
-          <mat-icon>edit</mat-icon>
-        </button>
+        <div class="footer-content">
+          <div class="leyenda-cambios" *ngIf="hayCambiosPendientes">
+            <mat-icon color="primary">warning</mat-icon>
+            <strong>Cambios pendientes</strong> de validación.
+          </div>
 
-        <!--!Boton de guarda-->
-        <button mat-mini-fab color="primary" (click)="save()" *ngIf="enableEdit">
-          <mat-icon>check</mat-icon>
-        </button>
+          <div class="footer-buttons">
+            <!--!Boton de editar-->
+            <button mat-mini-fab color="primary" (click)="edit()" *ngIf="!enableEdit">
+              <mat-icon>edit</mat-icon>
+            </button>
 
-        <!--!Boton de cancelar-->
-        <button mat-mini-fab color="primary" style="margin-left: 10px;" (click)="cancel()" *ngIf="enableEdit">
-          <mat-icon>close</mat-icon>
-        </button>
+            <!--!Boton de guarda-->
+            <button mat-mini-fab color="primary" (click)="save()" *ngIf="enableEdit">
+              <mat-icon>check</mat-icon>
+            </button>
 
-        <!--!Boton de contactos-->
-        <button mat-raised-button color="primary" (click)="contacts()" *ngIf="!enableEdit">Contactos ({{ companyData!.contactosempresasgreenbc!.length }})</button>
+            <!--!Boton de cancelar-->
+            <button mat-mini-fab color="primary" style="margin-left: 10px;" (click)="cancel()" *ngIf="enableEdit">
+              <mat-icon>close</mat-icon>
+            </button>
 
-        <!--!Boton de centros-->
-        <button mat-raised-button color="primary" (click)="centers()" *ngIf="!enableEdit">Centros ({{ companyData!.centrosempresasgreenbc!.length }})</button>
+            <!--!Boton de contactos-->
+            <button mat-raised-button color="primary" (click)="contacts()" *ngIf="!enableEdit">Contactos ({{ companyData!.contactosempresasgreenbc!.length }})</button>
+
+            <!--!Boton de centros-->
+            <button mat-raised-button color="primary" (click)="centers()" *ngIf="!enableEdit">Centros ({{ companyData!.centrosempresasgreenbc!.length }})</button>
+          </div>
+        </div>
       </div>
     </form>
   </div>

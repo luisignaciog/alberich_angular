@@ -115,8 +115,8 @@ export class HomeComponent {
       NIMAProductor: ['', [ ]],
       CodGestor: ['', [ ]],
       NIMAGestor: ['', [ ]],
-      EMailEnvioServicio: ['', [ Validators.email ]],
-      EMailEnvioDocAmbiental: ['', [ Validators.email ]],
+      EMailEnvioServicio: ['', [ Validators.required, Validators.email ]],
+      EMailEnvioDocAmbiental: ['', [ Validators.required, Validators.email ]],
     }, {
       validators: [validarShippingAgent(), validarProductor(), validarGestor()]
     });
@@ -457,5 +457,9 @@ export class HomeComponent {
         this.loading = false;
       }
     }
+  }
+
+  get hayCambiosPendientes(): boolean {
+    return Object.keys(this.cambiosPorCampo).length > 0;
   }
 }

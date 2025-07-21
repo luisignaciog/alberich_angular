@@ -1,3 +1,4 @@
+import { CompanyService } from './../../services/company_service';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -63,6 +64,7 @@ export class CenterDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<CenterDialogComponent>,
     private snackBar: MatSnackBar, private session: SessionStorageService,
+    private companyService: CompanyService,
     private http: HttpClient, private router: Router, private fb: FormBuilder ) {
     this.formulario = this.fb.group({
       Name: ['', [
@@ -106,12 +108,12 @@ export class CenterDialogComponent {
         //Validators.required,
       ]],
       EMailEnvioServicio: ['', [
-        //Validators.required,
-        //Validators.email
+        Validators.required,
+        Validators.email
       ]],
       EMailEnvioDocAmbiental: ['', [
-        //Validators.required,
-        //Validators.email
+        Validators.required,
+        Validators.email
       ]],
     }, {
       validators: [validarProductor(), validarGestor()]
@@ -122,6 +124,7 @@ export class CenterDialogComponent {
 
     if ((this.data.center == undefined) || (this.data.center.NoEmpresaGreenBC == "")) {
       this.new = true;
+      this.getCountries();
       return;
     }
 
@@ -224,6 +227,10 @@ export class CenterDialogComponent {
             const result = await firstValueFrom(this.http.post(url, body));
             this.loading = false;
 
+            this.snackBar.open('Datos pendientes de revisión', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+            this.dialogRef.close(false);
+            this.companyService.refreshCompanyData(this.companyData.SystemId, true);
+
           } catch (error: any) {
             if (error.status === 0) {
               this.snackBar.open('No hay conexión al servidor.', 'Cerrar', {
@@ -239,8 +246,7 @@ export class CenterDialogComponent {
             }
           }
 
-      this.snackBar.open('Datos pendientes de revisión', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
-      this.dialogRef.close(false);
+
     }
 
   generarCodigoAgrupacion(): string {
@@ -327,5 +333,9 @@ export class CenterDialogComponent {
       this.formulario.get('EMailEnvioServicio')?.disable();
       this.formulario.get('EMailEnvioDocAmbiental')?.disable();
     }
+  }
+
+  get hayCambiosPendientes(): boolean {
+    return Object.keys(this.cambiosPorCampo).length > 0;
   }
 }
