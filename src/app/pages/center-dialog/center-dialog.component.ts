@@ -21,7 +21,7 @@ import { CountryData, createEmptyCountryData } from '../../models/country_interf
 import { v4 as uuidv4 } from 'uuid';
 import { MatSelectModule } from '@angular/material/select';
 import { validarProductor } from '../../validators/validate_productor';
-import { validarGestor } from '../../validators/validate_gestor';
+import { alMenosUnoRequerido, validarGestor } from '../../validators/validate_gestor';
 
 @Component({
   selector: 'app-center-dialog',
@@ -67,56 +67,24 @@ export class CenterDialogComponent {
     private companyService: CompanyService,
     private http: HttpClient, private router: Router, private fb: FormBuilder ) {
     this.formulario = this.fb.group({
-      Name: ['', [
-        Validators.required,
-        //Validators.maxLength(20)
-      ]],
-      Address: ['', [
-        Validators.required,
-      ]],
-      City: ['', [
-        Validators.required,
-      ]],
-      PhoneNo: ['', [
-        Validators.required,
-        //Validators.pattern(/^\d{10}$/)
-      ]],
-      PostCode: ['', [
-        Validators.required,
-        //Validators.pattern(/^\d{5}$/)
-      ]],
-      County: ['', [
-        Validators.required,
-      ]],
-      CountryRegionCode: ['', [
-        Validators.required,
-      ]],
-      EMail: ['', [
-        Validators.required,
-        Validators.email
-      ]],
-      CodProductor: ['', [
-        // Validadores
-      ]],
-      NIMAProductor: ['', [
-        //Validators.required,
-      ]],
-      CodGestor: ['', [
-        //Validators.required,
-      ]],
-      NIMAGestor: ['', [
-        //Validators.required,
-      ]],
-      EMailEnvioServicio: ['', [
-        Validators.required,
-        Validators.email
-      ]],
-      EMailEnvioDocAmbiental: ['', [
-        Validators.required,
-        Validators.email
-      ]],
+      Name: ['', [ Validators.required ]],
+      Address: ['', [ Validators.required ]],
+      City: ['', [ Validators.required ]],
+      PhoneNo: ['', [ Validators.required ]],
+      PostCode: ['', [ Validators.required ]],
+      County: ['', [ Validators.required ]],
+      CountryRegionCode: ['', [ Validators.required ]],
+      EMail: ['', [ Validators.required, Validators.email ]],
+      CodProductor: ['', [ ]],
+      NIMAProductor: ['', [ ]],
+      CodGestor: ['', [ ]],
+      NIMAGestor: ['', [ ]],
+      EMailEnvioServicio: ['', [ Validators.required, Validators.email ]],
+      EMailEnvioDocAmbiental: ['', [ Validators.required, Validators.email ]],
     }, {
-      validators: [validarProductor(), validarGestor()]
+      validators: [validarProductor(), validarGestor(),
+        alMenosUnoRequerido('CodProductor', 'CodGestor')
+      ]
     });
   }
 

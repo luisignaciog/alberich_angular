@@ -2,7 +2,6 @@ import { CompanyService } from './../../services/company_service';
 import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar.component";
-import { createEmptyLoginData, LoginData } from '../../models/login_data_interface';
 import { SessionStorageService } from '../../models/session-storage-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CompanyData, createEmptyCompanyData } from '../../models/center_data_interface';
@@ -24,7 +23,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { CountryData, createEmptyCountryData } from '../../models/country_interface';
 import { validarShippingAgent } from '../../validators/validate_shipping_agent';
 import { validarProductor } from '../../validators/validate_productor';
-import { validarGestor } from '../../validators/validate_gestor';
+import { alMenosUnoRequerido, validarGestor } from '../../validators/validate_gestor';
 
 @Component({
   selector: 'app-home',
@@ -118,7 +117,12 @@ export class HomeComponent {
       EMailEnvioServicio: ['', [ Validators.required, Validators.email ]],
       EMailEnvioDocAmbiental: ['', [ Validators.required, Validators.email ]],
     }, {
-      validators: [validarShippingAgent(), validarProductor(), validarGestor()]
+        validators: [
+          validarShippingAgent(),
+          validarProductor(),
+          validarGestor(),
+          alMenosUnoRequerido('CodProductor', 'CodGestor') // <-- Aquí lo añades
+      ]
     });
   }
 
@@ -239,7 +243,6 @@ export class HomeComponent {
     }
 
     const body = this.genChanges(this.generarCodigoAgrupacion());
-    console.log('Cuerpo del cambio:', body);
 
     try{
       this.loading = true;
@@ -330,12 +333,10 @@ export class HomeComponent {
   }
 
   centers() {
-    console.log('centers');
     this.router.navigate(['centers']);
   }
 
   contacts() {
-    console.log('contacts');
     this.router.navigate(['contacts']);
   }
 

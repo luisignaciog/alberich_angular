@@ -68,6 +68,10 @@
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodProductor') }">
           <mat-label>Código productor</mat-label>
           <input matInput placeholder="Código productor" formControlName="CodProductor" >
+
+          <mat-error *ngIf="formulario.get('CodProductor')?.hasError('alMenosUnoRequerido')">
+            Debe rellenar al menos <strong>Cód. productor</strong> o <strong>Cód. gestor</strong>.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMAProductor') }">
@@ -82,6 +86,10 @@
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodGestor') }">
           <mat-label>Código gestor</mat-label>
           <input matInput placeholder="Código gestor" formControlName="CodGestor" >
+
+          <mat-error *ngIf="formulario.get('CodGestor')?.hasError('alMenosUnoRequerido')">
+            Debe rellenar al menos <strong>Cód. productor</strong> o <strong>Cód. gestor</strong>.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMAGestor') }">

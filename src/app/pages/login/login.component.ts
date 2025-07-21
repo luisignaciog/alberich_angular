@@ -47,7 +47,11 @@ export class LoginComponent {
   {
     try{
       this.loading = true;
-      const url = environment.url + `passwordempresasgreenbc('${this.formulario.value.userName}', '${this.formulario.value.password}')`;
+
+      const userNameEncoded = encodeURIComponent(this.formulario.value.userName);
+      const passwordEncoded = encodeURIComponent(this.formulario.value.password);
+
+      const url = environment.url + `passwordempresasgreenbc('${userNameEncoded}', '${passwordEncoded}')`;
       this.loginData = await lastValueFrom(this.http.get<LoginData>(url));
       this.companyService.refreshCompanyData(this.loginData.SystemId, true);
     } catch (error: any) {
