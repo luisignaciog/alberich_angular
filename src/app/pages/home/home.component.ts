@@ -228,6 +228,22 @@ export class HomeComponent {
         arr.push(registro);
       }
 
+      const camposCompartidos = ['Name', 'Address', 'PhoneNo', 'City', 'PostCode', 'County', 'EMail', 'CountryRegionCode'];
+      const cambioEnCentro = camposCompartidos.includes(key) && hayCambio;
+      if (cambioEnCentro)  {
+        const registro: any = {
+          FechayHora: ahora,
+          NoTabla: 50111,
+          NoCampo: this.camposMap[key as keyof typeof this.camposMap],
+          ValorNuevo: String(nuevoValor),
+          SystemIdRegistro: systemIdCentro001,
+          SystemIdRegistroPrincipal: systemId,
+          TipodeCambio: tipoCambio,
+          CodAgrupacionCambios: codAgrupacion
+        };
+        arr.push(registro);
+      }
+
       return arr;
     }, [] as RegistroCambio[]);
 
@@ -243,6 +259,7 @@ export class HomeComponent {
     }
 
     const body = this.genChanges(this.generarCodigoAgrupacion());
+    console.log('Cuerpo del cambio:', body);
 
     try{
       this.loading = true;
