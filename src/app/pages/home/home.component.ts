@@ -145,6 +145,8 @@ export class HomeComponent {
     var nifFile: string = this.obtenerValorFinal('TarjetaNIFEmpresaPresentada').valor;
     if (nifFile === 'false') { nifFile = ''; }
 
+    console.log('Certificado Titularidad Bancaria:', certFile);
+
     this.countrySelected = this.obtenerValorFinal('CountryRegionCode').valor;
     this.formulario.setValue({
       Name: this.obtenerValorFinal('Name').valor,
@@ -159,8 +161,8 @@ export class HomeComponent {
       MobilePhoneNo: this.obtenerValorFinal('MobilePhoneNo').valor,
       CodTransportista: this.obtenerValorFinal('CodTransportista').valor,
       NIMATransportista: this.companyData.NIMATransportista,
-      CertificadoTitularidadBancariaPresentado: certFile,
-      TarjetaNIFEmpresaPresentada: nifFile,
+      CertificadoTitularidadBancariaPresentado: this.mostrarTextoAdjunto(this.obtenerValorFinal('CertificadoTitularidadBancariaPresentado').valor),
+      TarjetaNIFEmpresaPresentada: this.mostrarTextoAdjunto(this.obtenerValorFinal('TarjetaNIFEmpresaPresentada').valor),
       CodProductor: this.obtenerValorFinal('CodProductor').valor,
       NIMAProductor: this.obtenerValorFinal('NIMAProductor').valor,
       CodGestor: this.obtenerValorFinal('CodGestor').valor,
@@ -479,5 +481,9 @@ export class HomeComponent {
 
   get hayCambiosPendientes(): boolean {
     return Object.keys(this.cambiosPorCampo).length > 0;
+  }
+
+  private mostrarTextoAdjunto(valor: string): string {
+    return valor === 'true' ? 'Adjunto' : '';
   }
 }
