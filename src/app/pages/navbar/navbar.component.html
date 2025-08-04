@@ -11,6 +11,10 @@
       <mat-icon>groups</mat-icon>
       <span>Contactos</span>
     </button>
+    <button *ngIf="!isHome" mat-menu-item (click)="userData()">
+      <mat-icon>arrow_back</mat-icon>
+      <span>Atras</span>
+    </button>
   </mat-menu>
   <span>{{ userName }}</span>
   <span class="example-spacer"></span>
