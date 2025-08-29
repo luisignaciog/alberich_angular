@@ -160,4 +160,11 @@ export class CentersComponent implements OnInit, AfterViewInit {
     ) ?? false;
   }
 
+  contacts() {
+    this.router.navigate(['contacts']);
+  }
+
+  home() {
+    this.router.navigate(['home']);
+  }
 }

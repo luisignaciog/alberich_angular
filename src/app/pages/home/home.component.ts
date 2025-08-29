@@ -59,12 +59,12 @@ export class HomeComponent {
     TarjetaNIFEmpresaPresentada: 997,
 
     // Campos especiales del centro 001:
-    CodProductor: 50103,
-    NIMAProductor: 999,
-    CodGestor: 50104,
-    NIMAGestor: 998,
-    EMailEnvioServicio: 50125,
-    EMailEnvioDocAmbiental: 50127,
+    //CodProductor: 50103,
+    //NIMAProductor: 999,
+    //CodGestor: 50104,
+    //NIMAGestor: 998,
+    //EMailEnvioServicio: 50125,
+    //EMailEnvioDocAmbiental: 50127,
   };
 
   campoTablaMap: { [campo: string]: number } = {
@@ -84,12 +84,12 @@ export class HomeComponent {
     TarjetaNIFEmpresaPresentada: 50110,
 
     // Campos especiales del centro 001:
-    CodProductor: 50111,
-    NIMAProductor: 50111,
-    CodGestor: 50111,
-    NIMAGestor: 50111,
-    EMailEnvioServicio: 50111,
-    EMailEnvioDocAmbiental: 50111
+    //CodProductor: 50111,
+    //NIMAProductor: 50111,
+    //CodGestor: 50111,
+    //NIMAGestor: 50111,
+    //EMailEnvioServicio: 50111,
+    //EMailEnvioDocAmbiental: 50111
   };
 
   constructor( private snackBar: MatSnackBar, private session: SessionStorageService,
@@ -110,18 +110,18 @@ export class HomeComponent {
       NIMATransportista: ['', [ ]],
       CertificadoTitularidadBancariaPresentado: ['', [ ]],
       TarjetaNIFEmpresaPresentada: ['', [ ]],
-      CodProductor: ['', [ ]],
-      NIMAProductor: ['', [ ]],
-      CodGestor: ['', [ ]],
-      NIMAGestor: ['', [ ]],
-      EMailEnvioServicio: ['', [ Validators.required, Validators.email ]],
-      EMailEnvioDocAmbiental: ['', [ Validators.required, Validators.email ]],
+      //CodProductor: ['', [ ]],
+      //NIMAProductor: ['', [ ]],
+      //CodGestor: ['', [ ]],
+      //NIMAGestor: ['', [ ]],
+      //EMailEnvioServicio: ['', [ Validators.required, Validators.email ]],
+      //EMailEnvioDocAmbiental: ['', [ Validators.required, Validators.email ]],
     }, {
         validators: [
           validarShippingAgent(),
-          validarProductor(),
-          validarGestor(),
-          alMenosUnoRequerido('CodProductor', 'CodGestor') // <-- Aquí lo añades
+          //validarProductor(),
+          //validarGestor(),
+          //alMenosUnoRequerido('CodProductor', 'CodGestor')
       ]
     });
   }
@@ -137,6 +137,7 @@ export class HomeComponent {
     this.getChanges();
     this.setValueFields();
     this.EnableDisableCtrls();
+
   }
 
   setValueFields() {
@@ -160,15 +161,16 @@ export class HomeComponent {
       CountryRegionCode: this.countrySelected,
       MobilePhoneNo: this.obtenerValorFinal('MobilePhoneNo').valor,
       CodTransportista: this.obtenerValorFinal('CodTransportista').valor,
-      NIMATransportista: this.companyData.NIMATransportista,
+      //NIMATransportista: this.companyData.NIMATransportista,
+      NIMATransportista: this.obtenerValorFinal('NIMATransportista').valor,
       CertificadoTitularidadBancariaPresentado: this.mostrarTextoAdjunto(this.obtenerValorFinal('CertificadoTitularidadBancariaPresentado').valor),
       TarjetaNIFEmpresaPresentada: this.mostrarTextoAdjunto(this.obtenerValorFinal('TarjetaNIFEmpresaPresentada').valor),
-      CodProductor: this.obtenerValorFinal('CodProductor').valor,
-      NIMAProductor: this.obtenerValorFinal('NIMAProductor').valor,
-      CodGestor: this.obtenerValorFinal('CodGestor').valor,
-      NIMAGestor: this.obtenerValorFinal('NIMAGestor').valor,
-      EMailEnvioServicio: this.obtenerValorFinal('EMailEnvioServicio').valor,
-      EMailEnvioDocAmbiental: this.obtenerValorFinal('EMailEnvioDocAmbiental').valor,
+      //CodProductor: this.obtenerValorFinal('CodProductor').valor,
+      //NIMAProductor: this.obtenerValorFinal('NIMAProductor').valor,
+      //CodGestor: this.obtenerValorFinal('CodGestor').valor,
+      //NIMAGestor: this.obtenerValorFinal('NIMAGestor').valor,
+      //EMailEnvioServicio: this.obtenerValorFinal('EMailEnvioServicio').valor,
+      //EMailEnvioDocAmbiental: this.obtenerValorFinal('EMailEnvioDocAmbiental').valor,
     });
   }
 
@@ -261,7 +263,6 @@ export class HomeComponent {
     }
 
     const body = this.genChanges(this.generarCodigoAgrupacion());
-    console.log('Cuerpo del cambio:', body);
 
     try{
       this.loading = true;
@@ -279,6 +280,8 @@ export class HomeComponent {
       this.getChanges();
       this.setValueFields();
       this.EnableDisableCtrls();
+
+      this.centers();
 
     } catch (error: any) {
       if (error.status === 0) {
@@ -316,12 +319,12 @@ export class HomeComponent {
       this.formulario.get('MobilePhoneNo')?.enable();
       this.formulario.get('CertificadoTitularidadBancariaPresentado')?.enable();
       this.formulario.get('TarjetaNIFEmpresaPresentada')?.enable();
-      this.formulario.get('CodProductor')?.enable();
-      this.formulario.get('NIMAProductor')?.enable();
-      this.formulario.get('CodGestor')?.enable();
-      this.formulario.get('NIMAGestor')?.enable();
-      this.formulario.get('EMailEnvioServicio')?.enable();
-      this.formulario.get('EMailEnvioDocAmbiental')?.enable();
+      //this.formulario.get('CodProductor')?.enable();
+      //this.formulario.get('NIMAProductor')?.enable();
+      //this.formulario.get('CodGestor')?.enable();
+      //this.formulario.get('NIMAGestor')?.enable();
+      //this.formulario.get('EMailEnvioServicio')?.enable();
+      //this.formulario.get('EMailEnvioDocAmbiental')?.enable();
     } else {
       this.formulario.get('Name')?.disable();
       this.formulario.get('Address')?.disable();
@@ -337,12 +340,12 @@ export class HomeComponent {
       this.formulario.get('MobilePhoneNo')?.disable();
       this.formulario.get('CertificadoTitularidadBancariaPresentado')?.disable();
       this.formulario.get('TarjetaNIFEmpresaPresentada')?.disable();
-      this.formulario.get('CodProductor')?.disable();
-      this.formulario.get('NIMAProductor')?.disable();
-      this.formulario.get('CodGestor')?.disable();
-      this.formulario.get('NIMAGestor')?.disable();
-      this.formulario.get('EMailEnvioServicio')?.disable();
-      this.formulario.get('EMailEnvioDocAmbiental')?.disable();
+      //this.formulario.get('CodProductor')?.disable();
+      //this.formulario.get('NIMAProductor')?.disable();
+      //this.formulario.get('CodGestor')?.disable();
+      //this.formulario.get('NIMAGestor')?.disable();
+      //this.formulario.get('EMailEnvioServicio')?.disable();
+      //this.formulario.get('EMailEnvioDocAmbiental')?.disable();
     }
   }
 

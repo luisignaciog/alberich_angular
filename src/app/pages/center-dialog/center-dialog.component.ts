@@ -22,6 +22,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { MatSelectModule } from '@angular/material/select';
 import { validarProductor } from '../../validators/validate_productor';
 import { alMenosUnoRequerido, validarGestor } from '../../validators/validate_gestor';
+import { ConfirmDialogComponent } from '../../shared/dialog-confirm/dialog-confirm.component';
 
 @Component({
   selector: 'app-center-dialog',
@@ -39,6 +40,7 @@ export class CenterDialogComponent {
   new: boolean = false;
   companyData: CompanyData = createEmptyCompanyData();
   cambiosPorCampo: { [nombreCampo: string]: any } = {};
+  cambiosPorCampoEmpresa: { [nombreCampo: string]: any } = {};
   countries: CountryData = createEmptyCountryData();
   countrySelected: string = '';
   noTabla = 50111;
@@ -59,12 +61,30 @@ export class CenterDialogComponent {
     EMailEnvioDocAmbiental: 50127,
   };
 
+  noTablaEmpresa = 50110;
+  camposMapEmpresa = {
+    Name: 2,
+    Address: 5,
+    City: 7,
+    PhoneNo: 9,
+    PostCode: 91,
+    County: 92,
+    EMail: 102,
+    VATRegistrationNo: 86,
+    CountryRegionCode: 35,
+    MobilePhoneNo: 5061,
+    CodTransportista: 50105,
+    NIMATransportista: 999,
+    CertificadoTitularidadBancariaPresentado: 998,
+    TarjetaNIFEmpresaPresentada: 997,
+  };
+
   readonly data = inject<{ center: centers }>(MAT_DIALOG_DATA);
 
   constructor(
     public dialogRef: MatDialogRef<CenterDialogComponent>,
     private snackBar: MatSnackBar, private session: SessionStorageService,
-    private companyService: CompanyService,
+    private companyService: CompanyService, public dialog: MatDialog,
     private http: HttpClient, private router: Router, private fb: FormBuilder ) {
     this.formulario = this.fb.group({
       Name: ['', [ Validators.required ]],
@@ -101,8 +121,8 @@ export class CenterDialogComponent {
 
     this.getCountries();
     this.getChanges();
+    this.getChangesEmpresa();
     this.setValueFields();
-    this.EnableDisableCtrls();
   }
 
   setValueFields() {
@@ -251,6 +271,31 @@ export class CenterDialogComponent {
     }
   }
 
+  getChangesEmpresa() {
+    const campoPorNumero: { [noCampo: number]: string } = {};
+    Object.entries(this.camposMapEmpresa).forEach(([nombre, numero]) => {
+      campoPorNumero[numero] = nombre;
+    });
+
+    const cambios = (this.companyData?.cambiosempresasgreenbc ?? []).filter(
+      c =>
+      c.No_Tabla === this.noTablaEmpresa &&
+      c.Tipo_de_Cambio === 'Modification' &&
+      c.SystemId_Registro === this.companyData.SystemId
+    );
+
+    for (const cambio of cambios) {
+      const nombreCampo = campoPorNumero[cambio.No_Campo];
+      if (!nombreCampo) continue;
+
+      if (
+        !this.cambiosPorCampoEmpresa[nombreCampo] ||
+        cambio.No_Mov > this.cambiosPorCampoEmpresa[nombreCampo].No_Mov
+      ) {
+        this.cambiosPorCampoEmpresa[nombreCampo] = cambio;
+      }
+    }
+  }
 
   obtenerValorFinal(campo: string): { valor: string, esPendiente: boolean } {
     if (this.cambiosPorCampo[campo]) {
@@ -261,6 +306,19 @@ export class CenterDialogComponent {
     }
     return {
       valor: (this.center as any)[campo] ?? '',
+      esPendiente: false
+    };
+  }
+
+  obtenerValorFinalEmpresa(campo: string): { valor: string, esPendiente: boolean } {
+    if (this.cambiosPorCampoEmpresa[campo]) {
+      return {
+        valor: this.cambiosPorCampoEmpresa[campo].Valor_Nuevo ?? '',
+        esPendiente: true
+      };
+    }
+    return {
+      valor: (this.companyData as any)[campo] ?? '',
       esPendiente: false
     };
   }
@@ -284,26 +342,49 @@ export class CenterDialogComponent {
     }
   }
 
-  EnableDisableCtrls() {
-    if (this.center.Code.trim() === "001") {
-      this.formulario.get('Name')?.disable();
-      this.formulario.get('Address')?.disable();
-      this.formulario.get('City')?.disable();
-      this.formulario.get('PhoneNo')?.disable();
-      this.formulario.get('PostCode')?.disable();
-      this.formulario.get('County')?.disable();
-      this.formulario.get('EMail')?.disable();
-      this.formulario.get('CountryRegionCode')?.disable();
-      this.formulario.get('CodProductor')?.disable();
-      this.formulario.get('NIMAProductor')?.disable();
-      this.formulario.get('CodGestor')?.disable();
-      this.formulario.get('NIMAGestor')?.disable();
-      this.formulario.get('EMailEnvioServicio')?.disable();
-      this.formulario.get('EMailEnvioDocAmbiental')?.disable();
-    }
-  }
-
   get hayCambiosPendientes(): boolean {
     return Object.keys(this.cambiosPorCampo).length > 0;
+  }
+
+  async copyData() {
+    this.countrySelected = this.obtenerValorFinalEmpresa('CountryRegionCode').valor;
+    this.formulario.setValue({
+      Name: this.obtenerValorFinalEmpresa('Name').valor,
+      Address: this.obtenerValorFinalEmpresa('Address').valor,
+      City: this.obtenerValorFinalEmpresa('City').valor,
+      PhoneNo: this.obtenerValorFinalEmpresa('PhoneNo').valor,
+      PostCode: this.obtenerValorFinalEmpresa('PostCode').valor,
+      County: this.obtenerValorFinalEmpresa('County').valor,
+      CountryRegionCode: this.countrySelected,
+      EMail: this.obtenerValorFinalEmpresa('EMail').valor,
+
+      CodProductor: this.obtenerValorFinal('CodProductor').valor,
+      NIMAProductor: this.obtenerValorFinal('NIMAProductor').valor,
+      CodGestor: this.obtenerValorFinal('CodGestor').valor,
+      NIMAGestor: this.obtenerValorFinal('NIMAGestor').valor,
+      EMailEnvioServicio: this.obtenerValorFinal('EMailEnvioServicio').valor,
+      EMailEnvioDocAmbiental: this.obtenerValorFinal('EMailEnvioDocAmbiental').valor
+    });
+  }
+
+  async QuestionCopy() {
+    const confirmado = await this.mostrarDialogo();
+    if (!confirmado) {
+      return;
+    }
+
+    await this.copyData();
+  }
+
+  async mostrarDialogo(): Promise<boolean> {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: 'Copiar datos',
+        message: '¿Seguro de copiar datos de la empresa?',
+        showIcon: true
+      }
+    });
+
+    return await firstValueFrom(dialogRef.afterClosed());
   }
 }

@@ -60,6 +60,15 @@
         <button mat-mini-fab color="primary" (click)="newContact()">
           <mat-icon>add</mat-icon>
         </button>
+
+        <!--!Boton de empresa-->
+        <button mat-raised-button color="primary" (click)="home()">Empresa</button>
+
+        <!--!Boton de centros-->
+        <button mat-raised-button color="primary" (click)="centers()">Centros ({{ companyData!.centrosempresasgreenbc!.length }})</button>
+
+        <!--!Boton de contactos-->
+        <button mat-raised-button color="primary" disabled>Contactos ({{ companyData!.contactosempresasgreenbc!.length }})</button>
       </div>
     </div>
   </div>
