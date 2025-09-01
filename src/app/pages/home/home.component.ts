@@ -6,7 +6,7 @@ import { SessionStorageService } from '../../models/session-storage-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CompanyData, createEmptyCompanyData } from '../../models/center_data_interface';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule, FormArray, AbstractControl } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule} from '@angular/material/form-field';
 import { CommonModule, NgIf } from '@angular/common';
@@ -108,8 +108,8 @@ export class HomeComponent {
       VATRegistrationNo: ['', [ Validators.required ]],
       CodTransportista: ['', [ ]],
       NIMATransportista: ['', [ ]],
-      CertificadoTitularidadBancariaPresentado: ['', [ ]],
-      TarjetaNIFEmpresaPresentada: ['', [ ]],
+      CertificadoTitularidadBancariaPresentado: ['', [ Validators.required ]],
+      TarjetaNIFEmpresaPresentada: ['', [ Validators.required ]],
       //CodProductor: ['', [ ]],
       //NIMAProductor: ['', [ ]],
       //CodGestor: ['', [ ]],
@@ -146,8 +146,6 @@ export class HomeComponent {
     var nifFile: string = this.obtenerValorFinal('TarjetaNIFEmpresaPresentada').valor;
     if (nifFile === 'false') { nifFile = ''; }
 
-    console.log('Certificado Titularidad Bancaria:', certFile);
-
     this.countrySelected = this.obtenerValorFinal('CountryRegionCode').valor;
     this.formulario.setValue({
       Name: this.obtenerValorFinal('Name').valor,
@@ -163,8 +161,8 @@ export class HomeComponent {
       CodTransportista: this.obtenerValorFinal('CodTransportista').valor,
       //NIMATransportista: this.companyData.NIMATransportista,
       NIMATransportista: this.obtenerValorFinal('NIMATransportista').valor,
-      CertificadoTitularidadBancariaPresentado: this.mostrarTextoAdjunto(this.obtenerValorFinal('CertificadoTitularidadBancariaPresentado').valor),
-      TarjetaNIFEmpresaPresentada: this.mostrarTextoAdjunto(this.obtenerValorFinal('TarjetaNIFEmpresaPresentada').valor),
+      CertificadoTitularidadBancariaPresentado: this.mostrarTextoAdjunto(this.companyData.CertificadoTitularidadBancariaPresentado),
+      TarjetaNIFEmpresaPresentada: this.mostrarTextoAdjunto(this.companyData.TarjetaNIFEmpresaPresentada),
       //CodProductor: this.obtenerValorFinal('CodProductor').valor,
       //NIMAProductor: this.obtenerValorFinal('NIMAProductor').valor,
       //CodGestor: this.obtenerValorFinal('CodGestor').valor,
@@ -254,13 +252,37 @@ export class HomeComponent {
     return { registroscambios };
   }
 
+  validateForm(): boolean {
+    let valid = true;
+
+    // Guardamos el estado original de habilitado/deshabilitado
+    const disabledControls: AbstractControl[] = [];
+    Object.keys(this.formulario.controls).forEach(key => {
+      const control = this.formulario.get(key)!;
+      if (control.disabled) {
+        disabledControls.push(control);
+        control.enable(); // habilitamos temporalmente para validar
+      }
+    });
+
+    // Marcamos todos los controles como tocados
+    Object.values(this.formulario.controls).forEach(control => {
+      control.markAsTouched({ onlySelf: true });
+      if (control.invalid) valid = false;
+    });
+
+    // Restauramos los controles deshabilitados
+    disabledControls.forEach(control => control.disable());
+
+    if (!valid) {
+      this.snackBar.open('Por favor completa los campos obligatorios.', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
+    }
+
+    return valid;
+  }
 
   async save() {
-    if (this.formulario.invalid) {
-      this.formulario.markAllAsTouched(); // marca campos para mostrar errores
-      this.snackBar.open('Por favor completa los campos obligatorios.', 'Cerrar', { duration: 4000, verticalPosition: 'top' });
-      return;
-    }
+    if (!this.validateForm()) return;
 
     const body = this.genChanges(this.generarCodigoAgrupacion());
 
@@ -355,10 +377,12 @@ export class HomeComponent {
   }
 
   centers() {
+    if (!this.validateForm()) return;
     this.router.navigate(['centers']);
   }
 
   contacts() {
+    if (!this.validateForm()) return;
     this.router.navigate(['contacts']);
   }
 
@@ -486,7 +510,11 @@ export class HomeComponent {
     return Object.keys(this.cambiosPorCampo).length > 0;
   }
 
-  private mostrarTextoAdjunto(valor: string): string {
-    return valor === 'true' ? 'Adjunto' : '';
+  private mostrarTextoAdjunto(valor: boolean): string {
+    if (valor === true) {
+      return 'Adjunto';
+    } else {
+      return '';
+    }
   }
 }

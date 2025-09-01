@@ -109,6 +109,8 @@ export class CenterDialogComponent {
   }
 
   ngOnInit() {
+    this.companyData = this.session.getData();
+    this.getChangesEmpresa();
 
     if ((this.data.center == undefined) || (this.data.center.NoEmpresaGreenBC == "")) {
       this.new = true;
@@ -116,12 +118,10 @@ export class CenterDialogComponent {
       return;
     }
 
-    this.companyData = this.session.getData();
     this.center = this.data.center;
 
     this.getCountries();
     this.getChanges();
-    this.getChangesEmpresa();
     this.setValueFields();
   }
 
