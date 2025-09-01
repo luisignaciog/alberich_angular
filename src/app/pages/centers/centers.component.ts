@@ -27,6 +27,7 @@ export class CentersComponent implements OnInit, AfterViewInit {
   dataSource: MatTableDataSource<centers> = new MatTableDataSource<centers>();
   displayedColumns: string[] = ['Code','Name','City', 'estado','actions']; //,'CodProductor','CodGestor','CodTransportista','EMailEnvioServicio','EMailEnvioDocAmbiental'];
   noTabla = 50111; // Tabla de centros en GreenBC
+  disableButtonContacts: boolean = false;
 
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -35,63 +36,66 @@ export class CentersComponent implements OnInit, AfterViewInit {
     private router: Router, public dialog: MatDialog) { }
 
   ngOnInit() {
-  this.centerData = this.session.getData();
+    this.centerData = this.session.getData();
 
-  if (this.centerData === null) {
-    this.router.navigate(['login']);
-    return;
+    if (this.centerData === null) {
+      this.router.navigate(['login']);
+      return;
+    }
+
+    this.loading = true;
+
+    const cambios = this.centerData.cambiosempresasgreenbc ?? [];
+
+    // Filtra cambios nuevos (que no tienen registro principal aún)
+    const nuevosPendientes = cambios
+      .filter(c =>
+        c.No_Tabla === this.noTabla &&
+        c.Tipo_de_Cambio === 'Insertion' &&
+        c.No_Campo === 3
+      )
+      .reduce((acc, cambio) => {
+        if (!acc.some(e => e.SystemId === cambio.SystemId_Registro)) {
+          acc.push({
+            "@odata.etag": "",
+            NoEmpresaGreenBC: "",
+            SystemId: cambio.SystemId_Registro,
+            Code: '(nuevo)',
+            Name: cambio.Valor_Nuevo,
+            Name2: '',
+            Address: '',
+            Address2: '',
+            City: '',
+            PhoneNo: '',
+            CountryRegionCode: '',
+            PostCode: '',
+            County: '',
+            EMail: '',
+            CodProductor: '',
+            NIMAProductor: '',
+            CodGestor: '',
+            NIMAGestor: '',
+            EMailEnvioServicio: '',
+            EMailEnvioDocAmbiental: '',
+            SystemModifiedAt: '',
+            esNuevo: true // <- marcar que es un nuevo
+          });
+        }
+        return acc;
+      }, [] as (centers & { esNuevo?: boolean })[]);
+
+    // Combina centros reales + nuevos pendientes
+    const centrosConMarcado = [
+      ...this.centerData.centrosempresasgreenbc.map(c => ({ ...c, esNuevo: false })),
+      ...nuevosPendientes
+    ];
+
+    this.dataSource = new MatTableDataSource(centrosConMarcado);
+
+    this.disableButtonContacts = (this.centerData!.centrosempresasgreenbc!.length <= 0 && nuevosPendientes.length <= 0);
+
+    this.loading = false;
   }
-
-  this.loading = true;
-
-  const cambios = this.centerData.cambiosempresasgreenbc ?? [];
-
-  // Filtra cambios nuevos (que no tienen registro principal aún)
-  const nuevosPendientes = cambios
-    .filter(c =>
-      c.No_Tabla === this.noTabla &&
-      c.Tipo_de_Cambio === 'Insertion' &&
-      c.No_Campo === 2
-    )
-    .reduce((acc, cambio) => {
-      if (!acc.some(e => e.SystemId === cambio.SystemId_Registro)) {
-        acc.push({
-          "@odata.etag": "",
-          NoEmpresaGreenBC: "",
-          SystemId: cambio.SystemId_Registro,
-          Code: '(nuevo)',
-          Name: cambio.Valor_Nuevo,
-          Name2: '',
-          Address: '',
-          Address2: '',
-          City: '',
-          PhoneNo: '',
-          CountryRegionCode: '',
-          PostCode: '',
-          County: '',
-          EMail: '',
-          CodProductor: '',
-          NIMAProductor: '',
-          CodGestor: '',
-          NIMAGestor: '',
-          EMailEnvioServicio: '',
-          EMailEnvioDocAmbiental: '',
-          SystemModifiedAt: '',
-          esNuevo: true // <- marcar que es un nuevo
-        });
-      }
-      return acc;
-    }, [] as (centers & { esNuevo?: boolean })[]);
-
-  // Combina centros reales + nuevos pendientes
-  const centrosConMarcado = [
-    ...this.centerData.centrosempresasgreenbc.map(c => ({ ...c, esNuevo: false })),
-    ...nuevosPendientes
-  ];
-
-  this.dataSource = new MatTableDataSource(centrosConMarcado);
-  this.loading = false;
-}
 
 
   ngAfterViewInit() {
