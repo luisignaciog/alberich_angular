@@ -138,6 +138,7 @@ export class HomeComponent {
     this.setValueFields();
     this.EnableDisableCtrls();
 
+    console.log(this.formulario.invalid);
   }
 
   setValueFields() {
@@ -178,46 +179,28 @@ export class HomeComponent {
     const tipoCambio = '1'; // Modification
 
     const camposFormulario = this.formulario.value;
-
-    const centro001 = this.companyData.centrosempresasgreenbc.find(c => c.Code === '001');
-    const systemIdCentro001 = centro001?.SystemId;
     const camposFichero = ['CertificadoTitularidadBancariaPresentado', 'TarjetaNIFEmpresaPresentada'];
-
-
-    // Función para saber a qué tabla pertenece un campo
-    const obtenerTablaParaCampo = (campo: string): number => {
-      const camposCentro001 = [
-        'CodProductor', 'NIMAProductor', 'CodGestor',
-        'NIMAGestor', 'EMailEnvioServicio', 'EMailEnvioDocAmbiental'
-      ];
-      return camposCentro001.includes(campo) ? 50111 : this.noTabla;
-    };
 
     const registroscambios = Object.keys(camposFormulario).reduce((arr, key) => {
       const nuevoValor = camposFormulario[key];
-      const tabla = obtenerTablaParaCampo(key);
-      const valorAnterior =
-        tabla === 50111
-          ? centro001?.[key as keyof typeof centro001]
-          : this.companyData?.[key as keyof typeof this.companyData];
+      const valorAnterior = this.companyData?.[key as keyof typeof this.companyData];
+      const tieneFicheroBase64 = this.ficherosBase64?.[key];
 
       const hayCambio = nuevoValor !== valorAnterior;
-      const tieneFicheroBase64 = this.ficherosBase64?.[key];
 
       if (camposFichero.includes(key)) {
         if (!tieneFicheroBase64) return arr; // No se adjuntó nuevo → no enviar cambio
       } else {
-        const hayCambio = nuevoValor !== valorAnterior;
         if (!hayCambio && !tieneFicheroBase64) return arr; // No hay cambio real
       }
 
       if (hayCambio || tieneFicheroBase64) {
         const registro: any = {
           FechayHora: ahora,
-          NoTabla: tabla,
+          NoTabla: this.noTabla, // aquí debería estar el número de tabla principal (ej: 50110)
           NoCampo: this.camposMap[key as keyof typeof this.camposMap],
           ValorNuevo: String(nuevoValor),
-          SystemIdRegistro: tabla === 50111 ? systemIdCentro001 : systemId,
+          SystemIdRegistro: systemId,
           SystemIdRegistroPrincipal: systemId,
           TipodeCambio: tipoCambio,
           CodAgrupacionCambios: codAgrupacion
@@ -230,27 +213,12 @@ export class HomeComponent {
         arr.push(registro);
       }
 
-      const camposCompartidos = ['Name', 'Address', 'PhoneNo', 'City', 'PostCode', 'County', 'EMail', 'CountryRegionCode'];
-      const cambioEnCentro = camposCompartidos.includes(key) && hayCambio;
-      if (cambioEnCentro)  {
-        const registro: any = {
-          FechayHora: ahora,
-          NoTabla: 50111,
-          NoCampo: this.camposMap[key as keyof typeof this.camposMap],
-          ValorNuevo: String(nuevoValor),
-          SystemIdRegistro: systemIdCentro001,
-          SystemIdRegistroPrincipal: systemId,
-          TipodeCambio: tipoCambio,
-          CodAgrupacionCambios: codAgrupacion
-        };
-        arr.push(registro);
-      }
-
       return arr;
     }, [] as RegistroCambio[]);
 
     return { registroscambios };
   }
+
 
   validateForm(): boolean {
     let valid = true;
@@ -285,6 +253,7 @@ export class HomeComponent {
     if (!this.validateForm()) return;
 
     const body = this.genChanges(this.generarCodigoAgrupacion());
+    console.log('Cuerpo de la solicitud:', body);
 
     try{
       this.loading = true;
@@ -516,5 +485,21 @@ export class HomeComponent {
     } else {
       return '';
     }
+  }
+
+  get requiredDataMissing(): boolean {
+    const name = this.formulario.get('Name')?.value;
+    const address = this.formulario.get('Address')?.value;
+    const city = this.formulario.get('City')?.value;
+    const phoneNo = this.formulario.get('PhoneNo')?.value;
+    const postCode = this.formulario.get('PostCode')?.value;
+    const county = this.formulario.get('County')?.value;
+    const email = this.formulario.get('EMail')?.value;
+    const countryRegionCode = this.formulario.get('CountryRegionCode')?.value;
+    const vatRegistrationNo = this.formulario.get('VATRegistrationNo')?.value;
+    const mobilePhoneNo = this.formulario.get('MobilePhoneNo')?.value;
+    const certificadoTitularidadBancariaPresentado = this.formulario.get('CertificadoTitularidadBancariaPresentado')?.value;
+    const tarjetaNIFEmpresaPresentada = this.formulario.get('TarjetaNIFEmpresaPresentada')?.value;
+    return !(name && address && city && phoneNo && postCode && county && email && countryRegionCode && vatRegistrationNo && mobilePhoneNo && certificadoTitularidadBancariaPresentado && tarjetaNIFEmpresaPresentada);
   }
 }
