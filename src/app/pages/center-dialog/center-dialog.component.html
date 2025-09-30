@@ -5,10 +5,19 @@
 <div class="back">
   <form [formGroup]="formulario">
     <mat-card class="example-card" appearance="outlined">
-      <mat-card-header>
+      <mat-card-header style="margin-top: 0px;">
+      <div style="width: 100%; display: flex; align-items: center; justify-content: space-between;">
         <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Datos del centro {{center.Code}}</mat-card-title>
-        <mat-card-subtitle *ngIf="center.Code === '001'">Datos del centro 001 no se puede modificar porque son los mismos que los datos de la empresa</mat-card-subtitle>
+
+        <!-- Contenedor con centrado horizontal -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <mat-card-title style="font-size: 26px;">Datos del centro {{center.Code}}</mat-card-title>
+          <mat-card-subtitle style="font-size: 20px;">Centros de carga propios o ajenos</mat-card-subtitle>
+        </div>
+
+        <button mat-raised-button color="primary" (click)="QuestionCopy()">Copiar datos de empresa</button>
+      </div>
+
       </mat-card-header>
 
       <mat-card-content class="scrollable-content">
@@ -52,6 +61,7 @@
           </mat-select>
         </mat-form-field>
 
+        <!--!Email-->
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMail') }">
           <mat-label>E-mail</mat-label>
           <input matInput placeholder="E-mail" formControlName="EMail" >
@@ -102,12 +112,12 @@
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMailEnvioServicio') }">
-          <mat-label>E-mail envío servicio</mat-label>
+          <mat-label>E-mail envío albaránes báscula</mat-label>
           <input matInput placeholder="E-mail" formControlName="EMailEnvioServicio" >
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMailEnvioDocAmbiental') }">
-          <mat-label>E-mail servicio ambiental</mat-label>
+          <mat-label>E-mail envío doc. medioambiental</mat-label>
           <input matInput placeholder="E-mail" formControlName="EMailEnvioDocAmbiental" >
         </mat-form-field>
 
@@ -120,7 +130,7 @@
         </div>
 
         <div style="margin-top: 10px; display: flex; justify-content: center; gap: 10px;">
-          <button mat-mini-fab color="primary" (click)="save()" *ngIf="center.Code != '001'">
+          <button mat-mini-fab color="primary" (click)="save()">
             <mat-icon>check</mat-icon>
           </button>
           <button mat-mini-fab color="primary" (click)="cancel()">

@@ -1,7 +1,7 @@
 export interface CompanyData {
   "@odata.context": string;
   "@odata.etag": string;
-  SystemId: "b4e1af38-b421-f011-add3-00155d037f01",
+  SystemId: "",
   No: string;
   Name: string;
   Name2: string;
@@ -89,7 +89,7 @@ export function createEmptyCompanyData (): CompanyData {
   return {
     "@odata.context": "",
     "@odata.etag": "",
-    SystemId: "b4e1af38-b421-f011-add3-00155d037f01",
+    SystemId: "",
     No: "",
     Name: "",
     Name2: "",

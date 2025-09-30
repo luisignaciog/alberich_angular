@@ -1,4 +1,5 @@
-<app-navbar></app-navbar>
+<app-navbar [disableOptions]="requiredDataMissing"></app-navbar>
+
 <div class="loading-overlay" *ngIf="loading">
   <mat-spinner></mat-spinner>
 </div>
@@ -105,6 +106,7 @@
           <input #fileInputNIF type="file" hidden (change)="adjuntarArchivo('TarjetaNIFEmpresaPresentada', fileInputNIF)">
         </mat-form-field>
 
+        <!--
         <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodProductor') }">
           <mat-label>Cód. productor</mat-label>
           <input matInput formControlName="CodProductor">
@@ -151,6 +153,7 @@
           <mat-label>E-mail servicio ambiental</mat-label>
           <input matInput placeholder="E-mail" formControlName="EMailEnvioDocAmbiental" >
         </mat-form-field>
+        -->
       </div>
 
       <div class="form-buttons">
@@ -176,11 +179,15 @@
               <mat-icon>close</mat-icon>
             </button>
 
-            <!--!Boton de contactos-->
-            <button mat-raised-button color="primary" (click)="contacts()" *ngIf="!enableEdit">Contactos ({{ companyData!.contactosempresasgreenbc!.length }})</button>
+            <!--!Boton de empresa-->
+            <button mat-raised-button disabled color="primary" *ngIf="!enableEdit">Empresa</button>
 
             <!--!Boton de centros-->
-            <button mat-raised-button color="primary" (click)="centers()" *ngIf="!enableEdit">Centros ({{ companyData!.centrosempresasgreenbc!.length }})</button>
+            <button mat-raised-button color="primary" (click)="centers()" *ngIf="!enableEdit" [disabled]="requiredDataMissing">Centros ({{ companyData!.centrosempresasgreenbc!.length }})</button>
+
+            <!--!Boton de contactos-->
+            <button mat-raised-button color="primary" (click)="contacts()" *ngIf="!enableEdit" [disabled]="requiredDataMissing">Contactos ({{ companyData!.contactosempresasgreenbc!.length }})</button>
+
           </div>
         </div>
       </div>

@@ -3,11 +3,11 @@
     <mat-icon>menu</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="centers()">
+    <button mat-menu-item (click)="centers()" [disabled]="disableOptions">
       <mat-icon>domain</mat-icon>
       <span>Centros</span>
     </button>
-    <button mat-menu-item (click)="contacts()">
+    <button mat-menu-item (click)="contacts()" [disabled]="disableOptions">
       <mat-icon>groups</mat-icon>
       <span>Contactos</span>
     </button>

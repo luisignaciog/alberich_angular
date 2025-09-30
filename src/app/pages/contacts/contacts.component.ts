@@ -112,4 +112,12 @@ export class ContactsComponent implements AfterViewInit, OnInit {
       cambio.SystemId_Registro === contact.SystemId
     ) ?? false;
   }
+
+  centers() {
+    this.router.navigate(['centers']);
+  }
+
+  home() {
+    this.router.navigate(['home']);
+  }
 }

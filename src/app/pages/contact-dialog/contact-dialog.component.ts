@@ -72,12 +72,13 @@ export class ContactDialogComponent {
   }
 
   ngOnInit() {
+    this.companyData = this.session.getData();
+
     if (this.data.contact === undefined) {
       this.new = true;
       return;
     }
 
-    this.companyData = this.session.getData();
     this.contact = this.data.contact;
 
     this.getChanges();

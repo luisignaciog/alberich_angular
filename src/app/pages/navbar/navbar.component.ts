@@ -1,5 +1,5 @@
 import { CompanyData, createEmptyCompanyData, centers } from './../../models/center_data_interface';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatIconModule} from '@angular/material/icon';
 import { MatButtonModule} from '@angular/material/button';
 import { MatToolbarModule} from '@angular/material/toolbar';
@@ -18,6 +18,8 @@ import { CommonModule } from '@angular/common';
   imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatMenuModule, MatTooltipModule, CommonModule],
 })
 export class NavbarComponent {
+  @Input() disableOptions: boolean = false;
+
   companyData: CompanyData = createEmptyCompanyData();
   userName: string = '';
   isHome: boolean = true;
@@ -36,6 +38,8 @@ export class NavbarComponent {
     if (this.companyData != null) {
       this.userName = this.companyData.Name;
     }
+
+    console.log('Navbar - Company Data:', this.companyData);
   }
 
   logout() {
@@ -58,4 +62,5 @@ export class NavbarComponent {
     console.log('contacts');
     this.router.navigate(['contacts']);
   }
+
 }

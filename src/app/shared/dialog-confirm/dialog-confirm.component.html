@@ -1,0 +1,11 @@
+<div class="overlay">
+  <div class="dialog">
+    <h2>{{ data.title }}</h2>
+    <p>{{ data.message }}</p>
+
+    <div class="actions">
+      <button class="btn cancel" (click)="onCancel()">Cancelar</button>
+      <button class="btn confirm" (click)="onConfirm()">Confirmar</button>
+    </div>
+  </div>
+</div>

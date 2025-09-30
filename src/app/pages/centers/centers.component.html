@@ -40,7 +40,7 @@
                 <ng-container matColumnDef="estado">
                   <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
                   <mat-cell *matCellDef="let centro">
-                    <mat-icon *ngIf="centro.esNuevo" color="primary">add_circle</mat-icon>
+                    <span *ngIf="centro.esNuevo">(Pendiente)</span>
                     <mat-icon *ngIf="!centro.esNuevo && tieneCambiosPendientes(centro)" color="primary">warning</mat-icon>
                     <span *ngIf="!centro.esNuevo && !tieneCambiosPendientes(centro)">✓</span>
                   </mat-cell>
@@ -93,6 +93,15 @@
         <button mat-mini-fab color="primary" (click)="newCenter()">
           <mat-icon>add</mat-icon>
         </button>
+
+        <!--!Boton de empresa-->
+        <button mat-raised-button color="primary" (click)="home()">Empresa</button>
+
+        <!--!Boton de centros-->
+        <button mat-raised-button disabled color="primary">Centros ({{ centerData!.centrosempresasgreenbc!.length }})</button>
+
+        <!--!Boton de contactos-->
+        <button mat-raised-button color="primary" (click)="contacts()" [disabled]="disableButtonContacts">Contactos ({{ centerData!.contactosempresasgreenbc!.length }})</button>
       </div>
     </div>
   </div>
