@@ -44,6 +44,7 @@ export class HomeComponent {
   countries: CountryData = createEmptyCountryData();
   countrySelected: string = '';
   noTabla = 50110;
+  selectedTabIndex = 0;
   camposMap = {
     Name: 2,
     Address: 5,
@@ -340,12 +341,14 @@ export class HomeComponent {
 
   centers() {
     if (!this.validateForm()) return;
-    this.router.navigate(['centers']);
+    this.selectedTabIndex = 1;
+    //this.router.navigate(['centers']);
   }
 
   contacts() {
     if (!this.validateForm()) return;
-    this.router.navigate(['contacts']);
+    this.selectedTabIndex = 2;
+    //this.router.navigate(['contacts']);
   }
 
   generarCodigoAgrupacion(): string {

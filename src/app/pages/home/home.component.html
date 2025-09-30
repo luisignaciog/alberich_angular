@@ -6,7 +6,7 @@
 
 <div class="back">
   <div class="profile-card">
-    <mat-tab-group class="empresa-tabs" mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab-group class="empresa-tabs" mat-stretch-tabs="false" mat-align-tabs="start" [(selectedIndex)]="selectedTabIndex">
       <mat-tab aria-label="datos" label="Datos de empresa">
         <form [formGroup]="formulario" class="form-container">
           <div class="form-scrollable">

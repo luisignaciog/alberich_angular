@@ -162,12 +162,4 @@ export class CentersComponent implements OnInit, AfterViewInit {
       cambio.SystemId_Registro === centro.SystemId
     ) ?? false;
   }
-
-  contacts() {
-    this.router.navigate(['contacts']);
-  }
-
-  home() {
-    this.router.navigate(['home']);
-  }
 }
