@@ -1,7 +1,9 @@
 <mat-toolbar>
+  <!--
   <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
     <mat-icon>menu</mat-icon>
   </button>
+
   <mat-menu #menu="matMenu">
     <button mat-menu-item (click)="centers()" [disabled]="disableOptions">
       <mat-icon>domain</mat-icon>
@@ -16,6 +18,7 @@
       <span>Atras</span>
     </button>
   </mat-menu>
+  -->
   <span>{{ userName }}</span>
   <span class="example-spacer"></span>
   <button mat-icon-button (click)="userData()" matTooltip="Ver datos">

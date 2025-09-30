@@ -22,21 +22,23 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { CountryData, createEmptyCountryData } from '../../models/country_interface';
 import { validarShippingAgent } from '../../validators/validate_shipping_agent';
-import { validarProductor } from '../../validators/validate_productor';
-import { alMenosUnoRequerido, validarGestor } from '../../validators/validate_gestor';
+import { MatTabsModule } from '@angular/material/tabs';
+import { CentersComponent } from '../centers/centers.component';
+import { ContactsComponent } from '../contacts/contacts.component';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   imports: [NavbarComponent, MatProgressSpinnerModule, FormsModule,ReactiveFormsModule, CommonModule
-    , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule, NgClass, MatCheckboxModule, MatSelectModule]
+    , MatInputModule, MatFormFieldModule, NgIf, MatIcon, MatButtonModule, NgClass, MatCheckboxModule,
+    MatSelectModule, MatTabsModule, CentersComponent, ContactsComponent],
 })
 export class HomeComponent {
   companyData: CompanyData = createEmptyCompanyData();
   formulario: FormGroup;
   loading: boolean = false;
-  enableEdit: boolean = false;
+  enableEdit: boolean = true;
   cambiosPorCampo: { [nombreCampo: string]: any } = {};
   ficherosBase64: { [key: string]: string } = {};
   countries: CountryData = createEmptyCountryData();
@@ -137,8 +139,6 @@ export class HomeComponent {
     this.getChanges();
     this.setValueFields();
     this.EnableDisableCtrls();
-
-    console.log(this.formulario.invalid);
   }
 
   setValueFields() {
@@ -160,16 +160,9 @@ export class HomeComponent {
       CountryRegionCode: this.countrySelected,
       MobilePhoneNo: this.obtenerValorFinal('MobilePhoneNo').valor,
       CodTransportista: this.obtenerValorFinal('CodTransportista').valor,
-      //NIMATransportista: this.companyData.NIMATransportista,
       NIMATransportista: this.obtenerValorFinal('NIMATransportista').valor,
       CertificadoTitularidadBancariaPresentado: this.mostrarTextoAdjunto(this.companyData.CertificadoTitularidadBancariaPresentado),
       TarjetaNIFEmpresaPresentada: this.mostrarTextoAdjunto(this.companyData.TarjetaNIFEmpresaPresentada),
-      //CodProductor: this.obtenerValorFinal('CodProductor').valor,
-      //NIMAProductor: this.obtenerValorFinal('NIMAProductor').valor,
-      //CodGestor: this.obtenerValorFinal('CodGestor').valor,
-      //NIMAGestor: this.obtenerValorFinal('NIMAGestor').valor,
-      //EMailEnvioServicio: this.obtenerValorFinal('EMailEnvioServicio').valor,
-      //EMailEnvioDocAmbiental: this.obtenerValorFinal('EMailEnvioDocAmbiental').valor,
     });
   }
 

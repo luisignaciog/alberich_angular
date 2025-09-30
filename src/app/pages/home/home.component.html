@@ -6,191 +6,142 @@
 
 <div class="back">
   <div class="profile-card">
-    <form [formGroup]="formulario" class="form-container">
-      <div class="form-scrollable">
-        <h2>Datos de empresa</h2>
+    <mat-tab-group class="empresa-tabs" mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab aria-label="datos" label="Datos de empresa">
+        <form [formGroup]="formulario" class="form-container">
+          <div class="form-scrollable">
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('Name') }">
+              <mat-label>Nombre empresa</mat-label>
+              <input matInput placeholder="Nombre empresa" formControlName="Name">
+            </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('Name') }">
-          <mat-label>Nombre empresa</mat-label>
-          <input matInput placeholder="Nombre empresa" formControlName="Name">
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('Address') }">
+              <mat-label>Dirección</mat-label>
+              <input matInput placeholder="Dirección" formControlName="Address">
+            </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('Address') }">
-          <mat-label>Dirección</mat-label>
-          <input matInput placeholder="Dirección" formControlName="Address">
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('PhoneNo') }">
+              <mat-label>Teléfono</mat-label>
+              <input matInput placeholder="Teléfono" formControlName="PhoneNo" >
+            </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('PhoneNo') }">
-          <mat-label>Teléfono</mat-label>
-          <input matInput placeholder="Teléfono" formControlName="PhoneNo" >
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('MobilePhoneNo') }">
+              <mat-label>Móvil</mat-label>
+              <input matInput placeholder="Móvil" formControlName="MobilePhoneNo">
+            </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('MobilePhoneNo') }">
-          <mat-label>Móvil</mat-label>
-          <input matInput placeholder="Móvil" formControlName="MobilePhoneNo">
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('City') }">
+              <mat-label>Ciudad</mat-label>
+              <input matInput placeholder="Ciudad" formControlName="City">
+            </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('City') }">
-          <mat-label>Ciudad</mat-label>
-          <input matInput placeholder="Ciudad" formControlName="City">
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('PostCode') }">
+              <mat-label>Código postal</mat-label>
+              <input matInput placeholder="Código postal" formControlName="PostCode">
+            </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('PostCode') }">
-          <mat-label>Código postal</mat-label>
-          <input matInput placeholder="Código postal" formControlName="PostCode">
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('County') }">
+              <mat-label>Provincia</mat-label>
+              <input matInput placeholder="Provincia" formControlName="County">
+            </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('County') }">
-          <mat-label>Provincia</mat-label>
-          <input matInput placeholder="Provincia" formControlName="County">
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMail') }">
+              <mat-label>E-mail</mat-label>
+              <input matInput placeholder="E-mail" formControlName="EMail">
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMail') }">
-          <mat-label>E-mail</mat-label>
-          <input matInput placeholder="E-mail" formControlName="EMail">
+              <mat-error *ngIf="formulario.get('EMail')?.hasError('required')">
+                El correo es obligatorio.
+              </mat-error>
 
-          <mat-error *ngIf="formulario.get('EMail')?.hasError('required')">
-            El correo es obligatorio.
-          </mat-error>
+              <mat-error *ngIf="formulario.get('EMail')?.hasError('email') && !formulario.get('EMail')?.hasError('required')">
+                El correo no es válido.
+              </mat-error>
+            </mat-form-field>
 
-          <mat-error *ngIf="formulario.get('EMail')?.hasError('email') && !formulario.get('EMail')?.hasError('required')">
-            El correo no es válido.
-          </mat-error>
-        </mat-form-field>
+            <!--! País -->
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CountryRegionCode') }">
+              <mat-label>País</mat-label>
+              <mat-select [(value)]="countrySelected" formControlName="CountryRegionCode">
+                <mat-option *ngFor="let country of countries.value" [value]="country.Code">
+                  {{ country.Name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
 
-        <!--! País -->
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CountryRegionCode') }">
-          <mat-label>País</mat-label>
-          <mat-select [(value)]="countrySelected" formControlName="CountryRegionCode">
-            <mat-option *ngFor="let country of countries.value" [value]="country.Code">
-              {{ country.Name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('VATRegistrationNo') }">
+              <mat-label>CIF/NIF</mat-label>
+              <input matInput placeholder="CIF/NIF" formControlName="VATRegistrationNo">
+            </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('VATRegistrationNo') }">
-          <mat-label>CIF/NIF</mat-label>
-          <input matInput placeholder="CIF/NIF" formControlName="VATRegistrationNo">
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodTransportista') }">
+              <mat-label>Cód. transportista</mat-label>
+              <input matInput placeholder="Cód. transportista" formControlName="CodTransportista" >
+            </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodTransportista') }">
-          <mat-label>Cód. transportista</mat-label>
-          <input matInput placeholder="Cód. transportista" formControlName="CodTransportista" >
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMATransportista') }">
+              <mat-label>NIMA Transp.</mat-label>
+              <input matInput placeholder="NIMA Transp." formControlName="NIMATransportista">
 
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMATransportista') }">
-          <mat-label>NIMA Transp.</mat-label>
-          <input matInput placeholder="NIMA Transp." formControlName="NIMATransportista">
+              <mat-error *ngIf="formulario.get('NIMATransportista')?.hasError('requerido')">
+                El NIMA del transportista es obligatorio si se indica un transportista.
+              </mat-error>
 
-          <mat-error *ngIf="formulario.get('NIMATransportista')?.hasError('requerido')">
-            El NIMA del transportista es obligatorio si se indica un transportista.
-          </mat-error>
+            </mat-form-field>
 
-        </mat-form-field>
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Certificado Titularidad Bancaria</mat-label>
+              <input matInput placeholder="Certificado" formControlName="CertificadoTitularidadBancariaPresentado" readonly>
+              <button mat-icon-button matSuffix (click)="fileInputCertificado.click()" *ngIf="enableEdit">
+                <mat-icon>attach_file</mat-icon>
+              </button>
+              <input #fileInputCertificado type="file" hidden (change)="adjuntarArchivo('CertificadoTitularidadBancariaPresentado', fileInputCertificado)">
+            </mat-form-field>
 
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Certificado Titularidad Bancaria</mat-label>
-          <input matInput placeholder="Certificado" formControlName="CertificadoTitularidadBancariaPresentado" readonly>
-          <button mat-icon-button matSuffix (click)="fileInputCertificado.click()" *ngIf="enableEdit">
-            <mat-icon>attach_file</mat-icon>
-          </button>
-          <input #fileInputCertificado type="file" hidden (change)="adjuntarArchivo('CertificadoTitularidadBancariaPresentado', fileInputCertificado)">
-        </mat-form-field>
-
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Tarjeta NIF Empresa</mat-label>
-          <input matInput placeholder="Tarjeta NIF" formControlName="TarjetaNIFEmpresaPresentada" readonly>
-          <button mat-icon-button matSuffix (click)="fileInputNIF.click()" *ngIf="enableEdit">
-            <mat-icon>attach_file</mat-icon>
-          </button>
-          <input #fileInputNIF type="file" hidden (change)="adjuntarArchivo('TarjetaNIFEmpresaPresentada', fileInputNIF)">
-        </mat-form-field>
-
-        <!--
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodProductor') }">
-          <mat-label>Cód. productor</mat-label>
-          <input matInput formControlName="CodProductor">
-
-          <mat-error *ngIf="formulario.get('CodProductor')?.hasError('alMenosUnoRequerido')">
-            Debe rellenar al menos <strong>Cód. productor</strong> o <strong>Cód. gestor</strong>.
-          </mat-error>
-
-        </mat-form-field>
-
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMAProductor') }">
-          <mat-label>NIMA productor</mat-label>
-          <input matInput placeholder="NIMA productor" formControlName="NIMAProductor" >
-
-          <mat-error *ngIf="formulario.get('NIMAProductor')?.hasError('requerido')">
-            El NIMA del productor es obligatorio si se indica un productor.
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('CodGestor') }">
-          <mat-label>Código gestor</mat-label>
-          <input matInput placeholder="Código gestor" formControlName="CodGestor" >
-
-          <mat-error *ngIf="formulario.get('CodGestor')?.hasError('alMenosUnoRequerido')">
-            Debe rellenar al menos <strong>Cód. productor</strong> o <strong>Cód. gestor</strong>.
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('NIMAGestor') }">
-          <mat-label>NIMA gestor</mat-label>
-          <input matInput placeholder="NIMA gestor" formControlName="NIMAGestor" >
-
-          <mat-error *ngIf="formulario.get('NIMAGestor')?.hasError('requerido')">
-            El NIMA del gestor es obligatorio si se indica un gestor.
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMailEnvioServicio') }">
-          <mat-label>E-mail envío servicio</mat-label>
-          <input matInput placeholder="E-mail" formControlName="EMailEnvioServicio" >
-        </mat-form-field>
-
-        <mat-form-field class="full-width" appearance="outline" [ngClass]="{ 'campo-pendiente': tieneCambioPendiente('EMailEnvioDocAmbiental') }">
-          <mat-label>E-mail servicio ambiental</mat-label>
-          <input matInput placeholder="E-mail" formControlName="EMailEnvioDocAmbiental" >
-        </mat-form-field>
-        -->
-      </div>
-
-      <div class="form-buttons">
-        <div class="footer-content">
-          <div class="leyenda-cambios" *ngIf="hayCambiosPendientes">
-            <mat-icon color="primary">warning</mat-icon>
-            <strong>Cambios pendientes</strong> de validación.
+            <mat-form-field class="full-width" appearance="outline">
+              <mat-label>Tarjeta NIF Empresa</mat-label>
+              <input matInput placeholder="Tarjeta NIF" formControlName="TarjetaNIFEmpresaPresentada" readonly>
+              <button mat-icon-button matSuffix (click)="fileInputNIF.click()" *ngIf="enableEdit">
+                <mat-icon>attach_file</mat-icon>
+              </button>
+              <input #fileInputNIF type="file" hidden (change)="adjuntarArchivo('TarjetaNIFEmpresaPresentada', fileInputNIF)">
+            </mat-form-field>
           </div>
 
-          <div class="footer-buttons">
-            <!--!Boton de editar-->
-            <button mat-mini-fab color="primary" (click)="edit()" *ngIf="!enableEdit">
-              <mat-icon>edit</mat-icon>
-            </button>
+          <div class="form-buttons">
+            <div class="footer-content">
+              <div class="leyenda-cambios" *ngIf="hayCambiosPendientes">
+                <mat-icon color="primary">warning</mat-icon>
+                <strong>Cambios pendientes</strong> de validación.
+              </div>
 
-            <!--!Boton de guarda-->
-            <button mat-mini-fab color="primary" (click)="save()" *ngIf="enableEdit">
-              <mat-icon>check</mat-icon>
-            </button>
+              <div class="footer-buttons">
+                <!--!Boton de editar-->
+                <button mat-mini-fab color="primary" (click)="edit()" *ngIf="!enableEdit">
+                  <mat-icon>edit</mat-icon>
+                </button>
 
-            <!--!Boton de cancelar-->
-            <button mat-mini-fab color="primary" style="margin-left: 10px;" (click)="cancel()" *ngIf="enableEdit">
-              <mat-icon>close</mat-icon>
-            </button>
+                <!--!Boton de guarda-->
+                <button mat-mini-fab color="primary" (click)="save()" *ngIf="enableEdit">
+                  <mat-icon>check</mat-icon>
+                </button>
 
-            <!--!Boton de empresa-->
-            <button mat-raised-button disabled color="primary" *ngIf="!enableEdit">Empresa</button>
-
-            <!--!Boton de centros-->
-            <button mat-raised-button color="primary" (click)="centers()" *ngIf="!enableEdit" [disabled]="requiredDataMissing">Centros ({{ companyData!.centrosempresasgreenbc!.length }})</button>
-
-            <!--!Boton de contactos-->
-            <button mat-raised-button color="primary" (click)="contacts()" *ngIf="!enableEdit" [disabled]="requiredDataMissing">Contactos ({{ companyData!.contactosempresasgreenbc!.length }})</button>
-
+                <!--!Boton de cancelar-->
+                <button mat-mini-fab color="primary" style="margin-left: 10px;" (click)="cancel()" *ngIf="enableEdit">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </form>
+        </form>
+      </mat-tab>
+
+      <mat-tab aria-label="centros" [label]="'Centros (' + companyData!.centrosempresasgreenbc!.length + ')'" [disabled]="requiredDataMissing">
+        <app-centers></app-centers>
+      </mat-tab>
+
+      <mat-tab aria-label="contactos" [label]="'Contactos (' + companyData!.contactosempresasgreenbc!.length + ')'" [disabled]="requiredDataMissing">
+        <app-contacts></app-contacts>
+      </mat-tab>
+    </mat-tab-group>
   </div>
 </div>

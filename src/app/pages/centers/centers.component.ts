@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { NavbarComponent } from "../navbar/navbar.component";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgIf } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
@@ -18,7 +17,7 @@ import { CenterDialogComponent } from '../center-dialog/center-dialog.component'
   selector: 'app-centers',
   templateUrl: './centers.component.html',
   styleUrl: './centers.component.css',
-  imports: [NavbarComponent, MatProgressSpinnerModule, NgIf, MatTableModule, MatPaginatorModule, MatSortModule,
+  imports: [MatProgressSpinnerModule, NgIf, MatTableModule, MatPaginatorModule, MatSortModule,
     MatIcon, MatButtonModule],
 })
 export class CentersComponent implements OnInit, AfterViewInit {

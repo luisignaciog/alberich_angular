@@ -18,7 +18,7 @@ import { ContactDialogComponent } from '../contact-dialog/contact-dialog.compone
   selector: 'app-contacts',
   templateUrl: './contacts.component.html',
   styleUrl: './contacts.component.css',
-  imports: [NavbarComponent, MatProgressSpinnerModule, NgIf, MatTableModule, MatPaginatorModule, MatSortModule,
+  imports: [MatProgressSpinnerModule, NgIf, MatTableModule, MatPaginatorModule, MatSortModule,
     MatIcon, MatButtonModule],
 })
 export class ContactsComponent implements AfterViewInit, OnInit {
